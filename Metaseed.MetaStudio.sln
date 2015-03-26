@@ -5,9 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A6C40101-72AA-4B04-954B-E61E0C13DBF5}"
 	ProjectSection(SolutionItems) = preProject
-		src\.nuget\NuGet.Config = src\.nuget\NuGet.Config
 		src\.nuget\NuGet.exe = src\.nuget\NuGet.exe
-		src\.nuget\NuGet.targets = src\.nuget\NuGet.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metaseed.MetaCore", "src\Metaseed.MetaCore\Metaseed.MetaCore.csproj", "{3AD5B418-A96D-4C42-BBB5-3F3B8B2AD7E3}"
