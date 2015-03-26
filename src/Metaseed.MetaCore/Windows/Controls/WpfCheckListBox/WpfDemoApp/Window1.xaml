@@ -1,0 +1,128 @@
+﻿<Window x:Class="WpfDemoApp.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:coll="clr-namespace:System.Collections;assembly=mscorlib"
+    xmlns:clb="clr-namespace:WpfCheckListBox;assembly=WpfCheckListBox"
+
+    FontSize="11" x:Name="me"
+    Title="CheckListBox/RadioListBox" Height="Auto" Width="Auto" 
+    ResizeMode="NoResize" 
+    Background="Gainsboro"
+    SizeToContent="WidthAndHeight">
+
+    <Window.Resources>
+        <clb:BoolArrayStringConverter x:Key="BoolArrayConverter" />
+        
+        <coll:ArrayList x:Key="actionList">
+            <clb:CheckItem KeyValue="0" Display="action 0"/>
+            <clb:CheckItem KeyValue="1" Display="action 1"/>
+            <clb:CheckItem KeyValue="2" Display="action 2"/>
+        </coll:ArrayList>
+        
+        <coll:ArrayList x:Key="arrayList">
+            <clb:CheckItem KeyValue="0" Display="item 0"/>
+            <clb:CheckItem KeyValue="1" Display="item 1"/>
+            <clb:CheckItem KeyValue="2" Display="item 2"/>
+            <clb:CheckItem KeyValue="3" Display="item 3"/>
+        </coll:ArrayList>
+
+    </Window.Resources>
+    
+    
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75" />
+            <RowDefinition Height="6" />
+            <RowDefinition Height="160" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="6" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="6" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="120" />
+            <ColumnDefinition Width="120" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0"  Name="labelEntity"  Margin="6" TextWrapping="Wrap"><Bold>Entity</Bold></TextBlock>
+        <ComboBox ItemsSource="{Binding ElementName=me,Path=Cultures}" SelectedItem="{Binding ElementName=me,Path=CurrentCulture,Mode=TwoWay}" DisplayMemberPath="DisplayName"></ComboBox>
+        <TextBlock Grid.Row="0" Grid.Column="1"  Name="labelType"    Margin="6" TextWrapping="Wrap"><Bold>PropType</Bold><LineBreak />(dynamic generated itemsource from bound enum)</TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="2"  Name="labelFeature" Margin="6" TextWrapping="Wrap"><Bold>PropFeatures</Bold><LineBreak />(dynamic generated itemsource from bound enum)</TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="3"  Name="labelAction"  Margin="6" TextWrapping="Wrap"><Bold>PropActions</Bold><LineBreak />(collection set in code/xaml, before first binding occurs)</TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="4"  Name="labelArray"   Margin="6" TextWrapping="Wrap"><Bold>PropArray</Bold><LineBreak />(collection set in code/xaml, before first binding occurs)</TextBlock>
+
+        
+        <ListBox          Grid.Row="2" Grid.Column="0" Grid.RowSpan="4" Margin="6" 
+                          Name="listBoxEntity" 
+                          DisplayMemberPath="PropName" 
+                          SelectionChanged="listBoxEntity_SelectionChanged" 
+                          Background="WhiteSmoke"/>
+
+        <clb:RadioListBox Grid.Row="2" Grid.Column="1" Margin="6" 
+                          Name="listBoxType" 
+                          CheckedValue="{Binding PropType, Mode=TwoWay}"
+                          Background="Moccasin"/>
+
+        <clb:CheckListBox Grid.Row="2" Grid.Column="2" Margin="6"   
+                          Name="listBoxFeature"
+                          CheckedValue="{Binding PropFeature, Mode=TwoWay}"
+                          Background="Moccasin"/>
+
+        <clb:RadioListBox Grid.Row="2" Grid.Column="3" Margin="6" 
+                          Name="listBoxAction" 
+                          CheckListArray="{StaticResource actionList}" 
+                          CheckedValue="{Binding PropAction, Mode=TwoWay}" 
+                          Background="Moccasin"/>
+        <clb:CheckListBox Grid.Row="2" Grid.Column="4" Margin="6"   
+                          Name="listBoxArray"
+                          CheckListArray="{StaticResource arrayList}" 
+                          CheckedValue="{Binding PropArray, Mode=TwoWay}"
+                          Background="Moccasin"/>
+
+        <clb:RadioComboBox Grid.Row="3" Grid.Column="1" Margin="6" 
+                           Name="comboBoxType"
+                           CheckedValue="{Binding PropType, Mode=TwoWay}" 
+                           Background="Lavender"/>
+
+        <clb:CheckComboBox Grid.Row="3" Grid.Column="2" Margin="6"   
+                           Name="comboBoxFeature"
+                           CheckedValue="{Binding PropFeature, Mode=TwoWay}" 
+                           Background="Lavender"/>
+
+        <clb:RadioComboBox Grid.Row="3" Grid.Column="3" Margin="6" 
+                           Name="comboBoxAction"
+                           CheckListArray="{StaticResource actionList}" 
+                           CheckedValue="{Binding PropAction, Mode=TwoWay}" 
+                           Background="Lavender"/>
+
+        <clb:CheckComboBox Grid.Row="3" Grid.Column="4" Margin="6"   
+                           Name="comboBoxArray"
+                           CheckListArray="{StaticResource arrayList}" 
+                           CheckedValue="{Binding PropArray, Mode=TwoWay}" 
+                           Background="Lavender"/>
+
+        <Label Grid.Row="5" Grid.Column="1" Margin="6" 
+               Name="labelValueType"
+               Content="{Binding PropType}" 
+               Background="WhiteSmoke"/>
+        
+        <Label Grid.Row="5" Grid.Column="2" Margin="6" 
+               Name="labelValueFeature"
+               Content="{Binding PropFeature}" 
+               Background="WhiteSmoke"/>
+        
+        <Label Grid.Row="5" Grid.Column="3" Margin="6" 
+               Name="labelValueAction"
+               Content="{Binding PropAction}" 
+               Background="WhiteSmoke"/>
+        
+        <Label Grid.Row="5" Grid.Column="4" Margin="6" 
+               Name="labelValueArray"
+               Content="{Binding PropArray, Converter={StaticResource BoolArrayConverter}}" 
+               Background="WhiteSmoke"/>
+    </Grid>
+</Window>

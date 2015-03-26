@@ -1,0 +1,13 @@
+﻿<Window x:Class="ChooseFontTest.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Font Chooser Dialog Sample" SizeToContent="WidthAndHeight">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" ></RowDefinition>
+			<RowDefinition></RowDefinition>
+		</Grid.RowDefinitions>
+		<Button HorizontalAlignment="Left" Click="ChooseFont_Click">Choose Font</Button>
+		<TextBlock Grid.Row="1" Name="sampleText" Margin="5">The quick bro</TextBlock>
+	</Grid>
+</Window>

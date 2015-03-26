@@ -1,0 +1,2670 @@
+﻿<Window x:Class="Metaseed.Windows.Controls.ChooseFont"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:win="clr-namespace:System.Windows;assembly=PresentationCore"
+	xmlns:local="clr-namespace:Metaseed.Windows.Controls"
+        xmlns:cv="clr-namespace:Metaseed.Windows.Data.Converters"
+    Title="Font" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+	MinHeight="600" MinWidth="600" Height="600" Width="600" ResizeMode="CanResizeWithGrip"
+	ShowInTaskbar="False">
+	
+	<Window.Resources>
+		<Style x:Key="dialogButtonStyle" TargetType="Button">
+			<Setter Property="Margin" Value="5"/>
+			<Setter Property="Width" Value="75"/>
+		</Style>
+		<Style x:Key="dialogButtonPanelStyle">
+			<Setter Property="FrameworkElement.Margin" Value="0,0,10,0"/>
+			<Setter Property="FrameworkElement.HorizontalAlignment" Value="Right"/>
+		</Style>
+		
+		<!--Main panel elements-->
+		<Style x:Key="mainLabelStyle" TargetType="Label">
+			<Setter Property="Margin" Value="3 0 0 0"/>
+			<Setter Property="Padding" Value="3"/>
+		</Style>
+		<Style x:Key="mainTextBoxStyle" TargetType="TextBox">
+			<Setter Property="Margin" Value="3 0 3 0"/>
+			<Setter Property="Padding" Value="3"/>
+			<Setter Property="BorderThickness" Value="0.75"/>
+			<Setter Property="Validation.ErrorTemplate">
+				<Setter.Value>
+					<ControlTemplate>
+						<DockPanel LastChildFill="True">
+							<Ellipse DockPanel.Dock="Right" Margin="2,0"
+							ToolTip="{Binding ElementName=adornerPlaceholder, 
+									Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+							Width="10" Height="10">
+								<Ellipse.Fill>
+									<LinearGradientBrush>
+										<GradientStop Color="#11FF1111" Offset="0" />
+										<GradientStop Color="#FFFF0000" Offset="1" />
+									</LinearGradientBrush>
+								</Ellipse.Fill>
+							</Ellipse>
+							<Border BorderBrush="Red" BorderThickness="2">
+								<AdornedElementPlaceholder Name="adornerPlaceholder"/>
+							</Border>
+						</DockPanel>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style x:Key="mainListBoxStyle" TargetType="ListBox">
+			<Setter Property="Margin" Value="3 0 3 0"/>
+			<Setter Property="Padding" Value="3"/>
+			<Setter Property="BorderThickness" Value="0.75"/>
+		</Style>
+		<Style x:Key="decorationChkBoxStyle" TargetType="CheckBox">
+			<Setter Property="Margin" Value="5 1 5 1"/>
+		</Style>
+
+		<cv:TypefaceToStringConverter x:Key="typefaceToStringConverter"/>
+		<cv:ColorToNamedBrushConverter x:Key="colorToNamedBrushConverter"/>
+		<cv:ColorToBrushConverter x:Key="colorToBrushConverter"/>
+		<cv:InvertBoolConverter x:Key="boolInverter"/>
+		<cv:IntValueToParamEqualityConverter x:Key="intValueToParamEquality"/>
+		<cv:ValueToParamEqualityConverter x:Key="valueToParamEquality"/>
+
+		<DataTemplate x:Key="typefaceTemplate">
+			<TextBlock Text="{Binding Converter={StaticResource typefaceToStringConverter}}"/>
+		</DataTemplate>
+		<DataTemplate x:Key="namedBrushTemplate">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" SharedSizeGroup="colorNames"/>
+					<ColumnDefinition SharedSizeGroup="colors"/>
+				</Grid.ColumnDefinitions>
+				<TextBlock Text="{Binding Path=Name}" Margin="1"/>
+				<Rectangle Grid.Column="1" Fill="{Binding Path=Brush}" Height="15" Width="15" Margin="1"/>
+			</Grid>
+		</DataTemplate>
+	</Window.Resources>
+
+	<DockPanel>
+		<!--Dialog Buttons-->
+		<Grid DockPanel.Dock="Bottom" Grid.IsSharedSizeScope="True"
+			  Style="{StaticResource dialogButtonPanelStyle}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" SharedSizeGroup="dialogButtons"/>
+				<ColumnDefinition Width="Auto" SharedSizeGroup="dialogButtons"/>
+			</Grid.ColumnDefinitions>
+
+			<Button Name="Button_OK" IsDefault="True" IsEnabled="False" Click="Button_OK_Click"
+					Style="{StaticResource dialogButtonStyle}">_OK</Button>
+			<Button Grid.Column="1" IsCancel="True" Style="{StaticResource dialogButtonStyle}">_Cancel</Button>
+		</Grid>
+		
+		<!-- ChoseFont panel -->
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition MinHeight="250"/> <!-- Main panel -->
+				<RowDefinition Height="Auto" MaxHeight="200"/> <!-- Font details -->
+				<RowDefinition Height="Auto" /> <!-- Preview -->
+			</Grid.RowDefinitions>
+			
+			<!--Main panel-->
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition /><!--Font Family column-->
+					<ColumnDefinition Width="Auto"/><!--Typeface and other stuff column-->
+				</Grid.ColumnDefinitions>
+				
+				<!--Font Family column-->
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>	<!-- Title -->
+						<RowDefinition Height="Auto"/> <!-- Text Box -->
+						<RowDefinition /> <!-- List Box -->
+					</Grid.RowDefinitions>
+
+					<!--Font Family column-->
+					<Label Style="{StaticResource mainLabelStyle}">Font family:</Label>
+					<TextBox Grid.Row="1" Name="txtFontFamily" 
+							 Style="{StaticResource mainTextBoxStyle}"
+							 Text="{Binding Path=FontFamily}"
+							 TextChanged="txtFontFamily_TextChanged" 
+							 IsTabStop="true" TabIndex="1"/>
+					<ListBox Grid.Row="2" Name="lbxFontFamily" 
+							Style="{StaticResource mainListBoxStyle}"
+							ItemsSource="{Binding Path=FontFamilies}"
+							SelectedItem="{Binding Path=FontFamily}"
+							IsTabStop="true" TabIndex="2" Height="Auto"/>
+				</Grid>
+				
+				<!--Typeface and other stuff -->
+				<Grid Grid.Column="1">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/> <!-- Typeface Title -->
+						<RowDefinition Height="Auto"/> <!-- Typeface TextBox -->
+						<RowDefinition /><!-- Typeface ListBox -->
+						<RowDefinition Height="Auto"/> <!-- FontSize & Color Title -->
+						<RowDefinition Height="Auto"/> <!-- FontSize & Color TextBox -->
+						<RowDefinition /><!-- FontSize & Color ListBox -->
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition/>
+						<ColumnDefinition Width="Auto"/> <!--Decorations-->
+						<ColumnDefinition/> <!--Color-->
+					</Grid.ColumnDefinitions>
+
+					<!--Typeface -->
+					<Label Grid.ColumnSpan="3" 
+						   Style="{StaticResource mainLabelStyle}">Typeface:</Label>
+					<TextBox Grid.Row="1" Grid.ColumnSpan="3" Name="txtTypeface" 
+							Style="{StaticResource mainTextBoxStyle}"
+							Text="{Binding Path=Typeface,
+								Converter={StaticResource typefaceToStringConverter}}"
+							TextChanged="txtTypeface_Changed"
+							IsTabStop="true" TabIndex="3"/>
+					<ListBox Grid.Row="2" Grid.ColumnSpan="3" Name="lbxTypeface"
+							Style="{StaticResource mainListBoxStyle}" Height="Auto"
+							ItemsSource="{Binding Path=Typefaces}"
+							SelectedItem="{Binding Path=Typeface}"
+							ItemTemplate="{StaticResource typefaceTemplate}"
+							IsTabStop="true" TabIndex="4"/>
+
+					<!--Font Size -->
+					<Label Grid.Row="3" Style="{StaticResource mainLabelStyle}">Size:</Label>
+					<TextBox Grid.Row="4" Name="txtFontSize"
+							Style="{StaticResource mainTextBoxStyle}" MinWidth="10"
+							Text="{Binding Path=FontSize, UpdateSourceTrigger=PropertyChanged,
+								ValidatesOnExceptions=True, ValidatesOnDataErrors=True}"
+							TextChanged="txtFontSize_Changed" 
+							IsTabStop="True" TabIndex="5"/>
+					<ListBox Grid.Row="5" Name="lbxFontSize" 
+							Style="{StaticResource mainListBoxStyle}" Height="Auto"
+							ItemsSource="{Binding Path=FontSizes}"
+							SelectedItem="{Binding Path=FontSize, FallbackValue={x:Null}}"
+							IsTabStop="True" TabIndex="5"/>
+
+					<!-- Decorations -->
+					<Label Grid.Row="3" Grid.Column="1" Style="{StaticResource mainLabelStyle}">Decorations:</Label>
+					<StackPanel Grid.Row="4" Grid.RowSpan="2" Grid.Column="1">
+						<CheckBox IsChecked="{Binding Path=Underline}"
+							  Style="{StaticResource decorationChkBoxStyle}">Underline</CheckBox>
+						<CheckBox IsChecked="{Binding Path=Strikethrough}"
+							  Style="{StaticResource decorationChkBoxStyle}">Strikethrough</CheckBox>
+						<CheckBox IsChecked="{Binding Path=Overline}"
+							  Style="{StaticResource decorationChkBoxStyle}">Overline</CheckBox>
+						<CheckBox IsChecked="{Binding Path=Baseline}"
+							  Style="{StaticResource decorationChkBoxStyle}">Baseline</CheckBox>
+					</StackPanel>
+
+					<!--Color -->
+					<Label Grid.Row="3" Grid.Column="2" 
+						   Style="{StaticResource mainLabelStyle}">Color:</Label>
+					<TextBox Grid.Row="4" Grid.Column="2" Name="txtColor"
+							Style="{StaticResource mainTextBoxStyle}"
+							Text="{Binding ElementName=lbxColor, Path=SelectedItem.Name}"
+							TextChanged="txtColor_Changed" 
+							IsTabStop="True" TabIndex="6"/>
+					<ListBox Grid.Row="5" Grid.Column="2" Name="lbxColor" Grid.IsSharedSizeScope="True"
+							Style="{StaticResource mainListBoxStyle}" Height="Auto"
+							ItemsSource="{Binding Path=NamedBrushes}"
+							SelectedItem="{Binding Path=FontColor, Converter={StaticResource colorToNamedBrushConverter}}"
+							ItemTemplate="{StaticResource namedBrushTemplate}"
+							IsTabStop="True" TabIndex="7"/>
+				</Grid>
+			</Grid>
+			
+			<!-- Font details -->
+			<Expander Grid.Row="1" Header="Font details" MaxHeight="200" Margin="0 10 0 0" 
+					  IsExpanded="{Binding Path=IsFontDetailsExpanded}">
+				<TabControl Margin="3 0 3 0" Name="tabctrlFontDetailsViewer" 
+							BorderThickness="0.75">
+
+					<!--Family and typeface samples-->
+					<TabItem Header="Family and typeface samples">
+						<Grid Margin="3 0 3 3">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition/> <!-- Family typefaces -->
+								<ColumnDefinition/> <!-- Typeface sizes -->
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>	<!-- Title -->
+								<RowDefinition/> <!-- Sample -->
+							</Grid.RowDefinitions>
+							
+							<!--FamilyTypefaceSamples column-->
+							<TextBlock Margin="3" xml:space="preserve">Font family: <TextBlock Text="{Binding Path=FontFamily.Source}"/></TextBlock>
+							<ListBox Grid.Row="1" Name="lbxFamilyTypefaceSamples"
+								Margin="3 0 0 0" Padding="3" BorderThickness="0.75" Background="White"
+								ItemsSource="{Binding Path=NamedTypefaces}"
+								IsTabStop="false" TabIndex="-1">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<TextBlock Text="{Binding Path=Name}"
+												FontFamily="Palatino Linotype"
+												FontSize="7.5pt"/> 
+											<TextBlock
+												FontFamily="{Binding ElementName=txtPreview, Path=FontFamily}"
+												FontStyle="{Binding Path=Typeface.Style}"
+												FontWeight="{Binding Path=Typeface.Weight}"
+												FontStretch="{Binding Path=Typeface.Stretch}"
+												FontSize="14"
+												Margin="0 0 0 5">
+												The quick brown fox jumps over the lazy dog
+											</TextBlock>
+										</StackPanel>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+
+							<!--TypefaceSizeSamples column-->
+							<TextBlock Grid.Column="1" Margin="3" xml:space="preserve">Typeface: <TextBlock Text="{Binding Path=TypefaceName}"/></TextBlock>
+							<ListBox Grid.Column="1" Grid.Row="1" Name="lbxTypefaceSizeSamples"
+								Margin="3 0 0 0" Padding="3" BorderThickness="0.75" Background="White"
+								ItemsSource="{Binding Path=SampleFontSizes}"
+								IsTabStop="false" TabIndex="-1"
+							>
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<TextBlock Text="{Binding}"
+												FontFamily="Palatino Linotype"
+												FontSize="7.5pt"> 
+												<TextBlock xml:space="preserve"> Points</TextBlock>
+											</TextBlock>
+											<TextBlock
+												FontFamily="{Binding ElementName=txtPreview, Path=FontFamily}"
+												FontStyle="{Binding ElementName=txtPreview, Path=FontStyle}"
+												FontWeight="{Binding ElementName=txtPreview, Path=FontWeight}"
+												FontStretch="{Binding ElementName=txtPreview, Path=FontStretch}"
+												FontSize="{Binding}"
+												Margin="0 0 0 5">
+												The quick brown fox jumps over the lazy dog
+											</TextBlock>
+										</StackPanel>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Grid>
+					</TabItem>
+
+					<!--Typographic features-->
+					<TabItem Header="Typographic features">
+						<Grid Margin="3 0 3 3">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition /> <!-- Family typefaces -->
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto" /> <!-- Title -->
+								<RowDefinition /> <!-- List of selectable features with samples -->
+							</Grid.RowDefinitions>
+							
+							<TextBlock Margin="3" xml:space="preserve">Typographic features for: <TextBlock Text="{Binding Path=FontFamily.Source}"/></TextBlock>
+							<ScrollViewer Grid.Row="1"
+								Margin="0" Padding="3" BorderThickness="0.75" Background="White"
+								VerticalScrollBarVisibility="Auto"
+								>
+								<StackPanel Grid.IsSharedSizeScope="true">
+									<StackPanel.Resources>
+										<Style TargetType="{x:Type ColumnDefinition}">
+											<Setter Property="Width" Value="Auto" />
+										</Style>
+										<Style TargetType="{x:Type RowDefinition}">
+											<Setter Property="Height" Value="Auto" />
+										</Style>
+										<Style x:Key="typographyLabelStyle" TargetType="{x:Type TextBlock}">
+											<Setter Property="Margin" Value="2 6 2 2" />
+										</Style>
+										<Style x:Key="typographyButtonStyle" TargetType="{x:Type RadioButton}">
+											<Setter Property="Grid.Column" Value="0" />
+											<Setter Property="Margin" Value="16 2 2 2" />
+										</Style>
+										<Style x:Key="typographySampleStyle" TargetType="{x:Type TextBlock}">
+											<Setter Property="Grid.Column" Value="1" />
+											<Setter Property="Margin" Value="4 1 0 0" />
+											<Setter Property="Text" Value="{Binding ElementName=txtPreview, Path=Text}"/>
+											<Setter Property="FontFamily" Value="{Binding Path=FontFamily}"/>
+											<Setter Property="FontSize" Value="14"/>
+											<Setter Property="FontWeight" Value="{Binding Path=Typeface.Weight}"/>
+											<Setter Property="FontStretch" Value="{Binding Path=Typeface.Stretch}"/>
+											<Setter Property="FontStyle" Value="{Binding Path=Typeface.Style}"/>
+											<Setter Property="TextDecorations" Value="{Binding Path=Decorations}"/>
+											<Setter Property="Foreground" Value="{Binding Path=FontColor, Converter={StaticResource colorToBrushConverter}}"/>
+											<Setter Property="Typography.AnnotationAlternates" Value="{Binding Path=AnnotationAlternates}"/>
+											<Setter Property="Typography.Capitals" Value="{Binding Path=Capitals}"/>
+											<Setter Property="Typography.CapitalSpacing" Value="{Binding Path=CapitalSpacing}"/>
+											<Setter Property="Typography.CaseSensitiveForms" Value="{Binding Path=CaseSensitiveForms}"/>
+											<Setter Property="Typography.ContextualAlternates" Value="{Binding Path=ContextualAlternates}"/>
+											<Setter Property="Typography.ContextualLigatures" Value="{Binding Path=ContextualLigatures}"/>
+											<Setter Property="Typography.ContextualSwashes" Value="{Binding Path=ContextualSwashes}"/>
+											<Setter Property="Typography.DiscretionaryLigatures" Value="{Binding Path=DiscretionaryLigatures}"/>
+											<Setter Property="Typography.EastAsianExpertForms" Value="{Binding Path=EastAsianExpertForms}"/>
+											<Setter Property="Typography.EastAsianLanguage" Value="{Binding Path=EastAsianLanguage}"/>
+											<Setter Property="Typography.EastAsianWidths" Value="{Binding Path=EastAsianWidths}"/>
+											<Setter Property="Typography.Fraction" Value="{Binding Path=Fraction}"/>
+											<Setter Property="Typography.HistoricalForms" Value="{Binding Path=HistoricalForms}"/>
+											<Setter Property="Typography.HistoricalLigatures" Value="{Binding Path=HistoricalLigatures}"/>
+											<Setter Property="Typography.Kerning" Value="{Binding Path=Kerning}"/>
+											<Setter Property="Typography.MathematicalGreek" Value="{Binding Path=MathematicalGreek}"/>
+											<Setter Property="Typography.NumeralAlignment" Value="{Binding Path=NumeralAlignment}"/>
+											<Setter Property="Typography.NumeralStyle" Value="{Binding Path=NumeralStyle}"/>
+											<Setter Property="Typography.SlashedZero" Value="{Binding Path=SlashedZero}"/>
+											<Setter Property="Typography.StandardLigatures" Value="{Binding Path=StandardLigatures}"/>
+											<Setter Property="Typography.StandardSwashes" Value="{Binding Path=StandardSwashes}"/>
+											<Setter Property="Typography.StylisticAlternates" Value="{Binding Path=StylisticAlternates}"/>
+											<Setter Property="Typography.StylisticSet1" Value="{Binding Path=StylisticSet1}"/>
+											<Setter Property="Typography.StylisticSet2" Value="{Binding Path=StylisticSet2}"/>
+											<Setter Property="Typography.StylisticSet3" Value="{Binding Path=StylisticSet3}"/>
+											<Setter Property="Typography.StylisticSet4" Value="{Binding Path=StylisticSet4}"/>
+											<Setter Property="Typography.StylisticSet5" Value="{Binding Path=StylisticSet5}"/>
+											<Setter Property="Typography.StylisticSet6" Value="{Binding Path=StylisticSet6}"/>
+											<Setter Property="Typography.StylisticSet7" Value="{Binding Path=StylisticSet7}"/>
+											<Setter Property="Typography.StylisticSet8" Value="{Binding Path=StylisticSet8}"/>
+											<Setter Property="Typography.StylisticSet9" Value="{Binding Path=StylisticSet9}"/>
+											<Setter Property="Typography.StylisticSet10" Value="{Binding Path=StylisticSet10}"/>
+											<Setter Property="Typography.StylisticSet11" Value="{Binding Path=StylisticSet11}"/>
+											<Setter Property="Typography.StylisticSet12" Value="{Binding Path=StylisticSet12}"/>
+											<Setter Property="Typography.StylisticSet13" Value="{Binding Path=StylisticSet13}"/>
+											<Setter Property="Typography.StylisticSet14" Value="{Binding Path=StylisticSet14}"/>
+											<Setter Property="Typography.StylisticSet15" Value="{Binding Path=StylisticSet15}"/>
+											<Setter Property="Typography.StylisticSet16" Value="{Binding Path=StylisticSet16}"/>
+											<Setter Property="Typography.StylisticSet17" Value="{Binding Path=StylisticSet17}"/>
+											<Setter Property="Typography.StylisticSet18" Value="{Binding Path=StylisticSet18}"/>
+											<Setter Property="Typography.StylisticSet19" Value="{Binding Path=StylisticSet19}"/>
+											<Setter Property="Typography.StylisticSet20" Value="{Binding Path=StylisticSet20}"/>
+											<Setter Property="Typography.Variants" Value="{Binding Path=Variants}"/>
+										</Style>
+									</StackPanel.Resources>
+
+									<!--Header-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock FontWeight="Bold">Typographic feature</TextBlock>
+										<TextBlock Grid.Column="1" FontWeight="Bold">Sample</TextBlock>
+									</Grid>
+
+									<!--AnnotationAlternates-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Annotation alternates</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="AnnotationAlternatesNoneButton"
+													 IsChecked="{Binding Path=AnnotationAlternates
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=0}">
+											None
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.AnnotationAlternates="0"
+												   Name="AnnotationAlternatesNoneSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="AnnotationAlternatesSet1Button"
+													 IsChecked="{Binding Path=AnnotationAlternates
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=1}">
+											Set 1
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.AnnotationAlternates="1"
+												   Name="AnnotationAlternatesSet1Sample" />
+										<RadioButton Grid.Row="3" Style="{StaticResource typographyButtonStyle}" 
+													 Name="AnnotationAlternatesSet2Button"
+													 IsChecked="{Binding Path=AnnotationAlternates
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=2}">
+											Set 2
+										</RadioButton>
+										<TextBlock Grid.Row="3" Style="{StaticResource typographySampleStyle}" 
+												   Typography.AnnotationAlternates="2"
+												   Name="AnnotationAlternatesSet2Sample" />
+										<RadioButton Grid.Row="4" Style="{StaticResource typographyButtonStyle}" 
+													 Name="AnnotationAlternatesSet3Button"
+													 IsChecked="{Binding Path=AnnotationAlternates
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=3}">
+											Set 3
+										</RadioButton>
+										<TextBlock Grid.Row="4" Style="{StaticResource typographySampleStyle}" 
+												   Typography.AnnotationAlternates="3"
+												   Name="AnnotationAlternatesSet3Sample" />
+									</Grid>
+
+									<!--Capitals-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Capitals</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="CapitalsNormalButton"
+													 IsChecked="{Binding Path=Capitals
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontCapitals.Normal}}">
+											Normal
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Capitals="Normal"
+												   Name="CapitalsNormalSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="CapitalsAllSmallButton"
+						 	 						 IsChecked="{Binding Path=Capitals
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontCapitals.AllSmallCaps}}">
+											All small
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Capitals="AllSmallCaps"
+												   Name="CapitalsAllSmallSample" />
+										<RadioButton Grid.Row="3" Style="{StaticResource typographyButtonStyle}" 
+													 Name="CapitalsSmallButton"
+						 	 						 IsChecked="{Binding Path=Capitals
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontCapitals.SmallCaps}}">
+											Small
+										</RadioButton>
+										<TextBlock Grid.Row="3" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Capitals="SmallCaps"
+												   Name="CapitalsSmallSample" />
+										<RadioButton Grid.Row="4" Style="{StaticResource typographyButtonStyle}" 
+													 Name="CapitalsAllPetiteButton"
+						 	 						 IsChecked="{Binding Path=Capitals
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontCapitals.AllPetiteCaps}}">
+											All petite
+										</RadioButton>
+										<TextBlock Grid.Row="4" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Capitals="AllPetiteCaps"
+												   Name="CapitalsAllPetiteSample" />
+										<RadioButton Grid.Row="5" Style="{StaticResource typographyButtonStyle}" 
+													 Name="CapitalsPetiteButton"
+						 	 						 IsChecked="{Binding Path=Capitals
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontCapitals.PetiteCaps}}">
+											Petite
+										</RadioButton>
+										<TextBlock Grid.Row="5" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Capitals="PetiteCaps"
+												   Name="CapitalsPetiteSample" />
+										<RadioButton Grid.Row="6" Style="{StaticResource typographyButtonStyle}" 
+													 Name="CapitalsUnicaseButton"
+						 	 						 IsChecked="{Binding Path=Capitals
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontCapitals.Unicase}}">
+											Unicase
+										</RadioButton>
+										<TextBlock Grid.Row="6" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Capitals="Unicase"
+												   Name="CapitalsUnicaseSample" />
+										<RadioButton Grid.Row="7" Style="{StaticResource typographyButtonStyle}" 
+													 Name="CapitalsTitlingButton"
+						 	 						 IsChecked="{Binding Path=Capitals
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontCapitals.Titling}}">
+											Titling
+										</RadioButton>
+										<TextBlock Grid.Row="7" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Capitals="Titling"
+												   Name="CapitalsTitlingSample" />
+									</Grid>
+
+									<!--Capital spacing-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Capital spacing</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="CapitalSpacingDisabledButton"
+													 IsChecked="{Binding Path=CapitalSpacing, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.CapitalSpacing="False"
+												   Name="CapitalSpacingDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="CapitalSpacingEnabledButton"
+													 IsChecked="{Binding Path=CapitalSpacing}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+										   			Typography.CapitalSpacing="True"
+													Name="CapitalSpacingEnabledSample" />
+									</Grid>
+
+									<!--Case sensitive forms-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0"/>
+											<ColumnDefinition SharedSizeGroup="C1"/>
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Case sensitive forms</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="CaseSensitiveFormsDisabledButton"
+													 IsChecked="{Binding Path=CaseSensitiveForms, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.CaseSensitiveForms="False"
+												   Name="CaseSensitiveFormsDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="CaseSensitiveFormsEnabledButton"
+													 IsChecked="{Binding Path=CaseSensitiveForms}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.CaseSensitiveForms="True"
+												   Name="CaseSensitiveFormsEnabledSample" />
+									</Grid>
+
+									<!--ContextualAlternates-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Contextual alternates</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="ContextualAlternatesDisabledButton"
+													 IsChecked="{Binding Path=ContextualAlternates, Converter={StaticResource boolInverter}}"
+													 >
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.ContextualAlternates="False"
+												   Name="ContextualAlternatesDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="ContextualAlternatesEnabledButton"
+													 IsChecked="{Binding Path=ContextualAlternates}"
+													>
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.ContextualAlternates="True"
+												   Name="ContextualAlternatesEnabledSample" />
+									</Grid>
+
+									<!--ContextualLigatures-->
+									<Grid x:Uid="Grid_9">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Contextual ligatures</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="ContextualLigaturesDisabledButton"
+													 IsChecked="{Binding Path=ContextualLigatures, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.ContextualLigatures="False"
+												   Name="ContextualLigaturesDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="ContextualLigaturesEnabledButton"
+													 IsChecked="{Binding Path=ContextualLigatures}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.ContextualLigatures="True"
+												   Name="ContextualLigaturesEnabledSample" />
+									</Grid>
+
+									<!--ContextualSwashes-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Contextual swashes</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="ContextualSwashesNoneButton"
+													 IsChecked="{Binding Path=ContextualSwashes
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=0}">
+											None
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.ContextualSwashes="0"
+												   Name="ContextualSwashesNoneSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="ContextualSwashesSet1Button"
+													 IsChecked="{Binding Path=ContextualSwashes
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=1}">
+											Set 1
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.ContextualSwashes="1"
+												   Name="ContextualSwashesSet1Sample" />
+										<RadioButton Grid.Row="3" Style="{StaticResource typographyButtonStyle}" 
+													 Name="ContextualSwashesSet2Button"
+													 IsChecked="{Binding Path=ContextualSwashes
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=2}">
+											Set 2
+										</RadioButton>
+										<TextBlock Grid.Row="3" Style="{StaticResource typographySampleStyle}" 
+												   Typography.ContextualSwashes="2"
+												   Name="ContextualSwashesSet2Sample" />
+										<RadioButton Grid.Row="4" Style="{StaticResource typographyButtonStyle}" 
+													 Name="ContextualSwashesSet3Button"
+													 IsChecked="{Binding Path=ContextualSwashes
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=3}">
+											Set 3
+										</RadioButton>
+										<TextBlock Grid.Row="4" Style="{StaticResource typographySampleStyle}" 
+												   Typography.ContextualSwashes="3"
+												   Name="ContextualSwashesSet3Sample" />
+									</Grid>
+
+									<!--DiscretionaryLigatures-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Discretionary ligatures</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="DiscretionaryLigaturesDisabledButton"
+													 IsChecked="{Binding Path=DiscretionaryLigatures, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.DiscretionaryLigatures="False"
+												   Name="DiscretionaryLigaturesDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="DiscretionaryLigaturesEnabledButton"
+													 IsChecked="{Binding Path=DiscretionaryLigatures}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.DiscretionaryLigatures="True"
+												   Name="DiscretionaryLigaturesEnabledSample" />
+									</Grid>
+
+									<!--East Asian expert forms-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">East Asian expert forms</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianExpertFormsDisabledButton"
+													 IsChecked="{Binding Path=EastAsianExpertForms, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianExpertForms="False"
+												   Name="EastAsianExpertFormsDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianExpertFormsEnabledButton"
+													 IsChecked="{Binding Path=EastAsianExpertForms}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianExpertForms="True"
+												   Name="EastAsianExpertFormsEnabledSample" />
+									</Grid>
+
+									<!--East Asian language-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition/>
+											<RowDefinition/>
+											<RowDefinition/>
+											<RowDefinition/>
+											<RowDefinition/>
+											<RowDefinition/>
+											<RowDefinition/>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">East Asian language</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianLanguageNormalButton"
+													 IsChecked="{Binding Path=EastAsianLanguage
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianLanguage.Normal}}">
+											Normal
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianLanguage="Normal"
+												   Name="EastAsianLanguageNormalSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianLanguageJis78Button"
+													 IsChecked="{Binding Path=EastAsianLanguage
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianLanguage.Jis78}}">
+											JIS 78
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianLanguage="Jis78"
+												   Name="EastAsianLanguageJis78Sample" />
+										<RadioButton Grid.Row="3" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianLanguageJis83Button"
+													 IsChecked="{Binding Path=EastAsianLanguage
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianLanguage.Jis83}}">
+											JIS 83
+										</RadioButton>
+										<TextBlock Grid.Row="3" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianLanguage="Jis83"
+												   Name="EastAsianLanguageJis83Sample" />
+										<RadioButton Grid.Row="4" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianLanguageJis90Button"
+													 IsChecked="{Binding Path=EastAsianLanguage
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianLanguage.Jis90}}">
+											JIS 90
+										</RadioButton>
+										<TextBlock Grid.Row="4" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianLanguage="Jis90"
+												   Name="EastAsianLanguageJis90Sample" />
+										<RadioButton Grid.Row="5" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianLanguageJis04Button"
+													 IsChecked="{Binding Path=EastAsianLanguage
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianLanguage.Jis04}}">
+											JIS 04
+										</RadioButton>
+										<TextBlock Grid.Row="5" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianLanguage="Jis04"
+												   Name="EastAsianLanguageJis04Sample" />
+										<RadioButton Grid.Row="6" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianLanguageHojoKanjiButton"
+													 IsChecked="{Binding Path=EastAsianLanguage
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianLanguage.HojoKanji}}">
+											Hoji Kanji
+										</RadioButton>
+										<TextBlock Grid.Row="6" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianLanguage="HojoKanji"
+												   Name="EastAsianLanguageHojoKanjiSample" />
+										<RadioButton Grid.Row="7" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianLanguageNlcKanjiButton"
+													 IsChecked="{Binding Path=EastAsianLanguage
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianLanguage.NlcKanji}}">
+											NLC Kanji
+										</RadioButton>
+										<TextBlock Grid.Row="7" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianLanguage="NlcKanji"
+												   Name="EastAsianLanguageNlcKanjiSample" />
+										<RadioButton Grid.Row="8" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianLanguageSimplifiedButton"
+													 IsChecked="{Binding Path=EastAsianLanguage
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianLanguage.Simplified}}">
+											Simplified
+										</RadioButton>
+										<TextBlock Grid.Row="8" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianLanguage="Simplified"
+												   Name="EastAsianLanguageSimplifiedSample" />
+										<RadioButton Grid.Row="9" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianLanguageTraditionalButton"
+													 IsChecked="{Binding Path=EastAsianLanguage
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianLanguage.Traditional}}">
+											Traditional
+										</RadioButton>
+										<TextBlock Grid.Row="9" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianLanguage="Traditional"
+												   Name="EastAsianLanguageTraditionalSample" />
+										<RadioButton Grid.Row="10" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianLanguageTraditionalNamesButton"
+													 IsChecked="{Binding Path=EastAsianLanguage
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianLanguage.TraditionalNames}}">
+											Traditional names
+										</RadioButton>
+										<TextBlock Grid.Row="10" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianLanguage="TraditionalNames"
+												   Name="EastAsianLanguageTraditionalNamesSample" />
+									</Grid>
+
+									<!--East Asian widths-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">East Asian widths</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianWidthsNormalButton"
+													 IsChecked="{Binding Path=EastAsianWidths
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianWidths.Normal}}">
+											Normal
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianWidths="Normal"
+												   Name="EastAsianWidthsNormalSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianWidthsProportionalButton"
+													 IsChecked="{Binding Path=EastAsianWidths
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianWidths.Proportional}}">
+											Proportional
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianWidths="Proportional"
+												   Name="EastAsianWidthsProportionalSample" />
+										<RadioButton Grid.Row="3" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianWidthsFullButton"
+													 IsChecked="{Binding Path=EastAsianWidths
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianWidths.Full}}">
+											Full
+										</RadioButton>
+										<TextBlock Grid.Row="3" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianWidths="Full"
+												   Name="EastAsianWidthsFullSample" />
+										<RadioButton Grid.Row="4" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianWidthsHalfButton"
+													 IsChecked="{Binding Path=EastAsianWidths
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianWidths.Half}}">
+											Half
+										</RadioButton>
+										<TextBlock Grid.Row="4" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianWidths="Half"
+												   Name="EastAsianWidthsHalfSample" />
+										<RadioButton Grid.Row="5" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianWidthsThirdButton"
+													 IsChecked="{Binding Path=EastAsianWidths
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianWidths.Third}}">
+											Third
+										</RadioButton>
+										<TextBlock Grid.Row="5" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianWidths="Third"
+												   Name="EastAsianWidthsThirdSample" />
+										<RadioButton Grid.Row="6" Style="{StaticResource typographyButtonStyle}" 
+													 Name="EastAsianWidthsQuarterButton"
+													 IsChecked="{Binding Path=EastAsianWidths
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontEastAsianWidths.Quarter}}">
+											Quarter
+										</RadioButton>
+										<TextBlock Grid.Row="6" Style="{StaticResource typographySampleStyle}" 
+												   Typography.EastAsianWidths="Quarter"
+												   Name="EastAsianWidthsQuarterSample" />
+									</Grid>
+
+									<!--Fractions-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Fractions</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="FractionsNormalButton"
+													 IsChecked="{Binding Path=Fraction
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontFraction.Normal}}">
+											Normal
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Fraction="Normal"
+												   Name="FractionsNormalSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="FractionsSlashedButton"
+													 IsChecked="{Binding Path=Fraction
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontFraction.Slashed}}">
+											Slashed
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Fraction="Slashed"
+												   Name="FractionsSlashedSample" />
+										<RadioButton Grid.Row="3" Style="{StaticResource typographyButtonStyle}" 
+													 Name="FractionsStackedButton"
+													 IsChecked="{Binding Path=Fraction
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontFraction.Stacked}}">
+											Stacked
+										</RadioButton>
+										<TextBlock Grid.Row="3" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Fraction="Stacked"
+												   Name="FractionsStackedSample" />
+									</Grid>
+
+									<!--HistoricalForms-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Historical forms</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="HistoricalFormsDisabledButton"
+													 IsChecked="{Binding Path=HistoricalForms, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.HistoricalForms="False"
+												   Name="HistoricalFormsDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="HistoricalFormsEnabledButton"
+													 IsChecked="{Binding Path=HistoricalForms}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.HistoricalForms="True"
+												   Name="HistoricalFormsEnabledSample" />
+									</Grid>
+
+									<!--HistoricalLigatures-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Historical ligatures</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="HistoricalLigaturesDisabledButton"
+													 IsChecked="{Binding Path=HistoricalLigatures, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.HistoricalLigatures="False"
+												   Name="HistoricalLigaturesDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="HistoricalLigaturesEnabledButton"
+													 IsChecked="{Binding Path=HistoricalLigatures}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.HistoricalLigatures="True"
+												   Name="HistoricalLigaturesEnabledSample" />
+									</Grid>
+
+									<!--Kerning-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Kerning</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="KerningDisabledButton"
+													 IsChecked="{Binding Path=Kerning, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Kerning="False"
+												   Name="KerningDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="KerningEnabledButton"
+													 IsChecked="{Binding Path=Kerning}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Kerning="True"
+												   Name="KerningEnabledSample" />
+									</Grid>
+
+									<!--Mathematical Greek-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Mathematical Greek</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="MathematicalGreekDisabledButton"
+													 IsChecked="{Binding Path=MathematicalGreek, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.MathematicalGreek="False"
+												   Name="MathematicalGreekDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="MathematicalGreekEnabledButton"
+													 IsChecked="{Binding Path=MathematicalGreek}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.MathematicalGreek="True"
+												   Name="MathematicalGreekEnabledSample" />
+									</Grid>
+
+									<!--Numeral alignment-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Numeral alignment</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="NumeralAlignmentNormalButton"
+													 IsChecked="{Binding Path=NumeralAlignment
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontNumeralAlignment.Normal}}">
+											Normal
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.NumeralAlignment="Normal"
+												   Name="NumeralAlignmentNormalSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="NumeralAlignmentProportionalButton"
+													 IsChecked="{Binding Path=NumeralAlignment
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontNumeralAlignment.Proportional}}">
+											Proportional
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.NumeralAlignment="Proportional"
+												   Name="NumeralAlignmentProportionalSample" />
+										<RadioButton Grid.Row="3" Style="{StaticResource typographyButtonStyle}" 
+													 Name="NumeralAlignmentTabularButton"
+													 IsChecked="{Binding Path=NumeralAlignment
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontNumeralAlignment.Tabular}}">
+											Tabular
+										</RadioButton>
+										<TextBlock Grid.Row="3" Style="{StaticResource typographySampleStyle}" 
+												   Typography.NumeralAlignment="Tabular"
+												   Name="NumeralAlignmentTabularSample" />
+									</Grid>
+
+									<!--Numeral style-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Numeral style</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="NumeralStyleNormalButton"
+													 IsChecked="{Binding Path=NumeralStyle
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontNumeralStyle.Normal}}">
+											Normal
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.NumeralStyle="Normal"
+												   Name="NumeralStyleNormalSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="NumeralStyleLiningButton"
+													 IsChecked="{Binding Path=NumeralStyle
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontNumeralStyle.Lining}}">
+											Lining
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.NumeralStyle="Lining"
+												   Name="NumeralStyleLiningSample" />
+										<RadioButton Grid.Row="3" Style="{StaticResource typographyButtonStyle}" 
+													 Name="NumeralStyleOldStyleButton"
+													 IsChecked="{Binding Path=NumeralStyle
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontNumeralStyle.OldStyle}}">
+											Old style
+										</RadioButton>
+										<TextBlock Grid.Row="3" Style="{StaticResource typographySampleStyle}" 
+												   Typography.NumeralStyle="OldStyle"
+												   Name="NumeralStyleOldStyleSample" />
+									</Grid>
+
+									<!--Slashed zero-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Slashed zero</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="SlashedZeroDisabledButton"
+													 IsChecked="{Binding Path=SlashedZero, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.SlashedZero="False"
+												   Name="SlashedZeroDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="SlashedZeroEnabledButton"
+													 IsChecked="{Binding Path=SlashedZero}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.SlashedZero="True"
+												   Name="SlashedZeroEnabledSample" />
+									</Grid>
+
+									<!--StandardLigatures-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Standard ligatures</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StandardLigaturesDisabledButton"
+													 IsChecked="{Binding Path=StandardLigatures, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StandardLigatures="False"
+												   Name="StandardLigaturesDisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}"
+													 Name="StandardLigaturesEnabledButton"
+													 IsChecked="{Binding Path=StandardLigatures}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StandardLigatures="True"
+												   Name="StandardLigaturesEnabledSample" />
+									</Grid>
+
+									<!--StandardSwashes-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Standard swashes</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StandardSwashesNoneButton"
+													 IsChecked="{Binding Path=StandardSwashes
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=0}">
+											None
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StandardSwashes="0"
+												   Name="StandardSwashesNoneSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StandardSwashesSet1Button"
+													 IsChecked="{Binding Path=StandardSwashes
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=1}">
+											Set 1
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StandardSwashes="1"
+												   Name="StandardSwashesSet1Sample" />
+										<RadioButton Grid.Row="3" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StandardSwashesSet2Button"
+													 IsChecked="{Binding Path=StandardSwashes
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=2}">
+											Set 2
+										</RadioButton>
+										<TextBlock Grid.Row="3" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StandardSwashes="2"
+												   Name="StandardSwashesSet2Sample" />
+										<RadioButton Grid.Row="4" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StandardSwashesSet3Button"
+													 IsChecked="{Binding Path=StandardSwashes
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=3}">
+											Set 3
+										</RadioButton>
+										<TextBlock Grid.Row="4" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StandardSwashes="3"
+												   Name="StandardSwashesSet3Sample" />
+									</Grid>
+
+									<!--Stylistic alternates-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic alternates</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticAlternatesNoneButton"
+													 IsChecked="{Binding Path=StylisticAlternates
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=0}">
+											None
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticAlternates="0"
+												   Name="StylisticAlternatesNoneSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticAlternatesSet1Button"
+													 IsChecked="{Binding Path=StylisticAlternates
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=1}">
+											Set 1
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticAlternates="1"
+												   Name="StylisticAlternatesSet1Sample" />
+										<RadioButton Grid.Row="3" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticAlternatesSet2Button"
+													 IsChecked="{Binding Path=StylisticAlternates
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=2}">
+											Set 2
+										</RadioButton>
+										<TextBlock Grid.Row="3" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticAlternates="2"
+												   Name="StylisticAlternatesSet2Sample" />
+										<RadioButton Grid.Row="4" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticAlternatesSet3Button"
+													 IsChecked="{Binding Path=StylisticAlternates
+														, Converter={StaticResource intValueToParamEquality}
+														, ConverterParameter=3}">
+											Set 3
+										</RadioButton>
+										<TextBlock Grid.Row="4" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticAlternates="3"
+												   Name="StylisticAlternatesSet3Sample" />
+									</Grid>
+
+									<!--Stylistic set 1-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 1</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet1DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet1, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet1="False"
+												   Name="StylisticSet1DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet1EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet1}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet1="True"
+												   Name="StylisticSet1EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 2-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 2</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet2DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet2, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet2="False"
+												   Name="StylisticSet2DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet2EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet2}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet2="True"
+												   Name="StylisticSet2EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 3-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 3</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet3DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet3, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet3="False"
+												   Name="StylisticSet3DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet3EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet3}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet3="True"
+												   Name="StylisticSet3EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 4-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 4</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet4DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet4, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet4="False"
+												   Name="StylisticSet4DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet4EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet4}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet4="True"
+												   Name="StylisticSet4EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 5-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 5</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet5DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet5, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet5="False"
+												   Name="StylisticSet5DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet5EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet5}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet5="True"
+												   Name="StylisticSet5EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 6-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 6</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet6DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet6, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet6="False"
+												   Name="StylisticSet6DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet6EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet6}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet6="True"
+												   Name="StylisticSet6EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 7-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 7</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet7DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet7, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet7="False"
+												   Name="StylisticSet7DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet7EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet7}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet7="True"
+												   Name="StylisticSet7EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 8-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 8</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet8DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet8, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet8="False"
+												   Name="StylisticSet8DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet8EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet8}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet8="True"
+												   Name="StylisticSet8EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 9-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 9</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet9DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet9, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet9="False"
+												   Name="StylisticSet9DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet9EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet9}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet9="True"
+												   Name="StylisticSet9EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 10-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 10</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet10DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet10, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet10="False"
+												   Name="StylisticSet10DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet10EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet10}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet10="True"
+												   Name="StylisticSet10EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 11-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 11</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet11DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet11, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet11="False"
+												   Name="StylisticSet11DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet11EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet11}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet11="True"
+												   Name="StylisticSet11EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 12-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 12</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet12DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet12, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet12="False"
+												   Name="StylisticSet12DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet12EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet12}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet12="True"
+												   Name="StylisticSet12EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 13-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 13</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet13DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet13, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet13="False"
+												   Name="StylisticSet13DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet13EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet13}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet13="True"
+												   Name="StylisticSet13EnabledSample" />
+									</Grid>
+									
+									<!--Stylistic set 14-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 14</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet14DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet14, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet14="False"
+												   Name="StylisticSet14DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet14EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet14}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet14="True"
+												   Name="StylisticSet14EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 15-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 15</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet15DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet15, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet15="False"
+												   Name="StylisticSet15DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet15EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet15}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet15="True"
+												   Name="StylisticSet15EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 16-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 16</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet16DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet16, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet16="False"
+												   Name="StylisticSet16DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet16EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet16}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet16="True"
+												   Name="StylisticSet16EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 17-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 17</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet17DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet17, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet17="False"
+												   Name="StylisticSet17DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet17EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet17}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet17="True"
+												   Name="StylisticSet17EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 18-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 18</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet18DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet18, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet18="False"
+												   Name="StylisticSet18DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet18EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet18}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet18="True"
+												   Name="StylisticSet18EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 19-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 19</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet19DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet19, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet19="False"
+												   Name="StylisticSet19DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet19EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet19}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet19="True"
+												   Name="StylisticSet19EnabledSample" />
+									</Grid>
+
+									<!--Stylistic set 20-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Stylistic set 20</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet20DisabledButton"
+													 IsChecked="{Binding Path=StylisticSet20, Converter={StaticResource boolInverter}}">
+											Disabled
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet20="False"
+												   Name="StylisticSet20DisabledSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="StylisticSet20EnabledButton"
+													 IsChecked="{Binding Path=StylisticSet20}">
+											Enabled
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.StylisticSet20="True"
+												   Name="StylisticSet20EnabledSample" />
+									</Grid>
+
+									<!--Variants-->
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition SharedSizeGroup="C0" />
+											<ColumnDefinition SharedSizeGroup="C1" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+											<RowDefinition />
+										</Grid.RowDefinitions>
+										
+										<TextBlock Style="{StaticResource typographyLabelStyle}">Variants</TextBlock>
+										<RadioButton Grid.Row="1" Style="{StaticResource typographyButtonStyle}" 
+													 Name="VariantsNormalButton"
+													 IsChecked="{Binding Path=Variants
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontVariants.Normal}}">
+											Normal
+										</RadioButton>
+										<TextBlock Grid.Row="1" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Variants="Normal"
+												   Name="VariantsNormalSample" />
+										<RadioButton Grid.Row="2" Style="{StaticResource typographyButtonStyle}" 
+													 Name="VariantsSuperscriptButton"
+													 IsChecked="{Binding Path=Variants
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontVariants.Superscript}}">
+											Superscript
+										</RadioButton>
+										<TextBlock Grid.Row="2" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Variants="Superscript"
+												   Name="VariantsSuperscriptSample" />
+										<RadioButton Grid.Row="3" Style="{StaticResource typographyButtonStyle}" 
+													 Name="VariantsSubscriptButton"
+													 IsChecked="{Binding Path=Variants
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontVariants.Subscript}}">
+											Subscript
+										</RadioButton>
+										<TextBlock Grid.Row="3" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Variants="Subscript"
+												   Name="VariantsSubscriptSample" />
+										<RadioButton Grid.Row="4" Style="{StaticResource typographyButtonStyle}" 
+													 Name="VariantsOrdinalButton"
+													 IsChecked="{Binding Path=Variants
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontVariants.Ordinal}}">
+											Ordinal
+										</RadioButton>
+										<TextBlock Grid.Row="4" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Variants="Ordinal"
+												   Name="VariantsOrdinalSample" />
+										<RadioButton Grid.Row="5" Style="{StaticResource typographyButtonStyle}" 
+													 Name="VariantsInferiorButton"
+													 IsChecked="{Binding Path=Variants
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontVariants.Inferior}}">
+											Inferior
+										</RadioButton>
+										<TextBlock Grid.Row="5" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Variants="Inferior"
+												   Name="VariantsInferiorSample" />
+										<RadioButton Grid.Row="6" Style="{StaticResource typographyButtonStyle}" 
+													 Name="VariantsRubyButton"
+													 IsChecked="{Binding Path=Variants
+														, Converter={StaticResource valueToParamEquality}
+														, ConverterParameter={x:Static win:FontVariants.Ruby}}">
+											Ruby
+										</RadioButton>
+										<TextBlock Grid.Row="6" Style="{StaticResource typographySampleStyle}" 
+												   Typography.Variants="Ruby"
+												   Name="VariantsRubySample" />
+									</Grid>
+								</StackPanel>
+							</ScrollViewer>
+						</Grid>
+					</TabItem>
+
+					<!--Descriptive text-->
+					<TabItem Header="Descriptive text" Name="tabDescriptiveText">
+						<TabItem.Style>
+							<Style>
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding Path=GlyphTypeface}" Value="{x:Null}">
+										<Setter Property="TabItem.Visibility" Value="Collapsed"/>
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
+						</TabItem.Style>
+						
+						<Grid Margin="3 0 3 3">
+							<Grid.Style>
+								<Style>
+									<Style.Triggers>
+										<DataTrigger Binding="{Binding Path=GlyphTypeface}" Value="{x:Null}">
+											<Setter Property="Grid.Visibility" Value="Collapsed"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</Grid.Style>
+							
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="5*" /><!-- Family typefaces -->
+								<ColumnDefinition Width="5*" /><!-- Typeface sizes -->
+								<ColumnDefinition Width="2*" /><!-- Languages -->
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto" /><!-- Title -->
+								<RowDefinition /><!-- Font description -->
+							</Grid.RowDefinitions>
+							
+							<!-- Font description -->
+							<Label Padding="3" Margin="3 0 3 0">Font description:</Label>
+							<ScrollViewer Grid.Row="1"
+								Margin="3 0 3 0" Padding="3" BorderThickness="0.75"
+								Background="White"
+								VerticalScrollBarVisibility="Auto">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="Auto" />
+										<ColumnDefinition Width="*" />
+									</Grid.ColumnDefinitions>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+										<RowDefinition Height="Auto" />
+									</Grid.RowDefinitions>
+									<Grid.Resources>
+										<Style x:Key="fontDescriptionTitleStyle" TargetType="TextBlock">
+											<Setter Property="Margin" Value="8 2 0 2"/>
+										</Style>
+										<Style x:Key="fontDescriptionTextStyle" TargetType="TextBlock">
+											<Setter Property="Margin" Value="8 2 8 2"/>
+											<Setter Property="Grid.Column" Value="1"/>
+											<Setter Property="TextWrapping" Value="Wrap"/>
+										</Style>
+									</Grid.Resources>
+
+									<!--Family-->
+									<TextBlock Grid.Row="1" Name="FamilyNameLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceFamilyName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Family:
+									</TextBlock>
+									<TextBlock Grid.Row="1" Name="FamilyNameText"
+											   Text="{Binding Path=GlyphTypefaceFamilyName}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceFamilyName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Face-->
+									<TextBlock Grid.Row="2" Name="FaceNameLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceFaceName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Face:
+									</TextBlock>
+									<TextBlock Grid.Row="2" Name="FaceNameText"
+											   Text="{Binding Path=GlyphTypefaceFaceName}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceFaceName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Description-->
+									<TextBlock Grid.Row="3" Name="DescriptionLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceDescription}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Description:
+									</TextBlock>
+									<TextBlock Grid.Row="3" Name="DescriptionText"
+											   Text="{Binding Path=GlyphTypefaceDescription}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceDescription}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--VersionString-->
+									<TextBlock Grid.Row="4" Name="VersionStringLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceVersionString}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Version:
+									</TextBlock>
+									<TextBlock Grid.Row="4" Name="VersionStringText"
+													   Text="{Binding Path=GlyphTypefaceVersionString}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceVersionString}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Copyright-->
+									<TextBlock Grid.Row="5" Name="CopyrightLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceCopyright}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Copyright:
+									</TextBlock>
+									<TextBlock Grid.Row="5" Name="CopyrightText"
+											   Text="{Binding Path=GlyphTypefaceCopyright}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceCopyright}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Trademark-->
+									<TextBlock Grid.Row="6" Name="TrademarkLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceTrademark}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Trademark:
+									</TextBlock>
+									<TextBlock Grid.Row="6" Name="TrademarkText"
+											   Text="{Binding Path=GlyphTypefaceTrademark}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceTrademark}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Manufacturer-->
+									<TextBlock Grid.Row="7" Name="ManufacturerNameLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceManufacturerName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Manufacturer:
+									</TextBlock>
+									<TextBlock Grid.Row="7" Name="ManufacturerNameText"
+											   Text="{Binding Path=GlyphTypefaceManufacturerName}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceManufacturerName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Designer-->
+									<TextBlock Grid.Row="8" Name="DesignerNameLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceDesignerName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Designer:
+									</TextBlock>
+									<TextBlock Grid.Row="8" Name="DesignerNameText"
+											   Text="{Binding Path=GlyphTypefaceDesignerName}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceDesignerName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Designer Url-->
+									<TextBlock Grid.Row="9" Name="DesignerUrlLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceDesignerUrl}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Designer Url:
+									</TextBlock>
+									<TextBlock Grid.Row="9" Name="DesignerUrlText"
+											   Text="{Binding Path=GlyphTypefaceDesignerUrl}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceDesignerUrl}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Vendor Url-->
+									<TextBlock Grid.Row="10" Name="VendorUrlLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceVendorUrl}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Vendor Url:
+									</TextBlock>
+									<TextBlock Grid.Row="10" Name="VendorUrlText"
+											   Text="{Binding Path=GlyphTypefaceVendorUrl}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceVendorUrl}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Sample text-->
+									<TextBlock Grid.Row="11" Name="SampleTextLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceSampleText}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Sample text:
+									</TextBlock>
+									<TextBlock Grid.Row="11" Name="SampleTextText"
+											   Text="{Binding Path=GlyphTypefaceSampleText}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceSampleText}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Win32 family-->
+									<TextBlock Grid.Row="12" Name="Win32FamilyNameLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceWin32FamilyName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Win32 family:
+									</TextBlock>
+									<TextBlock Grid.Row="12" Name="Win32FamilyNameText"
+											   Text="{Binding Path=GlyphTypefaceWin32FamilyName}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceWin32FamilyName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Win32 face-->
+									<TextBlock Grid.Row="13" Name="Win32FaceNameLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceWin32FaceName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Win32 face:
+									</TextBlock>
+									<TextBlock Grid.Row="13" Name="Win32FaceNameText"
+											   Text="{Binding Path=GlyphTypefaceWin32FaceName}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceWin32FaceName}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+
+									<!--Font file Uri-->
+									<TextBlock Grid.Row="14" Name="FontFileUriLabel">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTitleStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceFontUri}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+										Font file Uri:
+									</TextBlock>
+									<TextBlock Grid.Row="14" Name="FontFileUriText"
+											   Text="{Binding Path=GlyphTypefaceFontUri}">
+										<TextBlock.Style>
+											<Style BasedOn="{StaticResource fontDescriptionTextStyle}" TargetType="TextBlock">
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding Path=GlyphTypefaceFontUri}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Collapsed"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+								</Grid>
+							</ScrollViewer>
+
+							<!--LicenseDescription-->
+							<Label Grid.Column="1" Padding="3" Margin="3 0 3 0">License:</Label>
+							<TextBox Grid.Column="1" Grid.Row="1" Name="LicenseDescription"
+								Margin="3 0 3 0" Padding="3" BorderThickness="0.75" Background="White"
+								Text="{Binding Path=GlyphTypefaceLicenseDescription, Mode=OneWay}"
+								IsTabStop="false" TabIndex="-1"
+								IsReadOnly="true" AcceptsReturn="false" TextWrapping="Wrap"
+								VerticalScrollBarVisibility="Auto"/>
+
+							<!-- Language -->
+							<Label Grid.Column="2" Padding="3" Margin="3 0 3 0">Language:</Label>
+							<Grid Grid.Row="1" Grid.Column="2" Margin="3 0 3 0">
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto" /><!-- textbox -->
+									<RowDefinition /><!-- listbox -->
+								</Grid.RowDefinitions>
+
+								<TextBox Margin="3 0 0 0" Padding="3" BorderThickness="0.75" 
+										 Name="txtDescriptionLanguage" 
+										 Text="{Binding Path=DescriptiveTextCulture}"
+										 IsTabStop="true" TabIndex="1" 
+										 TextChanged="txtDescriptionLanguage_TextChanged"/>
+								<ListBox Grid.Row="1" Margin="3 0 0 0" Padding="3" BorderThickness="0.75" 
+										 Name="lbxDescriptionLanguage"
+										 ItemsSource="{Binding Path=DescriptiveTextCultures}"
+										 SelectedItem="{Binding Path=DescriptiveTextCulture}"
+										 IsTabStop="true" TabIndex="2"/>
+							</Grid>
+						</Grid>
+					</TabItem>
+
+					<!--Character repertoire-->
+					<!--<TabItem Header="Character repertoire"/>-->
+					<!--Metrics-->
+					<!--<TabItem Header="Metrics"/>-->
+				</TabControl>
+			</Expander>
+			
+			<!-- Preview -->
+			<Grid Grid.Row="2">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" /><!-- Title -->
+					<RowDefinition /><!-- Preview -->
+				</Grid.RowDefinitions>
+				
+				<!-- Preview -->
+				<Label Padding="3">Preview:</Label>
+				<TextBox Grid.Row="1" Name="txtPreview"
+					Margin="3 0 3 0" Padding="3" BorderThickness="0.75"
+					Background="White" MaxHeight="120"
+					IsTabStop="false" TabIndex="-1"
+					IsReadOnly="false" AcceptsReturn="false" TextWrapping="NoWrap"
+					VerticalScrollBarVisibility="Auto"
+					HorizontalScrollBarVisibility="Auto"
+					FontFamily="{Binding Path=FontFamily}"
+					FontSize="{Binding Path=FontSize}"
+					FontWeight="{Binding Path=Typeface.Weight}" 
+					FontStretch="{Binding Path=Typeface.Stretch}" 
+					FontStyle="{Binding Path=Typeface.Style}"
+					TextDecorations="{Binding Path=Decorations}"
+					Foreground="{Binding Path=FontColor, Converter={StaticResource colorToBrushConverter}}"
+					Typography.AnnotationAlternates="{Binding Path=AnnotationAlternates}"
+					Typography.Capitals="{Binding Path=Capitals}"
+					Typography.CapitalSpacing="{Binding Path=CapitalSpacing}"
+					Typography.CaseSensitiveForms="{Binding Path=CaseSensitiveForms}"
+					Typography.ContextualAlternates="{Binding Path=ContextualAlternates}"
+					Typography.ContextualLigatures="{Binding Path=ContextualLigatures}"
+					Typography.ContextualSwashes="{Binding Path=ContextualSwashes}"
+					Typography.DiscretionaryLigatures="{Binding Path=DiscretionaryLigatures}"
+					Typography.EastAsianExpertForms="{Binding Path=EastAsianExpertForms}"
+					Typography.EastAsianLanguage="{Binding Path=EastAsianLanguage}"
+					Typography.EastAsianWidths="{Binding Path=EastAsianWidths}"
+					Typography.Fraction="{Binding Path=Fraction}"
+					Typography.HistoricalForms="{Binding Path=HistoricalForms}"
+					Typography.HistoricalLigatures="{Binding Path=HistoricalLigatures}"
+					Typography.Kerning="{Binding Path=Kerning}"
+					Typography.MathematicalGreek="{Binding Path=MathematicalGreek}"
+					Typography.NumeralAlignment="{Binding Path=NumeralAlignment}"
+					Typography.NumeralStyle="{Binding Path=NumeralStyle}"
+					Typography.SlashedZero="{Binding Path=SlashedZero}"
+					Typography.StandardLigatures="{Binding Path=StandardLigatures}"
+					Typography.StandardSwashes="{Binding Path=StandardSwashes}"
+					Typography.StylisticAlternates="{Binding Path=StylisticAlternates}"
+					Typography.StylisticSet1="{Binding Path=StylisticSet1}"
+					Typography.StylisticSet2="{Binding Path=StylisticSet2}"
+					Typography.StylisticSet3="{Binding Path=StylisticSet3}"
+					Typography.StylisticSet4="{Binding Path=StylisticSet4}"
+					Typography.StylisticSet5="{Binding Path=StylisticSet5}"
+					Typography.StylisticSet6="{Binding Path=StylisticSet6}"
+					Typography.StylisticSet7="{Binding Path=StylisticSet7}"
+					Typography.StylisticSet8="{Binding Path=StylisticSet8}"
+					Typography.StylisticSet9="{Binding Path=StylisticSet9}"
+					Typography.StylisticSet10="{Binding Path=StylisticSet10}"
+					Typography.StylisticSet11="{Binding Path=StylisticSet11}"
+					Typography.StylisticSet12="{Binding Path=StylisticSet12}"
+					Typography.StylisticSet13="{Binding Path=StylisticSet13}"
+					Typography.StylisticSet14="{Binding Path=StylisticSet14}"
+					Typography.StylisticSet15="{Binding Path=StylisticSet15}"
+					Typography.StylisticSet16="{Binding Path=StylisticSet16}"
+					Typography.StylisticSet17="{Binding Path=StylisticSet17}"
+					Typography.StylisticSet18="{Binding Path=StylisticSet18}"
+					Typography.StylisticSet19="{Binding Path=StylisticSet19}"
+					Typography.StylisticSet20="{Binding Path=StylisticSet20}"
+					Typography.Variants="{Binding Path=Variants}"
+						 >
+					The quick brown fox jumps over the lazy dog
+				</TextBox>
+			</Grid>
+		</Grid>
+	</DockPanel>
+</Window>

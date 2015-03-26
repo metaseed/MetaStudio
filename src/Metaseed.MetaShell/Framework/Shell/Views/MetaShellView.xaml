@@ -1,0 +1,258 @@
+﻿<views2:ShellViewBase x:Class="Metaseed.MetaShell.Views.MetaShellView"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+				     xmlns:catel="http://catel.codeplex.com" 
+                     xmlns:meta="http://www.metaseed.com"
+                     xmlns:fluent="clr-namespace:Fluent;assembly=Fluent"
+                     xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+                     xmlns:prism="http://www.codeplex.com/prism"
+                     xmlns:msmvvm="clr-namespace:Metaseed.MVVM.View;assembly=Metaseed.MetaCore"
+                     xmlns:infr="clr-namespace:Metaseed.MetaShell.Infrastructure"
+                     xmlns:shellControls="clr-namespace:Metaseed.MetaShell.Controls"
+                     xmlns:views="clr-namespace:Metaseed.MetaShell.Views"
+                     
+                     ShowInTaskbar="True" ResizeMode="CanResizeWithGrip" SizeToContent="Manual" 
+                     WindowStartupLocation="Manual" WindowState="Maximized"
+                     
+                     xmlns:lex="http://wpflocalizeextension.codeplex.com"
+                     xmlns:controls="clr-namespace:Metaseed.MetaShell.Controls;assembly=Metaseed.ShellBase"
+                     xmlns:views1="clr-namespace:Metaseed.MetaShell.Views;assembly=Metaseed.ShellBase"
+                     xmlns:views2="clr-namespace:Metaseed.ShellBase.Framework.Shell.Views;assembly=Metaseed.ShellBase"
+                     lex:LocalizeDictionary.DesignCulture="zh-Hans"
+                     lex:ResxLocalizationProvider.DefaultAssembly="Metaseed.MetaShell"
+                     lex:ResxLocalizationProvider.DefaultDictionary="ShellViewResource"
+                     
+                     Title="{Binding Title}"
+                     >
+    <!--xmlns:metaShellPrismRegion="clr-namespace:Metaseed.MetaShell.Prism.Regions"-->
+
+    <!-- Resources -->
+    <fluent:RibbonWindow.Resources>
+        <xcad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <views1:NullableValueConverter x:Key="NullableValueConverter" />
+        <views1:ActiveDocumentConverter x:Key="ActiveDocumentConverter"/>
+    </fluent:RibbonWindow.Resources>
+
+    <!-- Content -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="24" />
+        </Grid.RowDefinitions>
+        <meta:TaskbarIcon x:Name="MyNotifyIcon" IconSource="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Metaseed.ico" ToolTipText="MetaStudio">
+            <meta:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{lex:Loc Metaseed.MetaShell:ShellViewResource:MyNotifyIcon_Close}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/ExitApp.png" Click="CLOSE_MenuClick"/>
+                </ContextMenu>
+            </meta:TaskbarIcon.ContextMenu>
+        </meta:TaskbarIcon>
+        <views:MetaShellRibbon x:Name="Part_Ribbon" />
+        <!--prism:RegionManager.RegionName="{x:Static infr:RegionNames.RibbonRegion}"-->
+
+        <xcad:DockingManager Grid.Row="1" x:Name="DockingManager" 
+                             DocumentsSource="{Binding ShellService.Documents}"
+						     AnchorablesSource="{Binding ShellService.Tools}"
+                             ActiveContent="{Binding ShellService.ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
+            <!-- prism:RegionManager.RegionName="{x:Static infr:RegionNames.DocumentsRegion}"-->
+            <xcad:DockingManager.Theme>
+                <xcad:AeroTheme />
+            </xcad:DockingManager.Theme>
+            <xcad:DockingManager.LayoutTransform>
+                <ScaleTransform
+                    ScaleX="{Binding Value, ElementName=zoomSlider}"
+                    ScaleY="{Binding Value, ElementName=zoomSlider}"/>
+            </xcad:DockingManager.LayoutTransform>
+            <xcad:DockingManager.AnchorableHeaderTemplate>
+                <!--x:Key="AnchorableHeaderTemplate" the default templete header icon size is not set Width="16" Height="16"-->
+                <DataTemplate>
+                    <Grid>
+                        <Grid.Resources>
+                            <xcad:NullToDoNothingConverter x:Key="NullToDoNothingConverter"/>
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Image x:Name="icon" Source="{Binding IconSource, Converter={StaticResource NullToDoNothingConverter}}" Stretch="Uniform" Width="16" Height="16"/>
+                        <TextBlock x:Name="title" Margin="4,0,0,0" Text="{Binding Title}" TextTrimming="CharacterEllipsis" Grid.Column="1"/>
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding IconSource}" Value="{x:Null}">
+                            <Setter Property="Margin" Value="0" TargetName="title"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </xcad:DockingManager.AnchorableHeaderTemplate>
+            <xcad:DockingManager.LayoutItemTemplate>
+                <DataTemplate>
+                    <ContentControl msmvvm:View.Model="{Binding}" IsTabStop="False" />
+                </DataTemplate>
+            </xcad:DockingManager.LayoutItemTemplate>
+            <xcad:DockingManager.LayoutUpdateStrategy>
+                <controls:LayoutInitializer/>
+            </xcad:DockingManager.LayoutUpdateStrategy>
+            <!--<xcad:DockingManager.LayoutItemTemplateSelector>
+                <controls:PanesTemplateSelector>
+                    <controls:PanesTemplateSelector.DocumentsTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <ContentControl  Content="{Binding RegionContentControl}"></ContentControl>
+                            </Grid>
+                        </DataTemplate>
+                    </controls:PanesTemplateSelector.DocumentsTemplate>
+                    <controls:PanesTemplateSelector.ToolsTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <ContentControl  Content="{Binding ViewModel.RegionContentControl}" prism:RegionManager.RegionManager="{Binding RegionManager}"></ContentControl>
+                            </Grid>
+                        </DataTemplate>
+                    </controls:PanesTemplateSelector.ToolsTemplate>
+                </controls:PanesTemplateSelector>
+            </xcad:DockingManager.LayoutItemTemplateSelector>-->
+            <xcad:DockingManager.LayoutItemContainerStyleSelector>
+                <controls:PanesStyleSelector>
+                    <controls:PanesStyleSelector.DocumentStyle>
+                        <Style TargetType="{x:Type xcad:LayoutItem}">
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
+                            <Setter Property="Title" Value="{Binding  Model.Title, Mode=OneWay}" />
+                            <Setter Property="CanClose" Value="{Binding  Model.CanClose}" />
+                            <Setter Property="CanFloat" Value="{Binding  Model.CanFloat}" />
+                            <Setter Property="ToolTip" Value="{Binding  Model.Description, Mode=OneWay}" />
+                            <Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
+                            <Setter Property="IconSource" Value="{Binding Model.IconSource, Converter={StaticResource NullableValueConverter}}" />
+                            <Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
+                            <Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
+                           
+                        </Style>
+                    </controls:PanesStyleSelector.DocumentStyle>
+                    <controls:PanesStyleSelector.ToolStyle>
+                        <Style TargetType="{x:Type xcad:LayoutAnchorableItem}">
+                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
+                            <Setter Property="Title" Value="{Binding Model.Title, Mode=OneWay}" />
+                            <Setter Property="CanClose" Value="{Binding  Model.CanClose}" />
+                            <Setter Property="CanFloat" Value="{Binding  Model.CanFloat}" />
+                            <Setter Property="ToolTip" Value="{Binding  Model.Description, Mode=OneWay}" />
+                            <Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
+                            <Setter Property="IconSource" Value="{Binding Model.IconSource, Converter={StaticResource NullableValueConverter}}" />
+                            <Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
+                            <Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
+                            <Setter Property="CanHide" Value="{Binding  Model.CanHide}" />
+                            <Setter Property="Visibility" Value="{Binding Model.IsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={x:Static Visibility.Hidden}}"/>
+                        </Style>
+                    </controls:PanesStyleSelector.ToolStyle>
+                </controls:PanesStyleSelector>
+            </xcad:DockingManager.LayoutItemContainerStyleSelector>
+            <xcad:LayoutRoot>
+                <xcad:LayoutPanel Orientation="Vertical" x:Name="LayoutPanelVertical">
+                    <!--metaShellPrismRegion:AvalonDockRegion.RegionName="{x:Static infr:RegionNames.ToolboxLeftRegion}"-->
+                    <!--CanClose="False"-->
+                    <xcad:LayoutPanel Orientation="Horizontal" x:Name="LayoutPanelHorizontal">
+                        <!--<xcad:LayoutAnchorablePaneGroup DockWidth="150" Orientation="Horizontal">
+                            <xcad:LayoutAnchorablePane >
+                                -->
+                        <!--prism:RegionManager.RegionName="{x:Static infr:RegionNames.ToolboxLeftRegion}"-->
+                        <!--
+                                <xcad:LayoutAnchorable x:Name="LayoutAnchorable_Function" ContentId="LayoutAnchorable_Function" Title="Functions" >
+                                    <TextBox/>
+                                </xcad:LayoutAnchorable>
+
+                            </xcad:LayoutAnchorablePane>
+
+                        </xcad:LayoutAnchorablePaneGroup>-->
+
+                        <xcad:LayoutDocumentPaneGroup>
+
+                            <xcad:LayoutDocumentPane x:Name="LayoutDocumentPane">
+                                <!--<xcad:LayoutDocument Title="Doc0">
+                                    <RichTextBox/>
+                                </xcad:LayoutDocument>
+                                <xcad:LayoutDocument Title="Doc1">
+                                    <RichTextBox/>
+                                </xcad:LayoutDocument>
+                                <xcad:LayoutDocument Title="Doc2">
+                                    <RichTextBox/>
+                                </xcad:LayoutDocument>-->
+                            </xcad:LayoutDocumentPane>
+
+                        </xcad:LayoutDocumentPaneGroup>
+                        <!--metaShellPrismRegion:AvalonDockRegion.RegionName="{x:Static infr:RegionNames.ToolboxRightRegion}"-->
+                        <!--<xcad:LayoutAnchorablePaneGroup DockWidth="150" Orientation="Vertical">
+                            <xcad:LayoutAnchorablePane >
+                                <xcad:LayoutAnchorable Title="Tool 1">
+                                    <TextBox/>
+                                </xcad:LayoutAnchorable>
+                                <xcad:LayoutAnchorable Title="Tool 2">
+                                    <TextBox/>
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+                        </xcad:LayoutAnchorablePaneGroup>-->
+                    </xcad:LayoutPanel>
+                    <!--metaShellPrismRegion:AvalonDockRegion.RegionName="{x:Static infr:RegionNames.ToolboxBottomRegion}"-->
+                    <!--<xcad:LayoutAnchorablePaneGroup DockHeight="100" Orientation="Vertical">
+                        <xcad:LayoutAnchorablePane >
+                            <xcad:LayoutAnchorable x:Name="LayoutAnchorable_Info" ContentId="LayoutAnchorable_Info" Title="Debugging window"  CanHide="False" >
+                                -->
+                    <!--<catel:TraceOutputControl />-->
+                    <!--
+                                <TextBox/>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Tool 2">
+                                <TextBox/>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>-->
+                </xcad:LayoutPanel>
+                <!--<xcad:LayoutRoot.LeftSide>
+                    <xcad:LayoutAnchorSide>
+                        <xcad:LayoutAnchorGroup>
+                            <xcad:LayoutAnchorable x:Name="LayoutAnchorable_Function" ContentId="LayoutAnchorable_Function" Title="Functions" CanClose="False">
+                                <Button Content="kkkk"/>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorGroup>
+                    </xcad:LayoutAnchorSide>
+                </xcad:LayoutRoot.LeftSide>-->
+                <!--<xcad:LayoutRoot.BottomSide>
+                    <xcad:LayoutAnchorSide >
+                        <xcad:LayoutAnchorGroup>
+                            <xcad:LayoutAnchorable x:Name="LayoutAnchorable_Info" ContentId="LayoutAnchorable_Info" Title="Debugging window"  CanHide="False" AutoHideHeight="150">
+                                <catel:TraceOutputControl />
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorGroup>
+                    </xcad:LayoutAnchorSide>
+                </xcad:LayoutRoot.BottomSide>-->
+            </xcad:LayoutRoot>
+        </xcad:DockingManager>
+
+        <fluent:StatusBar Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
+            <fluent:StatusBar.Resources>
+                <views1:ZoomValueConverter x:Key="ZoomValueC"/>
+            </fluent:StatusBar.Resources>
+            <fluent:StatusBarItem Title="File Path" ToolTip="{Binding Path=ShellService.PackageService.CurrentPackagePath}" MouseDoubleClick="StatusBarItemFilePath_MouseDoubleClick"  HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="{lex:Loc Key=StatusBarItem_FilePath}"/>
+                    <TextBlock Text="{Binding Path=TruncatedPackagePath}"/>
+                </StackPanel>
+            </fluent:StatusBarItem>
+            <Separator HorizontalAlignment="Left"/>
+            <fluent:StatusBarItem Title="Metaseed.com" HorizontalAlignment="Right">
+                <Hyperlink NavigateUri="http://www.metaseed.com" RequestNavigate="Hyperlink_RequestNavigate">www.metaseed.com</Hyperlink>
+            </fluent:StatusBarItem>
+            <Separator HorizontalAlignment="Left"/>
+            <fluent:StatusBarItem Title="Zoom Value" HorizontalAlignment="Right">
+                <Button Click="ZoomButton_Click">
+                    <Button.Content>
+                        <TextBlock Text="{Binding Value, ElementName=zoomSlider, Converter={StaticResource ZoomValueC},StringFormat={}{0:0.0}\%}" />
+                    </Button.Content>
+                    <Button.ToolTip>
+                        click to change back to 100%
+                    </Button.ToolTip>
+                </Button>
+            </fluent:StatusBarItem>
+            <fluent:StatusBarItem Title="Zoom Slider" HorizontalAlignment="Right">
+                <Slider x:Name="zoomSlider" Minimum="0.5" Value="1" Maximum="3" IsDirectionReversed="False"  SmallChange="0.1" LargeChange="0.1" 
+                        Style="{DynamicResource ZoomSliderStyle}" />
+            </fluent:StatusBarItem>
+        </fluent:StatusBar>
+    </Grid>
+</views2:ShellViewBase>

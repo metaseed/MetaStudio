@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<model>
+<class name="MyClass1">
+  <property name="MyProperty1" type="string"/>
+  <property name="MyProperty2" type="string"/>
+</class>
+  <class name="MyClass2">
+    <property name="MyProperty1" type="string"/>
+    <property name="MyProperty2" type="string"/>
+  </class>
+</model>

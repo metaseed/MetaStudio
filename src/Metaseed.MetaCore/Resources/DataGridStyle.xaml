@@ -1,0 +1,92 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:dg="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Center Aligned DataGridCell Style -->
+    <Style x:Key="CenterAlignedCellStyle" TargetType="{x:Type dg:DataGridCell}" >
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type dg:DataGridCell}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <ContentPresenter VerticalAlignment="Center"
+                                      HorizontalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <LinearGradientBrush x:Key="dgHeaderBrush" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#906B8E95" Offset="0"/>
+        <GradientStop Color="#9014A7C1" Offset="1"/>
+        <GradientStop Color="#901E424E" Offset="0.509"/>
+        <GradientStop Color="#901D4855" Offset="0.542"/>
+        <GradientStop Color="#901D4855" Offset="0.542"/>
+        <GradientStop Color="#90193A44" Offset="0.526"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="dgHeaderBorderBrush" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#FF1D1D1D" Offset="0.614"/>
+        <GradientStop Color="#FF007F96" Offset="0.853"/>
+        <GradientStop Color="#FF0AEAFA" Offset="1"/>
+    </LinearGradientBrush>
+
+    <Style x:Key="dgHeaderStyle" TargetType="dg:DataGridColumnHeader">
+        <Setter Property="Background" Value="{StaticResource dgHeaderBrush}" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="BorderBrush" Value="{StaticResource dgHeaderBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="MinWidth" Value="30" />
+        <Setter Property="MinHeight" Value="30" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style x:Key="dgCellStyle" TargetType="dg:DataGridCell"
+                   BasedOn="{StaticResource {x:Type dg:DataGridCell}}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Foreground" Value="Black" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                <!--<Setter Property="Background" Value="{StaticResource whiteBackBrush}" />-->
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static dg:DataGrid.FocusBorderBrushKey}}" />
+                <Setter Property="Foreground" Value="Black" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="dgRowStyle" TargetType="dg:DataGridRow">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Background" Value="White" />
+        <Setter Property="ValidationErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Ellipse Width="12" Height="12" Fill="Red" Stroke="Black" StrokeThickness="0.5"/>
+                        <TextBlock FontWeight="Bold" Padding="4,0,0,0" Margin="0" VerticalAlignment="Center" Foreground="White" Text="!" ToolTip="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type dg:DataGridRow}}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="true">
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="Red"/>
+                <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+            </Trigger>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="#FFD0D0E0" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="LightGoldenrodYellow" />
+                <!--<Setter Property="BorderThickness" Value="3"/>-->
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>

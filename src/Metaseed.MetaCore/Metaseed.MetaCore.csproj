@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3AD5B418-A96D-4C42-BBB5-3F3B8B2AD7E3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Metaseed</RootNamespace>
+    <AssemblyName>Metaseed.MetaCore</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <FodyPath>..\..\packages\Fody.1.20.0.0</FodyPath>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\output\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>..\..\output\Debug\Metaseed.MetaCore.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\output\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>metaseed.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Catel.Core">
+      <HintPath>..\..\packages\Catel.Core.4.0.0\lib\net45\Catel.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Catel.Extensions.Controls">
+      <HintPath>..\..\packages\Catel.Extensions.Controls.4.0.0\lib\net45\Catel.Extensions.Controls.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Catel.Extensions.Prism">
+      <HintPath>..\..\packages\Catel.Extensions.Prism.4.0.0\lib\net45\Catel.Extensions.Prism.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Catel.MVVM">
+      <HintPath>..\..\packages\Catel.MVVM.4.0.0\lib\net45\Catel.MVVM.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity">
+      <HintPath>..\..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="ReachFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Prism.4.1.0.0\lib\NET40\System.Windows.Interactivity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="WPFLocalizeExtension">
+      <HintPath>..\..\packages\WpfLocalizeExtension.2.3\lib\net35\WPFLocalizeExtension.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="XAMLMarkupExtensions">
+      <HintPath>..\..\packages\XAMLMarkupExtensions.1.2\lib\net40\XAMLMarkupExtensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collections\Generic\IListExtension.cs" />
+    <Compile Include="Collections\Generic\ObservableCollection_Sortable.cs" />
+    <Compile Include="ComponentModel\LocalizedCategoryAttribute.cs" />
+    <Compile Include="ComponentModel\LocalizedDescriptionAttribute.cs" />
+    <Compile Include="ComponentModel\LocalizedDisplayNameAttribute.cs" />
+    <Compile Include="Data\DataDirty\DataDirtyManager.cs" />
+    <Compile Include="ExpressionHelper.cs" />
+    <Compile Include="IO\DirectoryHelper.cs" />
+    <Compile Include="ModuleInitializer.cs" />
+    <Compile Include="MVVM\ViewModel\ICreatViewAsContent.cs" />
+    <Compile Include="Windows\Data\Converters\NullableToStringConverter.cs" />
+    <Compile Include="IO\PackageReadWrite.cs" />
+    <Compile Include="Localize\LocalizeHelper.cs" />
+    <Compile Include="MetaCore.cs" />
+    <Compile Include="MVVM\View\View.cs" />
+    <Compile Include="Properties\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Reflection\AttributeExtension.cs" />
+    <Compile Include="Reflection\SetField.cs" />
+    <None Include="app.config" />
+    <Compile Include="Win32\FileAssociation\AssociationManager.cs" />
+    <Compile Include="Win32\FileAssociation\FileAssociationInfo.cs" />
+    <Compile Include="Win32\FileAssociation\FileType1.cs" />
+    <Compile Include="Win32\FileAssociation\ProgramAssociationInfo.cs" />
+    <Compile Include="Win32\FileAssociation\ProgramIcon.cs" />
+    <Compile Include="Win32\FileAssociation\ProgramVerb.cs" />
+    <Compile Include="Win32\FileAssociation\RegistryException.cs" />
+    <Compile Include="Win32\FileAssociation\RegistryWrapper.cs" />
+    <Compile Include="Win32\FileAssociation\ShellNotification.cs" />
+    <Compile Include="Windows\Controls\Led\Led.xaml.cs">
+      <DependentUpon>Led.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\Led\WidthToBorderThickConverter.cs" />
+    <Compile Include="Windows\Data\BindingExtension.cs" />
+    <Compile Include="Collections\Generic\ArrayEqual.cs" />
+    <Compile Include="Collections\Generic\IEnumrableExtension.cs" />
+    <Compile Include="IO\EndianBinaryReader.cs" />
+    <Compile Include="IO\EndianBinaryWriter.cs" />
+    <Compile Include="Algorithm\Adler32Checksum.cs" />
+    <Compile Include="Algorithm\BooleanAlgebra.cs" />
+    <Compile Include="Algorithm\CRC16.cs" />
+    <Compile Include="Windows\Data\Converters\VisibilityToBooleanConverter.cs" />
+    <Compile Include="Windows\Interactivity\DataGridCommitEditBehavior.cs" />
+    <Compile Include="Windows\Interactivity\EnterKeyToUpdateTextBox.cs" />
+    <Compile Include="__\SelfKill.cs" />
+    <None Include="Fody.targets" />
+    <None Include="packages.config" />
+    <Compile Include="Windows\Controls\AutoCompleteTextBox\AutoCompleteTextBox.cs" />
+    <Compile Include="Windows\Controls\AutoCompleteTextBox\LimitedCollectionView.cs" />
+    <Compile Include="Windows\Controls\AutoCompleteTextBox\LimitedListCollectionView.cs" />
+    <Compile Include="Windows\Controls\AutoCompleteTextBox\ListBoxItemBehavior.cs" />
+    <Compile Include="Windows\Controls\FilterListView\FilterableListView.cs" />
+    <Compile Include="Windows\Controls\FilterListView\SortableFilterableGridViewColumn.cs" />
+    <Compile Include="Windows\Controls\FilterListView\SortableGridViewColumnHeader.cs" />
+    <Compile Include="Windows\Controls\FilterListView\SortableListView.cs" />
+    <Compile Include="Windows\Controls\FontDialog\ChooseFontDialog\ChooseFont.xaml.cs">
+      <DependentUpon>ChooseFont.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\FontDialog\ChooseFontDialog\FontInfo.cs" />
+    <Compile Include="Windows\Controls\FontDialog\ChooseFontDialog\TypefaceExtensions.cs" />
+    <Compile Include="Windows\Controls\Helpers\DataGridHelp.cs" />
+    <Compile Include="Windows\Controls\Helpers\ListViewExtenders.cs" />
+    <Compile Include="Windows\Controls\Helpers\TreeViewItemSelect.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\BalloonIcon.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\BalloonFlags.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\IconDataMembers.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\IconState.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\MouseEvent.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\NotifyCommand.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\NotifyIconData.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\NotifyIconVersion.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\Point.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\TrayInfo.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\WinApi.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\WindowClass.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\WindowMessageSink.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\PopupActivationMode.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\RoutedEventHelper.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\SimpleControls\Balloon.xaml.cs">
+      <DependentUpon>Balloon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\TaskbarIcon.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\TaskbarIcon.Declarations.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Util.cs" />
+    <Compile Include="Windows\Controls\ProportionalPanel.cs" />
+    <Compile Include="Windows\Data\Converters\ValueConverters.cs" />
+    <Compile Include="Windows\Interactivity\ReturnCommandBehavoir\ReturnCommandBehavoir.cs" />
+    <Compile Include="Windows\Interactivity\ReturnCommandBehavoir\ReturnKey.cs" />
+    <Compile Include="Windows\Interop\CaptureScreen.cs" />
+    <Compile Include="Windows\Interop\TruncateFilePath.cs" />
+    <Compile Include="Windows\Data\Converters\BackgroundStripe.cs" />
+    <Compile Include="Windows\Data\Converters\BrushToColorConverter.cs" />
+    <Compile Include="Windows\Data\Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Windows\Data\Converters\NullToVisibilityConverter_NV.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\Threading\ControlRefresh.cs" />
+    <Compile Include="__\A.cs" />
+    <Compile Include="__\C.cs" />
+    <None Include="__\usage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="metaseed.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Collections\ObjectModel\" />
+    <Folder Include="ComponentModel\Composition\" />
+    <Folder Include="Data\Interfaces\" />
+    <Folder Include="Generics\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Linq\" />
+    <Folder Include="MVVM\Services\Interfaces\" />
+    <Folder Include="Prism\" />
+    <Folder Include="Services\" />
+    <Folder Include="Windows\Helpers\" />
+    <Folder Include="Windows\Media\" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="Windows\Controls\AutoCompleteTextBox\Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Resources\DataGridStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\Led\Led.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\Controls\FilterListView\FilterListViewDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Windows\Controls\FilterListView\usage.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Windows\Controls\FontDialog\ChooseFontDialog\ChooseFont.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml" />
+    <Content Include="Windows\Controls\NotifyIcon\NotifyIconWpf\DefaultTrayIcon.ico" />
+    <Resource Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Images\Close.png" />
+    <Resource Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Images\error.png" />
+    <Resource Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Images\Info.png" />
+    <Resource Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Images\warning.png" />
+    <None Include="Windows\Interactivity\ReturnCommandBehavoir\_usage.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Windows\Controls\NotifyIcon\NotifyIconWpf\SimpleControls\Balloon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resource.zh-Hans.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Metaseed.Core\Metaseed.Core.csproj">
+      <Project>{e26d7625-0627-4055-add5-8ceab29e8003}</Project>
+      <Name>Metaseed.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="Fody.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /E /Y  $(TargetDir)Metaseed.MetaCore.dll D:\Source\Workspaces\Maxwell\FeatureBranch\Maxstudio\ThirdParty\Metaseed\MetaStudio
+xcopy /E /Y  $(TargetDir)Metaseed.MetaCore.pdb  D:\Source\Workspaces\Maxwell\FeatureBranch\Maxstudio\ThirdParty\Metaseed\MetaStudio
+xcopy /E /Y  $(TargetDir)Metaseed.MetaCore.xml  D:\Source\Workspaces\Maxwell\FeatureBranch\Maxstudio\ThirdParty\Metaseed\MetaStudio</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

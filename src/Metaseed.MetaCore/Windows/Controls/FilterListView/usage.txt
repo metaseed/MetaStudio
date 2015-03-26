@@ -1,0 +1,46 @@
+﻿
+you can aplly style to it, in the examples there is a styled example.
+
+in the control it explicitly use the list's element type"Emplyee"
+we changed it!
+http://www.go4answers.com/Example/getting-type-ienumerables-items-7350.aspx
+how to get array item's type:
+1. Non-generic class residing in the System.Collections namespace. 
+There's nothing you can do with these, and the types they return are always Object.
+2. Array: Call Type.GetElementType() for the return value. 
+3. IEnumerable<T>:  Classes in System.Collections.Generic implement this, as does the array type  
+in 2.0 and above, since arrays were retrofitted with it when 2.0 was released. You'll have to first
+ get the collection's interfaces, then check each interface  for whether or not it's generic, 
+ and if so, call  GetGenericTypeDefinition on it.  The return of GetGenericTypeDefinition should 
+ be compared to typeof(IEnumerable<>), and if it is equal, then fetch the first generic parameter 
+ type.  It would look like this:Type elementType = null;List<string> values = newList<string>();
+ Type[] interfaces = values.GetType().GetInterfaces();
+ foreach (Type i in interfaces)if (i.IsGenericType && i.GetGenericTypeDefinition().Equals(typeof(IEnumerable<>)))        
+ elementType = i.GetGenericArguments()[0];Console.WriteLine(elementType.Name);
+
+ publicstaticType GetItemType(thisICollection objects)
+{     object[] objectArray =
+newobject[objects.Count];
+     objects.CopyTo(objectArray, 0);     return objectArray[0].GetType();
+}
+
+
+2010/11/27 changes:
+<ctrl:FilterableListView ItemsSource="{Binding}"  >
+    <ListView.View>
+        <GridView>
+            <GridView.Columns> 
+                <!--filterable and Sortable-->
+                <ctrl:SortableGridViewColumn Header="Sender" SortPropertyName="Sender" IsFilterable="True" Width="100" DisplayMemberBinding="{Binding Path=Sender}"/>
+                <!--only Sortable-->
+                <ctrl:SortableGridViewColumn Header="Time" SortPropertyName="Time"   DisplayMemberBinding="{Binding Path=Time, StringFormat=o}"/>
+                <!--filterable and Sortable-->
+                <ctrl:SortableGridViewColumn Header="Category" SortPropertyName="Category" IsFilterable="True"   DisplayMemberBinding="{Binding Path=Category}"/>
+                <!--not sortable and not filetable-->
+                <GridViewColumn Header="Priority"  DisplayMemberBinding="{Binding Path=Priority}"/>
+                <!--not sortable and not filetable-->
+                <ctrl:SortableGridViewColumn Header="Message"  DisplayMemberBinding="{Binding Path=Message}"/>
+            </GridView.Columns>
+        </GridView>
+    </ListView.View>
+</ctrl:FilterableListView>

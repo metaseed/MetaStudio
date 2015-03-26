@@ -1,0 +1,69 @@
+﻿<Window Opacity="0.8"
+    x:Class="Metaseed.Common.MySplashScreen"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Metaseed.Common"   SizeToContent="WidthAndHeight" 
+    Title="SplashScreen" Height="300" Width="500" WindowStartupLocation="CenterScreen" WindowStyle="None" ShowInTaskbar="False" ResizeMode="NoResize" Topmost="True" AllowsTransparency="True">
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="#B40000F5" />
+                <GradientStop Offset="0.992" Color="#C3FF0000" />
+            </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+    </Window.Background>
+    <DockPanel>
+        <!--<DockPanel.Background>
+            <ImageBrush Opacity="0.3" AlignmentY="Top" ImageSource="/Metaseed.Common;component/favicon.ico" Stretch="None" TileMode="None" />
+        </DockPanel.Background>-->
+        <Grid DockPanel.Dock="Top" Margin="0,10,0,10" >
+            <!--<Image Source="/CANStudio;component/favicon.ico" Height="100"/>-->
+            <!--<TextBlock HorizontalAlignment="Center" Text="☯" FontSize="120 px" Margin="0" Opacity="0.8" x:Name="taiji">
+            <TextBlock.Foreground>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                    <GradientStop Color="Red" Offset="0" />
+                    <GradientStop Color="Green" Offset="0.5" />
+                    <GradientStop Color="Blue" Offset="1" />
+                </LinearGradientBrush>
+            </TextBlock.Foreground>-->
+          <!--<TextBlock.RenderTransform>
+              <RotateTransform x:Name="TextEffectRotateTransform"  
+                Angle="0" CenterX="60" CenterY="80" />
+          </TextBlock.RenderTransform>
+            <TextBlock.Triggers>
+          <EventTrigger RoutedEvent="TextBlock.Loaded">
+            <BeginStoryboard>
+              <Storyboard>
+                  <DoubleAnimation
+                    Storyboard.TargetName="TextEffectRotateTransform"
+                    Storyboard.TargetProperty="Angle" 
+                    From="0"
+                    To="360"
+                    RepeatBehavior="Forever"
+                  AutoReverse="True"
+                    Duration="00:00:12" />
+              </Storyboard>
+            </BeginStoryboard>
+          </EventTrigger>
+        </TextBlock.Triggers>
+</TextBlock>-->
+            <Label Opacity="0.8"   Name="label1" FontSize="30" HorizontalContentAlignment="Center"  VerticalContentAlignment="Center" Foreground="MintCream" Content="CANOpenStackChip  V1.0 ">  
+                <Label.BitmapEffect>
+                <OuterGlowBitmapEffect GlowSize="15" />
+            </Label.BitmapEffect>
+        </Label>
+</Grid>
+        <ListBox Margin="8,0,8,8" x:Name="lb"  BorderThickness="0"    VerticalAlignment="Bottom" ItemsSource="{Binding Source={x:Static local:MessageListener.Instance},Path=Messages}" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.ScrollChanged="m_cStatusList_ScrollChanged" Opacity="1" Background="#00000000" Foreground="White">
+            <!--<ListBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent=""
+                    </Style.Triggers>
+                </Style>
+            </ListBox.Style>-->
+        </ListBox>
+        
+        <!--<Label Height="28" Margin="19,0,17,15" Name="label2" VerticalAlignment="Bottom"
+               Content="{Binding Source={x:Static local:MessageListener.Instance},Path=Message}" Foreground="White"></Label>-->
+    </DockPanel>
+</Window>

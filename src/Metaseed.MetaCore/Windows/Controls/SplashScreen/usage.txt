@@ -1,0 +1,38 @@
+﻿0.to set a image *.png as a splasher, change it's property BuildAction to SplashScreen
+
+1.show
+	public partial class App : Application
+	{    
+		Shell _mainWindow;
+		protected override void OnStartup(StartupEventArgs e)
+		{
+			Splasher.Splash = new MySplashScreen();
+			Splasher.ShowSplash();
+		....
+			_mainWindow = new Shell();
+			this.MainWindow = _mainWindow;
+		....
+			_mainWindow.Show();
+		}
+		.....
+	}
+
+2.display messages
+	if (Splasher.Splash != null)
+	{
+		MessageListener.Instance.ReceiveMessage(str);
+	}
+
+3.close
+	private void Window_Loaded(object sender, RoutedEventArgs e)
+	{
+		#if DEBUG
+			//Splasher.Splash.AllowsTransparency = false;
+			//Splasher.Splash.WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
+			Splasher.Splash.Topmost = false;
+			((MySplashScreen)(Splasher.Splash)).IsShowScrollBar = true;
+			Splasher.Splash.ShowInTaskbar = true;
+		#else
+			Splasher.CloseSplash();
+		#endif
+	}

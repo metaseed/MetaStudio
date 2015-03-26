@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppStartupTime" xml:space="preserve">
+    <value>程序启动耗时 {0}ms</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>类别</value>
+  </data>
+  <data name="FileOpenedMessage" xml:space="preserve">
+    <value>文件已打开。(๑￫ܫ￩)。</value>
+  </data>
+  <data name="FileSavedMessage" xml:space="preserve">
+    <value>文件已经保存。(・(ｪ)・)。</value>
+  </data>
+  <data name="FileSaveTimeFormat" xml:space="preserve">
+    <value>保存文件用时{0}毫秒。</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>提示信息</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="NetWorkConnecting" xml:space="preserve">
+    <value>正在连接通信网络，请稍后。。。≡￣﹏￣≡</value>
+  </data>
+  <data name="NetWorkDisConnecting" xml:space="preserve">
+    <value>正在断开与通信网络的连接，请稍后。。。(^_-)-☆</value>
+  </data>
+  <data name="OpenMessage" xml:space="preserve">
+    <value>正在打开配置文件，请耐心等待 （*∩_∩*）  </value>
+  </data>
+  <data name="Priority" xml:space="preserve">
+    <value>优先级</value>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="SaveMessage" xml:space="preserve">
+    <value>正在保存文件，请耐心等待 ╮（￣▽￣）╭</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>信息源</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>时间</value>
+  </data>
+  <data name="OpenFileDialogTitle" xml:space="preserve">
+    <value>打开Metastudio文件包</value>
+  </data>
+  <data name="SaveFileDialogTitle" xml:space="preserve">
+    <value>保存Metastudio文件包</value>
+  </data>
+  <data name="InstanceTitle" xml:space="preserve">
+    <value>实例标题</value>
+  </data>
+  <data name="InstanceTitleDescription" xml:space="preserve">
+    <value>用于区别相同类型的不同文档</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>动作</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>外观</value>
+  </data>
+  <data name="Behavior" xml:space="preserve">
+    <value>行为</value>
+  </data>
+  <data name="Data" xml:space="preserve">
+    <value> 数据</value>
+  </data>
+  <data name="Design" xml:space="preserve">
+    <value>设计</value>
+  </data>
+  <data name="Layout" xml:space="preserve">
+    <value>布局</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>测试</value>
+  </data>
+  <data name="FileOpenTimeFormat" xml:space="preserve">
+    <value>打开文件用时{0}毫秒</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>已打开</value>
+  </data>
+  <data name="Unopen" xml:space="preserve">
+    <value>未打开</value>
+  </data>
+  <data name="Config" xml:space="preserve">
+    <value>配置</value>
+  </data>
+  <data name="CanvasHeight" xml:space="preserve">
+    <value>图纸宽度</value>
+  </data>
+  <data name="CanvasHeightDes" xml:space="preserve">
+    <value>图纸宽度(&gt;=800)</value>
+  </data>
+  <data name="CanvasWidth" xml:space="preserve">
+    <value>图纸长度</value>
+  </data>
+  <data name="CanvasWidthDes" xml:space="preserve">
+    <value>图纸长度(&gt;=1400)</value>
+  </data>
+  <data name="CANDriverUsed" xml:space="preserve">
+    <value>CANOpen驱动选择</value>
+  </data>
+  <data name="FunctionBlock_MaxNum" xml:space="preserve">
+    <value>最多只能放置{0}个此类功能模块到功能设计图中。</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>普通</value>
+  </data>
+</root>

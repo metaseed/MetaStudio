@@ -1,0 +1,102 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"      
+                    xmlns:c="clr-namespace:Metaseed.Windows.Controls"> 
+    <!--<cv:BackgroundStripe x:Key="BackgroundStripe"/>-->
+    <Style  x:Key="ListItemRolloverHighlight" TargetType="{x:Type ListViewItem}">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background" Value="LightGray" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Create a stylised filter button -->
+    <DataTemplate x:Key="filterButtonInactiveTemplate">
+        <Path Fill="DarkGray" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z"/>
+    </DataTemplate>
+    
+    <!-- Create a stylised filter button -->
+    <DataTemplate x:Key="filterButtonActiveTemplate">
+        <Path Fill="Black" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z"/>
+    </DataTemplate>
+
+    <Style x:Key="HeaderTemplateArrowUp" TargetType="{x:Type Label}">
+        <Setter Property="Margin" Value="5,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Label">
+                    <Path x:Name="arrow" StrokeThickness = "1" Fill = "White" Data = "M 5,10 L 15,10 L 10,5 L 5,10"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="HeaderTemplateArrowDown" TargetType="{x:Type Label}">
+        <Setter Property="Margin" Value="5,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Label">
+                    <Path x:Name="arrow" StrokeThickness = "1" Fill = "White" Data = "M 5,5 L 10,10 L 15,5 L 5,5"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="HeaderTemplateTransparent" TargetType="{x:Type Label}">
+        <Setter Property="Margin" Value="5,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Label">
+                    <Path x:Name="arrow" StrokeThickness = "1" Fill = "Transparent" Data = "M 5,10 L 15,10 L 10,5 L 5,10"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <DataTemplate x:Key="FilterListCell">
+        <StackPanel Orientation="Horizontal">
+            <CheckBox IsChecked="{Binding Path=IsChecked}" Content="{Binding Path=ItemView}"/>
+        </StackPanel>
+    </DataTemplate>
+    <DataTemplate x:Key="FilterGridHeaderTemplate" >
+        <StackPanel Orientation="Horizontal">
+            <!-- render the header text -->
+            <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding}"/>
+            <!-- add a lael which is used to display the sort indicator -->
+            <Label Name="sortIndicator" VerticalAlignment="Center" Style="{StaticResource HeaderTemplateTransparent}"/>            
+            <!-- Add a filter button and popup  -->
+            <Button  ContentTemplate="{StaticResource filterButtonInactiveTemplate}" Name="filterButton"   Margin="0,0,6,0"   Command="{x:Static c:FilterableListView.ShowFilter}"/>
+            <Popup  StaysOpen="false" Name="filterPopup" Placement="Bottom" PlacementTarget="{Binding ElementName=filterButton}">
+                <Border BorderBrush="Gray" BorderThickness="2">
+                <StackPanel Background="White">
+                <ListView x:Name="filterList" ItemsSource="{Binding}"                               
+                               BorderThickness="1" ItemContainerStyle="{StaticResource ListItemRolloverHighlight}">
+                    <ListView.View>
+                        <GridView>
+                            <!-- hide the column header -->
+                            <GridView.ColumnHeaderContainerStyle>
+                                <Style TargetType="GridViewColumnHeader">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                    <Setter Property="Height" Value="0" />
+                                    <Setter Property="MinWidth" Value="50"/>
+                                </Style>
+                            </GridView.ColumnHeaderContainerStyle>
+                            <GridViewColumn CellTemplate="{StaticResource FilterListCell}"/><!--DisplayMemberBinding="{Binding Path=ItemView}"-->
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                    <MenuItem Header="RemoveFilters"   Command="{x:Static c:FilterableListView.RemoveFilters}"/>
+                    <MenuItem Header="Refresh" ToolTip="After Click, The New Items Added To The Items List Could Have Their Filters Appear In The Filter List" Background="White" Command="{x:Static c:FilterableListView.RefreshItems}"/>
+                </StackPanel>
+                </Border>
+            </Popup>
+        </StackPanel>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="SortableGridHeaderTemplate" >
+        <StackPanel Orientation="Horizontal">
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding}"/>
+            <Label Name="sortIndicator" VerticalAlignment="Center" Style="{StaticResource HeaderTemplateTransparent}"/>                        
+        </StackPanel>
+    </DataTemplate>
+
+</ResourceDictionary>

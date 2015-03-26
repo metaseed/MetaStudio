@@ -1,0 +1,46 @@
+﻿<views:DocumentBaseView x:Class="Metaseed.Modules.Browser.Views.BrowserDocumentView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"               
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                  
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:catel="http://catel.codeplex.com"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d" 
+        d:DesignHeight="300" d:DesignWidth="300"
+        xmlns:views="clr-namespace:Metaseed.MetaShell.Views;assembly=Metaseed.ShellBase"
+        Background="{DynamicResource WindowBackground}"
+        ><!--lex:LocalizeDictionary.DesignCulture="zh-Hans"-->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Button BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Command="{Binding GoBack}" ToolTip="Go back to the previous page" >
+            <Image Source="pack://application:,,,/Metaseed.MetaShell;component/Framework/Browser/Resources/Images/Back.png" Width="16"/>
+        </Button>
+        <Button Grid.Column="1" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Command="{Binding GoForward}" ToolTip="Go forward to the next page">
+            <Image Source="pack://application:,,,/Metaseed.MetaShell;component/Framework/Browser/Resources/Images/Forward.png" Width="16" />
+        </Button>
+        <Button Grid.Column="2" BorderThickness="0" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Command="{Binding Refresh}" ToolTip="Reload the current page">
+            <Grid>
+                <Image Visibility="Hidden" Source="pack://application:,,,/Metaseed.MetaShell;component/Framework/Browser/Resources/Images/Stop.png" Width="16" />
+                <Image Source="pack://application:,,,/Metaseed.MetaShell;component/Framework/Browser/Resources/Images/Refresh.png" Width="16" />
+            </Grid>
+        </Button>
+        <TextBox Text="{Binding Url}" Grid.Column="3">
+            <i:Interaction.Behaviors>
+                <catel:SelectTextOnFocus />
+                <catel:UpdateBindingOnTextChanged UpdateDelay="0" />
+                <catel:KeyPressToCommand Key="Enter" Command="{Binding Browse}" />
+            </i:Interaction.Behaviors>
+        </TextBox>
+        <WebBrowser Grid.Row="1" x:Name="webBrowser" Grid.ColumnSpan="4" />
+    </Grid>
+</views:DocumentBaseView>

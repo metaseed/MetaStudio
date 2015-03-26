@@ -1,0 +1,52 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ Assembly Name="System.Xml.dll" #>
+<#@ Assembly Name="System.Xml.Linq.dll" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ Assembly Name="Microsoft.CSharp.dll" #>
+<#@ Assembly name="$(SolutionDir)packages\AmazedSaint.ElasticObject.1.2.0\lib\net40\AmazedSaint.Elastic.dll" #>
+<#@ Import Namespace="System.Xml" #>
+<#@ Import Namespace="System.Xml.Linq" #>
+<#@ Import Namespace="AmazedSaint.Elastic" #>
+<#@ Import Namespace="AmazedSaint.Elastic.Lib" #>
+<#@ output extension=".cs" #>
+
+<#
+var model=FromFile("ElasticDemoModel.xml");
+
+foreach(var c in model["class"])  //get all classes
+	WriteClass(c);
+
+#>
+
+<#+ 
+//Create an elastic object
+private dynamic FromFile(string file)
+{
+   var path= Host.ResolvePath(file);
+   return XDocument.Load(path).Root.ToElastic();
+}
+
+//Write a class
+private void WriteClass(dynamic c)
+{ 
+#>
+//Class generated 
+class <#= c.name #> 
+{
+<#+
+		foreach(var p in c["property"])
+			WriteProperty(p);  
+#>			
+}
+<#+
+}
+
+
+//Write a Property
+private void WriteProperty(dynamic p)
+{
+#>
+public <#= p.type #> <#= p.name #>  {get;set;}
+<#+   
+}
+#>

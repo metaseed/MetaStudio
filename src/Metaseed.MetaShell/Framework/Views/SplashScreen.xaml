@@ -1,0 +1,42 @@
+﻿<catel:DataWindow x:Class="Metaseed.MetaShell.Views.SplashScreen"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:catel="http://catel.codeplex.com"
+                  WindowStartupLocation="CenterScreen" WindowStyle="None" Topmost="true" SizeToContent="WidthAndHeight" 
+                  Background="{x:Null}" ResizeMode="NoResize" AllowsTransparency="True" ShowInTaskbar="False" Width="500" Height="300">
+    <Grid><!---->
+        <Image x:Name="splashScreenImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Source="/Metaseed.MetaShell;component/Resources/Images/SplashScreen/L_6.jpg" Stretch="None"/>
+        <Grid x:Name="statusPanel"  HorizontalAlignment="Right" Margin="20,30,20,60">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="16"/>
+                <RowDefinition Height="18"/>
+                <RowDefinition Height="85"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="MetaStduio" VerticalAlignment="Center" FontSize="48" FontWeight="Bold" FontStyle="Italic" Foreground="White">
+                <TextBlock.Effect>
+                    <DropShadowEffect ShadowDepth="1" RenderingBias="Quality" Color="Black"/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <TextBlock Grid.Row="1" Text="Metaseed © 2008-2014" HorizontalAlignment="Right" Foreground="LightGreen"  FontStyle="Italic">
+                <TextBlock.Effect>
+                    <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" Color="White"/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <ProgressBar Grid.Row="2" HorizontalAlignment="Left" Value="{Binding Percentage,Mode=OneWay}" Height="11" Width="224"/>
+            <TextBlock Grid.Row="3" Width="224" HorizontalAlignment="Left" Text="{Binding TaskName, FallbackValue=Some very long task name is running with text wrapped...}" Height="85" Margin="5,5,0,0"  ScrollViewer.VerticalScrollBarVisibility="Disabled"  Foreground="Black" FontFamily="Segoe UI Semibold" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" >
+                <TextBlock.Effect>
+                    <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" Color="White"/>
+                </TextBlock.Effect>
+            </TextBlock>
+        </Grid>
+        <!--According To The License, You Should Always Keep The 'Powered By MetaStudio' At The Right Corner Of Splash Screen, 
+        Unless You Got A Written Permission From Metaseed. http://www.metaseed.com-->
+        <TextBlock Text="Powered By MetaStudio" Margin="0,0,3,3"  Foreground="White"  HorizontalAlignment="Right" VerticalAlignment="Bottom" FontStyle="Italic" FontSize="12"  >
+            <TextBlock.Effect>
+                <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" Color="Black"/>
+            </TextBlock.Effect>
+        </TextBlock>
+ 
+    </Grid>
+</catel:DataWindow>
