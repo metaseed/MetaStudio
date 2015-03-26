@@ -284,9 +284,8 @@
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="Fody.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /E /Y  $(TargetDir)Metaseed.MetaCore.dll D:\Source\Workspaces\Maxwell\FeatureBranch\Maxstudio\ThirdParty\Metaseed\MetaStudio
-xcopy /E /Y  $(TargetDir)Metaseed.MetaCore.pdb  D:\Source\Workspaces\Maxwell\FeatureBranch\Maxstudio\ThirdParty\Metaseed\MetaStudio
-xcopy /E /Y  $(TargetDir)Metaseed.MetaCore.xml  D:\Source\Workspaces\Maxwell\FeatureBranch\Maxstudio\ThirdParty\Metaseed\MetaStudio</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

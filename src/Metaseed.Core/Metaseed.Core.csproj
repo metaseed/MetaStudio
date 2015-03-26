@@ -139,9 +139,8 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /E /Y  $(TargetPath)  D:\Source\Workspaces\Maxwell\FeatureBranch\Maxstudio\ThirdParty\Metaseed\MetaStudio
-xcopy /E /Y  $(TargetDir)Metaseed.Core.pdb D:\Source\Workspaces\Maxwell\FeatureBranch\Maxstudio\ThirdParty\Metaseed\MetaStudio
-xcopy /E /Y  $(TargetDir)Metaseed.Core.xml  D:\Source\Workspaces\Maxwell\FeatureBranch\Maxstudio\ThirdParty\Metaseed\MetaStudio</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
