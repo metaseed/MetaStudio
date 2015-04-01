@@ -8,12 +8,14 @@ using System.Windows.Media.Imaging;
 namespace Metaseed.MetaShell.Views
 {
     using ViewModels;
+    using Catel.MVVM;
+    using Catel.IoC;
     /// <summary>
     /// Interaction logic for SplashScreen.xaml.
     /// </summary>
     public partial class SplashScreen : DataWindow
     {
-        private const string SplashScreenLocation = "Resources\\Images\\SplashScreen";
+        private  string SplashScreenLocation =AppEnvironment.AppPath+ @"\Resources\Images\SplashScreen";
         /// <summary>
         /// Initializes a new instance of the <see cref="SplashScreen"/> class.
         /// </summary>

@@ -4,8 +4,8 @@
                   xmlns:catel="http://catel.codeplex.com"
                   WindowStartupLocation="CenterScreen" WindowStyle="None" Topmost="true" SizeToContent="WidthAndHeight" 
                   Background="{x:Null}" ResizeMode="NoResize" AllowsTransparency="True" ShowInTaskbar="False" Width="500" Height="300">
-    <Grid><!---->
-        <Image x:Name="splashScreenImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Source="/Metaseed.MetaShell;component/Resources/Images/SplashScreen/L_6.jpg" Stretch="None"/>
+    <Grid>
+        <Image x:Name="splashScreenImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Source="/Metaseed.ShellBase;component/Resources/Images/SplashScreen/L_6.jpg" Stretch="None"/>
         <Grid x:Name="statusPanel"  HorizontalAlignment="Right" Margin="20,30,20,60">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
@@ -32,7 +32,7 @@
         </Grid>
         <!--According To The License, You Should Always Keep The 'Powered By MetaStudio' At The Right Corner Of Splash Screen, 
         Unless You Got A Written Permission From Metaseed. http://www.metaseed.com-->
-        <TextBlock Text="Powered By MetaStudio" Margin="0,0,3,3"  Foreground="White"  HorizontalAlignment="Right" VerticalAlignment="Bottom" FontStyle="Italic" FontSize="12"  >
+        <TextBlock Text="Powered By MetaStudio" Margin="0,0,3,3"  Foreground="White"  HorizontalAlignment="Right" VerticalAlignment="Bottom" FontStyle="Italic" FontSize="10"  >
             <TextBlock.Effect>
                 <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" Color="Black"/>
             </TextBlock.Effect>

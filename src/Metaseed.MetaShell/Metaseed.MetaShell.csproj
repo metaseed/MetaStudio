@@ -239,9 +239,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShellViewResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="Framework\Views\SplashScreen.xaml.cs">
-      <DependentUpon>SplashScreen.xaml</DependentUpon>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -266,10 +263,6 @@
       <DependentUpon>MetaShellView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Framework\Views\SplashScreen.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="InternalModules\PropertyGrid\Editors\MetaCollectionControlDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -344,11 +337,6 @@
     <Folder Include="Framework\Prism\Regions\RegionAdapters\" />
     <Folder Include="Framework\Services\Helpers\" />
     <Folder Include="Framework\Views\Helpers\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Images\SplashScreen\L_6.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Metaseed.MetaCore\Metaseed.MetaCore.csproj">

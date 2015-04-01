@@ -199,7 +199,7 @@ namespace Metaseed.MetaShell.Views
 
         private void OnHelpClick(object sender, RoutedEventArgs e)
         {
-            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            Version version = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
             MessageBox.Show("Version:" + version.ToString()+Environment.NewLine+"http://www.metaseed.com", "Application Information", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
         }
 

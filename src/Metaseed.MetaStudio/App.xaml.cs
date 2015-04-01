@@ -89,12 +89,7 @@ namespace Metaseed.MetaStudio
             //
             //splash screen
             //
-            var serviceLocator = ServiceLocator.Default;
-            //serviceLocator.RegisterInstance<MetaBootstrapper>(this);
-            var viewLocator = serviceLocator.ResolveType<IViewLocator>();
-            viewLocator.Register(typeof(ProgressNotifyableViewModel), typeof(MetaShell.Views.SplashScreen));
-            var viewModelLocator = serviceLocator.ResolveType<IViewModelLocator>();
-            viewModelLocator.Register(typeof(MetaShell.Views.SplashScreen), typeof(ProgressNotifyableViewModel));
+            SplashScreenservice.ResisterService();
 
             var bootstrapper = new MetaBootstrapper<MetaShellView>();
             bootstrapper.CreatedModuleCatalog+=(sender,e1)=>
