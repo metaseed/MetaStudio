@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Metaseed.MetaStudioTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Schlumberger")]
+[assembly: AssemblyCompany("Metaseed")]
 [assembly: AssemblyProduct("Metaseed.MetaStudioTest")]
-[assembly: AssemblyCopyright("Copyright © Schlumberger 2015")]
+[assembly: AssemblyCopyright("Copyright © Metaseed 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

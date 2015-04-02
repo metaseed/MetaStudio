@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Interactivity;
 
 namespace Metaseed.Windows.Interactivity
 {
@@ -36,8 +36,8 @@ namespace Metaseed.Windows.Interactivity
         {
             if (key == Key.Enter && TargetObject != null)
             {
-                this.CommandParameter = TargetObject.Text;
-                ExecuteCommand();
+                CommandParameter = TargetObject.Text;
+                ExecuteCommand(CommandParameter);
 
                 this.ResetText();
             }

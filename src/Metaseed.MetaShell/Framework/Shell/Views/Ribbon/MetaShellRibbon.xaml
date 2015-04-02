@@ -10,7 +10,6 @@
         xmlns:inf="clr-namespace:Metaseed.MetaShell.Infrastructure"    
         xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
         xmlns:prism="http://www.codeplex.com/prism"
-        xmlns:prismCommand="clr-namespace:Microsoft.Practices.Prism.Commands;assembly=Microsoft.Practices.Prism"
         xmlns:lex="http://wpflocalizeextension.codeplex.com"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:services="clr-namespace:Metaseed.MetaShell.Services;assembly=Metaseed.ShellBase"
@@ -23,9 +22,8 @@
         <Fluent:Backstage Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:File}">
             <!--Background="Green"-->
             <Fluent:BackstageTabControl>
-                <Fluent:Button Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:New}" x:Name="New" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/New.png"  Fluent:KeyTip.Keys="N"   prismCommand:Click.Command="{Binding Source={x:Static inf:GloableCommands.NewCommand}}">
+                <Fluent:Button Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:New}" x:Name="New" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/New.png"  Fluent:KeyTip.Keys="N"   Command="{Binding Source={x:Static inf:GloableCommands.NewCommand}}">
                     <Fluent:Button.ToolTip>
-                        <!---->
                         <Fluent:ScreenTip
                                     Title="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:New}"
                                     Text="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:CreatNewPackageDescription}"
@@ -35,10 +33,9 @@
                                     IsRibbonAligned ="True"/>
                     </Fluent:Button.ToolTip>
                 </Fluent:Button>
-                <Fluent:Button Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:Open}" x:Name="Open" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Open.png" Fluent:KeyTip.Keys="O" prismCommand:Click.Command="{Binding Path=OpenCommand}"/>
-                <Fluent:Button Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:Save}" x:Name="Save" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Save.png" Fluent:KeyTip.Keys="S" prismCommand:Click.Command="{Binding Path=SaveCommand}"/>
-                <!--Command="Cut" Click="OnBtnClick"-->
-                        <Fluent:Button Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:SaveAs}" x:Name="SaveAs" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/SaveAs.png" Fluent:KeyTip.Keys="A" prismCommand:Click.Command="{Binding Path=SaveAsCommand}"/>
+                <Fluent:Button Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:Open}" x:Name="Open" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Open.png" Fluent:KeyTip.Keys="O" Command="{Binding Path=PackageService.OpenCommand}"/>
+                <Fluent:Button Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:Save}" x:Name="Save" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Save.png" Fluent:KeyTip.Keys="S" Command="{Binding Path=PackageService.SaveCommand}"/>
+                <Fluent:Button Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:SaveAs}" x:Name="SaveAs" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/SaveAs.png" Fluent:KeyTip.Keys="A" Command="{Binding Path=PackageService.SaveAsCommand}"/>
                         <Fluent:Button Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:AddPlugin}" Click="AddPluginButton_Click" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/AddPlugin.png" Fluent:KeyTip.Keys="AP"/>
                         <Fluent:BackstageTabItem   Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:RecentFiles}"    Fluent:KeyTip.Keys="R">
 
@@ -161,7 +158,7 @@
 
     <Fluent:RibbonTabItem   x:Name="RibbonTabHome" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:Home}" Fluent:KeyTip.Keys="H" ToolTip="Home Ribbon Tab" >
         <Fluent:RibbonGroupBox Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/New.png"  Fluent:KeyTip.Keys="F" x:Name="RibbonGroupBoxFile" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:File}" IsLauncherVisible="True">
-            <Fluent:Button x:Name="NewButton" Fluent:KeyTip.Keys="N" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:New}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/New.png" LargeIcon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/New.png" SizeDefinition="Large" prismCommand:Click.Command="{Binding Source={x:Static inf:GloableCommands.NewCommand}}" >
+            <Fluent:Button x:Name="NewButton" Fluent:KeyTip.Keys="N" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:New}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/New.png" LargeIcon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/New.png" SizeDefinition="Large" Command="{Binding Source={x:Static inf:GloableCommands.NewCommand}}" >
                 <Fluent:Button.ToolTip>
                     <Fluent:ScreenTip
                 Title="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:New}"
@@ -172,9 +169,9 @@
                   />
                 </Fluent:Button.ToolTip>
             </Fluent:Button>
-            <Fluent:Button x:Name="openButton" Fluent:KeyTip.Keys="O" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:Open}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Open.png" SizeDefinition="Middle,Small"  prismCommand:Click.Command="{Binding Path=OpenCommand}"/>
-            <Fluent:Button x:Name="saveButton" Fluent:KeyTip.Keys="S" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:Save}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Save.png" SizeDefinition="Middle,Small"  prismCommand:Click.Command="{Binding Path=SaveCommand}" />
-            <Fluent:Button x:Name="saveAsButton" Fluent:KeyTip.Keys="A" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:SaveAs}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/SaveAs.png" SizeDefinition="Middle,Small"  prismCommand:Click.Command="{Binding Path=SaveAsCommand}" />
+            <Fluent:Button x:Name="openButton" Fluent:KeyTip.Keys="O" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:Open}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Open.png" SizeDefinition="Middle,Small"  Command="{Binding Path=PackageService.OpenCommand}"/>
+            <Fluent:Button x:Name="saveButton" Fluent:KeyTip.Keys="S" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:Save}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Save.png" SizeDefinition="Middle,Small"  Command="{Binding Path=PackageService.SaveCommand}" />
+            <Fluent:Button x:Name="saveAsButton" Fluent:KeyTip.Keys="A" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:SaveAs}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/SaveAs.png" SizeDefinition="Middle,Small"  Command="{Binding Path=PackageService.SaveAsCommand}" />
         </Fluent:RibbonGroupBox>
         <Fluent:RibbonGroupBox Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Tools.png"  Fluent:KeyTip.Keys="W"  Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:FileContentsManagement}" IsLauncherVisible="True"  LauncherKeys="WC">
 
@@ -227,17 +224,17 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
-                                    
-                <Button Grid.Column="0" BorderThickness="0" Background="Transparent"  HorizontalAlignment="Stretch" ToolTip="{Binding Description, Mode=OneWay}" Command="{Binding ElementName=documentsDropDownButton, Path=DataContext.OpenDocumentCommand}" CommandParameter="{Binding}">
+
+                                    <Button Grid.Column="0" BorderThickness="0" Background="Transparent"  HorizontalAlignment="Stretch" ToolTip="{Binding Description, Mode=OneWay}" Command="{Binding ElementName=documentsDropDownButton, Path=DataContext.PackageService.OpenDocumentCommand}" CommandParameter="{Binding}">
                 </Button>
-                <Fluent:Button Width="120" Grid.Column="0" BorderThickness="0" SizeDefinition="Middle"  Icon="{Binding IconSource}" Header="{Binding Title, Mode=OneWay}" ToolTip="{Binding Description, Mode=OneWay}" Command="{Binding ElementName=documentsDropDownButton, Path=DataContext.OpenDocumentCommand}" CommandParameter="{Binding}"/>
+                                    <Fluent:Button Width="120" Grid.Column="0" BorderThickness="0" SizeDefinition="Middle"  Icon="{Binding IconSource}" Header="{Binding Title, Mode=OneWay}" ToolTip="{Binding Description, Mode=OneWay}" Command="{Binding ElementName=documentsDropDownButton, Path=DataContext.PackageService.OpenDocumentCommand}" CommandParameter="{Binding}"/>
                 <!--<Image Width="16" Height="16" Source="{Binding IconSource}"/>
                                     -->
-                <Fluent:Button Grid.Column="1"  Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/SaveDocument.png"  Command="{Binding ElementName=documentsDropDownButton, Path=DataContext.SaveDocumentCommand}" CommandParameter="{Binding}"  SizeDefinition="Small">
+                                    <Fluent:Button Grid.Column="1"  Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/SaveDocument.png"  Command="{Binding ElementName=documentsDropDownButton, Path=DataContext.PackageService.SaveDocumentCommand}" CommandParameter="{Binding}"  SizeDefinition="Small">
                     <!--BorderThickness="0"Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"-->
 
                 </Fluent:Button>
-                <Fluent:Button Grid.Column="2" Command="{Binding ElementName=documentsDropDownButton, Path=DataContext.DelDocumentCommand}" CommandParameter="{Binding}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Delete.png" SizeDefinition="Small">
+                                    <Fluent:Button Grid.Column="2" Command="{Binding ElementName=documentsDropDownButton, Path=DataContext.PackageService.DelDocumentCommand}" CommandParameter="{Binding}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/Delete.png" SizeDefinition="Small">
 
                 </Fluent:Button>
 
@@ -250,7 +247,7 @@
 
 
             </Fluent:DropDownButton>
-            <Fluent:Button  Fluent:KeyTip.Keys="SC" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:SaveCurrentDocument}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/SaveDocument.png" LargeIcon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/SaveDocument.png" SizeDefinition="Large" prismCommand:Click.Command="{Binding ElementName=documentsDropDownButton, Path=DataContext.SaveCurrentDocumentCommand}" >
+                <Fluent:Button  Fluent:KeyTip.Keys="SC" Header="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:SaveCurrentDocument}" Icon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/SaveDocument.png" LargeIcon="pack://application:,,,/Metaseed.MetaShell;component/Resources/Images/SaveDocument.png" SizeDefinition="Large" Command="{Binding ElementName=documentsDropDownButton, Path=DataContext.PackageService.SaveCurrentDocumentCommand}" >
                 <Fluent:Button.ToolTip>
                     <Fluent:ScreenTip
                   Title="{lex:Loc Metaseed.MetaShell:ShellRibbonResource:SaveCurrentDocument}"

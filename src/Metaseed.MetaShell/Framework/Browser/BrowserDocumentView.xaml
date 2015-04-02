@@ -9,8 +9,7 @@
         mc:Ignorable="d" 
         d:DesignHeight="300" d:DesignWidth="300"
         xmlns:views="clr-namespace:Metaseed.MetaShell.Views;assembly=Metaseed.ShellBase"
-        Background="{DynamicResource WindowBackground}"
-        ><!--lex:LocalizeDictionary.DesignCulture="zh-Hans"-->
+        Background="{DynamicResource WindowBackground}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>

@@ -86,7 +86,7 @@ namespace Metaseed.MetaShell.Services
             }
             else
             {
-                _shellService.Messager.MessageBox.Show("No new.meta file in application directory.");
+                ShellService.Messager.MessageBox.Show("No new.meta file in application directory.");
             }
         }
 
@@ -102,9 +102,12 @@ namespace Metaseed.MetaShell.Services
                 if (_recentFiles == null)
                 {
                     _recentFiles = new ObservableCollection<string>();
-                    foreach (var item in Properties.Settings.Default.RecentFiles)
+                    if (Properties.Settings.Default.RecentFiles != null)
                     {
-                        _recentFiles.Add(item);
+                        foreach (var item in Properties.Settings.Default.RecentFiles)
+                        {
+                            _recentFiles.Add(item);
+                        }
                     }
                 }
                 return _recentFiles;

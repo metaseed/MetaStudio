@@ -5,7 +5,6 @@ namespace Metaseed.MetaShell.Services
 {
     public interface IRibbonService
     {
-        #region Ribbon
         IRibbonService AddRibbonContextualTabGroup(RibbonContextualTabGroup ribbonContextualTabGroup);
         IRibbonService AddRibbonTab(RibbonTabItem ribbonTab);
         IRibbonService RemoveRibbonTab(RibbonTabItem ribbonTab);
@@ -13,6 +12,5 @@ namespace Metaseed.MetaShell.Services
         IRibbonService AddRibbonControl(IRibbonControl ribbonControl, RibbonGroupBox ribbonGroupBox);
         IRibbonService AddRibbonControl(IRibbonControl ribbonControl, string ribbonTabItemName, string ribbonGroupBoxName);
         bool IsRibbonBackstageOpen { get; set; }
-        #endregion
     }
 }

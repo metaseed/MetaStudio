@@ -150,9 +150,6 @@
   <data name="Priority" xml:space="preserve">
     <value>优先级</value>
   </data>
-  <data name="Properties" xml:space="preserve">
-    <value>属性</value>
-  </data>
   <data name="SaveMessage" xml:space="preserve">
     <value>正在保存文件，请耐心等待 ╮（￣▽￣）╭</value>
   </data>
