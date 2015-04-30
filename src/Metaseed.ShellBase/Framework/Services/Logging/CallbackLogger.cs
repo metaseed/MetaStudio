@@ -1,4 +1,6 @@
 
+using System.Diagnostics;
+
 namespace Metaseed.MetaShell.Services
 {
     using System;
@@ -87,6 +89,11 @@ namespace Metaseed.MetaShell.Services
         protected override void Write(ILog log, string message, LogEvent logEvent, object extraData,DateTime time)
         {
             Log(new LoggerMessage(log.TargetType.Name, logEvent, message, extraData));
+            if (logEvent == LogEvent.Error)
+            {
+                //Debugger.Break();
+            }
+
         }
         #endregion
     }

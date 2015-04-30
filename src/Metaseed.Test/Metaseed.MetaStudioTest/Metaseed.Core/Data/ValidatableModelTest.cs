@@ -12,7 +12,7 @@ namespace Metaseed.MetaStudioTest
     public class ValidatableModelTest
     {
         [TestMethod]
-        public async Task TestMethod1()
+        public async Task TestValidatableModel()
         {
             var test = new UserInput() { UserName = string.Empty, Email = "44555", RepeatEmail = "sda" };
             await test.ValidateAsync();

@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -60,8 +61,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Data\ValidatableModelTest.cs" />
-    <Compile Include="Data\ValidatableModelTestHelper.cs" />
+    <Compile Include="Metaseed.Core\Data\ValidatableModelTest.cs" />
+    <Compile Include="Metaseed.Core\Data\ValidatableModelTestHelper.cs" />
+    <Compile Include="Metaseed.Core\MVVM\Commands\RemoteCommandTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

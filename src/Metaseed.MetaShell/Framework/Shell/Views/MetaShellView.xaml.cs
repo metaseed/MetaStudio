@@ -89,7 +89,7 @@ namespace Metaseed.MetaShell.Views
             if (String.IsNullOrEmpty(viewModel.PackageService.CurrentPackagePath))
             {
                 e.Cancel = false;
-                AppClosingEvent.SendWith(this);
+                AppClosingEvent.SendWith(new Tuple<IDataWindow, CancelEventArgs>(this,e));
                 //eventAggregator.GetEvent<AppClosingEvent>().Publish(this);
             }
             else
@@ -99,14 +99,14 @@ namespace Metaseed.MetaShell.Views
                 if (closeAppDialog.SelectedButton == CloseAppDialogButtons.Quit)//quit
                 {
                     e.Cancel = false;
-                    AppClosingEvent.SendWith(this);
+                    AppClosingEvent.SendWith(new Tuple<IDataWindow, CancelEventArgs>(this, e));
                     //eventAggregator.GetEvent<AppClosingEvent>().Publish(this);
                 }
                 else if (closeAppDialog.SelectedButton == CloseAppDialogButtons.SaveAndQuit) //save &quit
                 {
                     viewModel.PackageService.Save(viewModel.PackageService.CurrentPackagePath);
                     e.Cancel = false;
-                    AppClosingEvent.SendWith(this);
+                    AppClosingEvent.SendWith(new Tuple<IDataWindow, CancelEventArgs>(this, e));
                     //eventAggregator.GetEvent<AppClosingEvent>().Publish(this);
                 }
                 else//cancle

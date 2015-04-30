@@ -35,9 +35,10 @@ namespace Metaseed.MetaShell.Services
         static ILog Log = LogManager.GetCurrentClassLogger();
         static bool _created = false;
         public static string HomeRibbonTabName = "RibbonTabHome";
-        private readonly RibbonService _ribbonService = new RibbonService();
-        public ShellService()
+        private readonly IRibbonService _ribbonService;
+        public ShellService(IRibbonService ribbonServce)
         {
+            _ribbonService = ribbonServce;
             System.Diagnostics.Debug.Assert(_created == false);
             _created = true;
             _tools = new ObservableCollection<IToolViewModel>();
@@ -249,7 +250,7 @@ namespace Metaseed.MetaShell.Services
             }
             return true;
         }
-        virtual public void DeleteDocument(ILayoutContentViewModel document)
+        public void DeleteDocument(ILayoutContentViewModel document)
         {
             if (document is IDocumentViewModel)
             {

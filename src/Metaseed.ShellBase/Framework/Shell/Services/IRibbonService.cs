@@ -1,4 +1,5 @@
-﻿using Fluent;
+﻿using System;
+using Fluent;
 using Metaseed.MetaShell.Services;
 
 namespace Metaseed.MetaShell.Services
@@ -12,5 +13,8 @@ namespace Metaseed.MetaShell.Services
         IRibbonService AddRibbonControl(IRibbonControl ribbonControl, RibbonGroupBox ribbonGroupBox);
         IRibbonService AddRibbonControl(IRibbonControl ribbonControl, string ribbonTabItemName, string ribbonGroupBoxName);
         bool IsRibbonBackstageOpen { get; set; }
+
+        event Action<RibbonTabItem> RibbonTabAdded;
+        event Action<RibbonTabItem> RibbonTabRemoved;
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +16,7 @@ using Metaseed.MetaShell.Views;
 namespace Metaseed.MetaShell.Services{
     public class RibbonService:IRibbonService
     {
-        static ILog Log = LogManager.GetCurrentClassLogger();
+        static readonly ILog Log = LogManager.GetCurrentClassLogger();
         Ribbon _ribbon;
         Ribbon Ribbon
         {
@@ -23,11 +25,34 @@ namespace Metaseed.MetaShell.Services{
                 if (_ribbon == null)
                 {
                     _ribbon = ServiceLocator.Default.ResolveType<ShellRibbon>();
+                    _ribbon.Tabs.CollectionChanged += Tabs_CollectionChanged;
                     ScreenTip.HelpPressed += OnScreenTipHelpPressed;
                 }
                 return _ribbon;
             }
         }
+
+        void Tabs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action==NotifyCollectionChangedAction.Add)
+            {
+                foreach (RibbonTabItem tab in e.NewItems)
+                {
+                    if (RibbonTabAdded!=null)
+                    this.RibbonTabAdded(tab);
+                }
+            }else if (e.Action == NotifyCollectionChangedAction.Remove )
+            {
+                foreach (RibbonTabItem tab in e.OldItems)
+                {
+                    if (RibbonTabRemoved!=null)
+                    this.RibbonTabRemoved(tab);
+                }
+            }
+        }
+
+        public event Action<RibbonTabItem> RibbonTabAdded;
+        public event Action<RibbonTabItem> RibbonTabRemoved;
         /// <summary>
         /// Handles F1 pressed on ScreenTip with help capability
         /// </summary>

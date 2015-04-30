@@ -27,7 +27,7 @@ namespace Metaseed.MetaShell.Controls
         {
             Debug.Assert(Name != null);
             Debug.Assert(RibbonTabName != null);
-            IShellService shellService = ServiceLocator.Default.ResolveType<IShellService>();
+            var shellService = ServiceLocator.Default.ResolveType<IShellService>();
             shellService.Ribbon.AddRibbonGroupBox(this,RibbonTabName);
             this.Hide(null);
             _HasInitialized = true;

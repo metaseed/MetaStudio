@@ -7,7 +7,7 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Metaseed.MetaCore")]
-[assembly: AssemblyDescription("MetaSeed")]
+[assembly: AssemblyDescription("Metaseed.MetaCore")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Metaseed.MetaCore")]
@@ -33,8 +33,7 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.4.0")]
-[assembly: AssemblyFileVersion("2.0.40")]
+//[assembly: AssemblyFileVersion("2.0.4.*")]
 [assembly: XmlnsDefinition("http://www.metaseed.com", "Metaseed.Windows.Controls")]
 [assembly: XmlnsDefinition("http://www.metaseed.com", "Metaseed.Windows.Data.Converters")]
 [assembly: XmlnsPrefix("http://www.metaseed.com", "metaseed")]

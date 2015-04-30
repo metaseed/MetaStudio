@@ -13,12 +13,12 @@
                 <RowDefinition Height="18"/>
                 <RowDefinition Height="85"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="MetaStduio" VerticalAlignment="Center" FontSize="48" FontWeight="Bold" FontStyle="Italic" Foreground="White">
+            <TextBlock x:Name="AppName" Text="MetaStduio" VerticalAlignment="Center" FontSize="48" FontWeight="Bold" FontStyle="Italic" Foreground="White">
                 <TextBlock.Effect>
                     <DropShadowEffect ShadowDepth="1" RenderingBias="Quality" Color="Black"/>
                 </TextBlock.Effect>
             </TextBlock>
-            <TextBlock Grid.Row="1" Text="Metaseed © 2008-2014" HorizontalAlignment="Right" Foreground="LightGreen"  FontStyle="Italic">
+            <TextBlock x:Name="Copyright" Grid.Row="1" Text="Metaseed © 2008-2014" HorizontalAlignment="Right" Foreground="LightGreen"  FontStyle="Italic">
                 <TextBlock.Effect>
                     <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" Color="White"/>
                 </TextBlock.Effect>

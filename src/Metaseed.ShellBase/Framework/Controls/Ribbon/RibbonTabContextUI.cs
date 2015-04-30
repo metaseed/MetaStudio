@@ -26,7 +26,7 @@ namespace Metaseed.MetaShell.Controls
         {
             this.Group = group;
             var shellService = ServiceLocator.Default.ResolveType<IShellService>();
-            this.Name = this.GetType().Name;
+            if (string.IsNullOrEmpty(this.Name)) this.Name = this.GetType().Name;
             shellService.Ribbon.AddRibbonTab(this);
         }
         public virtual void Initialize()

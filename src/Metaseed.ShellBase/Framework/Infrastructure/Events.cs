@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Catel.Messaging;
 using System.Windows;
 using System.Globalization;
@@ -7,7 +8,9 @@ using Metaseed.MetaShell.Services;
 using Metaseed.MetaShell.ViewModels;
 
 namespace Metaseed.MetaShell.Infrastructure{
-    public class AppClosingEvent : MessageBase<AppClosingEvent, IDataWindow> { }
+    public class AppClosingEvent : MessageBase<AppClosingEvent, Tuple<IDataWindow,CancelEventArgs>>
+    {
+    }
     public class CurrentThemeChangedEvent : MessageBase<CurrentThemeChangedEvent, Tuple<AppTheme, AppTheme>>
     {
 

@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.Xml;
+using System.Xml.Linq;
 using Catel.Windows;
 using System.IO;
 using System.Reflection;
@@ -22,7 +24,29 @@ namespace Metaseed.MetaShell.Views
         public SplashScreen()
             : base(DataWindowMode.Custom)
         {
+            var assembly=Assembly.GetEntryAssembly();
+            var titleAttributes=assembly.GetCustomAttributes(typeof (AssemblyTitleAttribute), true);
+            
             InitializeComponent();
+            if (titleAttributes.Length > 0)
+            {
+                AppName.Text = ((AssemblyTitleAttribute)titleAttributes[0]).Title;
+            }
+            var copyrightAttributes = assembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), true);
+            if (copyrightAttributes.Length > 0)
+            {
+                Copyright.Text = ((AssemblyCopyrightAttribute)copyrightAttributes[0]).Copyright;
+            }
+            var configPath = AppEnvironment.AppPath + @"\Resources\Images\SplashScreen\SplashScreenInfo.xml";
+            if (File.Exists(configPath))
+            {
+                var info = XElement.Load(configPath);
+                var productName = info.Element("ProductName");
+                if (productName != null) AppName.Text = productName.Value;
+                var copyright = info.Element("Copyright");
+                if (copyright != null) Copyright.Text = copyright.Value;
+            }
+
             CustomiseSplashScreen();
         }
 
