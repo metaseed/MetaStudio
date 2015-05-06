@@ -23,7 +23,10 @@ namespace Metaseed.MVVM.Commands
         {
             return true;
         }
-
+        internal void RaiseCanExecuteChanged(object sender, EventArgs e)
+        {
+            CanExecuteChanged(sender, e);
+        }
         virtual public void Execute(object parameter)
         {
             

@@ -28,15 +28,6 @@ namespace Metaseed.MVVM.Commands
             _callback.RemoteCommandService = this;
             
         }
-        //public RemoteCommandService()
-        //    : base(new InstanceContext(new RemoteCommandServiceCallback()), new ServiceEndpoint(ContractDescription.GetContract(typeof(IRemoteCommandService)),
-        //        new NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/IRemoteCommandService")))
-        //{
-        //    commandManager = new RemoteCommandManager(this);
-        //    //_callback = callback;
-        //   // _callback.RemoteCommandService = this;
-        //    //((IRemoteCommandService)this).Connect();
-        //}
 
 
         void IRemoteCommandService.Register(string commandID, CommandUIData uiData)
@@ -51,12 +42,12 @@ namespace Metaseed.MVVM.Commands
             
         }
 
-        public void UnRegister(string commandID)
+        void IRemoteCommandService.UnRegister(string commandID)
         {
             Channel.UnRegister(commandID);
         }
 
-        public void CanExecuteChanged(string commandID)
+         void IRemoteCommandService. CanExecuteChanged(string commandID)
         {
             Channel.CanExecuteChanged(commandID);
         }

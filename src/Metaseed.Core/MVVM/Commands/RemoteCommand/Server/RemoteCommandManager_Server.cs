@@ -27,7 +27,13 @@ namespace Metaseed.MVVM.Commands
             }
             return null;
         }
-
+        internal RemoteCommandDelegate this[string commandID]
+        {
+            get
+            {
+                return (RemoteCommandDelegate)(Commands[commandID][Callback]);
+            }
+        }
         internal readonly Dictionary<string, Dictionary<IRemoteCommandServiceCallback, IRemoteCommand>> Commands = new Dictionary<string, Dictionary<IRemoteCommandServiceCallback, IRemoteCommand>>();
 
         internal void Add(string commandID, CommandUIData uiData)

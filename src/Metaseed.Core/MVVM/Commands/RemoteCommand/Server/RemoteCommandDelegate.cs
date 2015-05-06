@@ -17,8 +17,15 @@ namespace Metaseed.MVVM.Commands
         RemoteCommandManager_Server commandManager { get { return ((RemoteCommandService_Server)(this.CommandService)).CommandManager; } }
         public override bool CanExecute(object parameter)
         {
-            return base.CanExecute(parameter);
+            var r= base.CanExecute(parameter);
+            if (r)
+            {
+                var re=Callback.CanExcute(this.ID, parameter);
+                if (re) return true;
+            }
+            return false;
         }
+
 
         public override void Execute(object parameter)
         {

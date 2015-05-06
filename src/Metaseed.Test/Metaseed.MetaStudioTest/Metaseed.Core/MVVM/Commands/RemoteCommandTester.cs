@@ -26,13 +26,17 @@ namespace Metaseed.MetaStudioTest.Metaseed.Core.MVVM.Commands
             {
                 remoteCommandService.Open();
                 Debug.WriteLine("\n register command");
-                var command = new MyCommand(remoteCommandService, "id",
+                var clientCommand = new MyClientCommand(remoteCommandService, "id",
                     new CommandUIData() { Text = "text", IconURL = "icon", IsCheckable = false, IsChecked = false });
-                remoteCommandService.Register(command);
+                remoteCommandService.Register(clientCommand);
 
-                Thread.Sleep(1500);
+                bool r=clientCommand.event_Exec.WaitOne(2000);
+                Assert.IsTrue(r);
+                clientCommand.RaiseCanExecuteChanged(null,null);
+                var c=clientCommand.event_CanExec.WaitOne(10000);
+                Assert.IsTrue(c);
                 remoteCommandService.Close();
-                Assert.IsTrue(command.excuted);
+                
             }
             catch (TimeoutException e)
             {

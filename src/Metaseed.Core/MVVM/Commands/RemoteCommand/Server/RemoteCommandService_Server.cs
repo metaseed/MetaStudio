@@ -65,9 +65,9 @@ namespace Metaseed.MVVM.Commands
         }
 
          void IRemoteCommandService.CanExecuteChanged(string commandID)
-        {
-            throw new NotImplementedException();
-        }
+         {
+             CommandManager[commandID].RaiseCanExecuteChanged(this, null);
+         }
         #endregion IRemoteCommandService
 
 
