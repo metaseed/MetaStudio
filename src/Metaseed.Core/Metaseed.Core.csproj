@@ -90,10 +90,15 @@
     <Compile Include="Data\ValueObject.cs" />
     <Compile Include="AppEnvironment.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\IRemoteCommand.cs" />
-    <Compile Include="MVVM\Commands\RemoteCommand\IRemoteCommandManager.cs" />
-    <Compile Include="MVVM\Commands\RemoteCommand\RemoteCommand.cs" />
-    <Compile Include="MVVM\Commands\RemoteCommand\RemoteCommandManager.cs" />
-    <Compile Include="MVVM\Commands\RemoteCommand\RemoteCommandManagerService.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\IRemoteCommandService.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\Client\RemoteCommand.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\Client\RemoteCommandManager.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\RemoteCommandBase.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\Client\RemoteCommandService.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\Server\RemoteCommandDelegate.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\Server\RemoteCommandService_Server.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\Server\RemoteCommandManager_Server.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\Server\IRemoteCommandUIBuilder.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="Windows\HostedProcessWindow\ProcessWindowHelper.cs" />
     <Compile Include="EventArgs.cs" />
@@ -132,6 +137,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.zh-Hans.resx" />
+    <None Include="MVVM\Commands\RemoteCommand\Archetecture\ClassRelationship.dgml" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

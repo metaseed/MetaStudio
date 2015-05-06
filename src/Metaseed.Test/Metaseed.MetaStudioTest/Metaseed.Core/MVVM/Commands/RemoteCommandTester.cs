@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Metaseed.MVVM.Commands;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,62 +16,62 @@ namespace Metaseed.MetaStudioTest.Metaseed.Core.MVVM.Commands
     public class RemoteCommandTester
     {
         [TestMethod]
-        public void TestRemoteCommandManager_RepeatRegistCommand()
+        public void TestRemoteCommandManager_Excute_CommandPara()
         {
-            var remoteCommandManagerService = new RemoteCommandManagerService();
-            remoteCommandManagerService.Start();
-
-            var remoteCommandManager= new RemoteCommandManager();
+            var remoteCommandServiceServer = new FakeRemoteCommandServer();
+            var serviceController = new RemoteCommandServiceController(remoteCommandServiceServer);
+            serviceController.Start();
+            var remoteCommandService = new RemoteCommandService();
             try
             {
-                remoteCommandManager.Open();
+                remoteCommandService.Open();
+                Debug.WriteLine("\n register command");
+                var command = new MyCommand(remoteCommandService, "id",
+                    new CommandUIData() { Text = "text", IconURL = "icon", IsCheckable = false, IsChecked = false });
+                remoteCommandService.Register(command);
 
-                Debug.WriteLine("\n register"); 
-                remoteCommandManager.Register("id","text","icon");
-                remoteCommandManager.Register("id", "text", "icon");
-
-                remoteCommandManager.Close();
-                Assert.IsTrue(false);
+                Thread.Sleep(1500);
+                remoteCommandService.Close();
+                Assert.IsTrue(command.excuted);
             }
             catch (TimeoutException e)
             {
                 Debug.WriteLine("The service operation timed out. " + e.Message);
-                remoteCommandManager.Abort();
+                remoteCommandService.Abort();
+                Assert.IsTrue(false);
             }
-            // Catch the contractually specified SOAP fault raised here as an exception. 
             catch (FaultException<ValidationFault> e)
             {
                 Debug.WriteLine("Message: {0}, Description: {1}", e.Detail.Message, e.Detail.Description);
-                remoteCommandManager.Abort();
-                Assert.IsTrue(true);
+                remoteCommandService.Abort();
+                Assert.IsTrue(false);
             }
-            // Catch unrecognized faults. This handler receives exceptions thrown by WCF 
-            // services when ServiceDebugBehavior.IncludeExceptionDetailInFaults  
-            // is set to true or when un-typed FaultExceptions raised.
             catch (FaultException e)
             {
                 Debug.WriteLine(e.Message);
-                remoteCommandManager.Abort();
+                remoteCommandService.Abort();
+                Assert.IsTrue(false);
             }
-            // Standard communication fault handler. 
             catch (CommunicationException e)
             {
                 Debug.WriteLine("There was a communication problem. " + e.Message + e.StackTrace);
-                remoteCommandManager.Abort();
+                remoteCommandService.Abort();
+                Assert.IsTrue(false);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
-                remoteCommandManager.Abort();
-            }
-        }
-        [TestMethod]
-        public void TestRemoteCommandManager_()
-        {
+                Debug.WriteLine(e.Message + e.StackTrace);
 
+                remoteCommandService.Abort();
+                Assert.IsTrue(false);
+            }
+            finally
+            {
+                serviceController.Stop();
+            }
         }
     }
 
-    
-       
+
+
 }

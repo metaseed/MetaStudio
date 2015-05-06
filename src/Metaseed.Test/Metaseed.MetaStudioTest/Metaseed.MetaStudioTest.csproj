@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <Choose>
@@ -63,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Metaseed.Core\Data\ValidatableModelTest.cs" />
     <Compile Include="Metaseed.Core\Data\ValidatableModelTestHelper.cs" />
+    <Compile Include="Metaseed.Core\MVVM\Commands\FakeRemoteCommandServer.cs" />
     <Compile Include="Metaseed.Core\MVVM\Commands\RemoteCommandTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -74,6 +76,9 @@
       <Project>{e26d7625-0627-4055-add5-8ceab29e8003}</Project>
       <Name>Metaseed.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -7,10 +7,17 @@ using System.Windows.Input;
 
 namespace Metaseed.MVVM.Commands
 {
-    public interface IRemoteCommand:ICommand
+    public interface IRemoteCommand : ICommand
     {
         string ID { get; set; }
-        string Text { get; set; }
-        string IconURL { get; set; }
+        CommandUIData UIData { get; set; }
+       
+    }
+    public struct CommandUIData
+    {
+        public string Text { get; set; }
+        public string IconURL { get; set; }
+        public bool IsCheckable { get; set; }
+        public bool? IsChecked { get; set; }
     }
 }

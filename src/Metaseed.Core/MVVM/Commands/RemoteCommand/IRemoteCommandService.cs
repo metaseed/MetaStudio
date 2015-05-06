@@ -9,12 +9,12 @@ namespace Metaseed.MVVM.Commands
     /// The primary interface is used to send messages from client to service.
     /// The callback interface is used to send messages from service back to client.
     /// </summary>
-    [ServiceContract(Namespace = "http://Metaseed.MVVM.Commands", SessionMode = SessionMode.Required, CallbackContract = typeof(IRemoteCommandManagerCallback))]
-    public interface IRemoteCommandManager
+    [ServiceContract(Namespace = "http://Metaseed.MVVM.Commands", SessionMode = SessionMode.Required, CallbackContract = typeof(IRemoteCommandServiceCallback))]
+    public interface IRemoteCommandService
     {
         [OperationContract]
         [FaultContract(typeof(ValidationFault))]
-        void Register(string commandID, string text, string iconURL);
+        void Register(string commandID, CommandUIData uiData );
 
         [OperationContract(IsOneWay = true)]
         void UnRegister(string commandID);
@@ -25,12 +25,12 @@ namespace Metaseed.MVVM.Commands
     /// <summary>
     /// The callback interface is used to send messages from service back to client.
     /// </summary>
-    public interface IRemoteCommandManagerCallback
+    public interface IRemoteCommandServiceCallback
     {
         [OperationContract(IsOneWay = true)]
-        void Excute(string commandID);
+        void Excute(string commandID, object para);
         [OperationContract]
-        bool CanExcute(string commandID);
+        bool CanExcute(string commandID, object para);
     }
 
     [DataContract]
