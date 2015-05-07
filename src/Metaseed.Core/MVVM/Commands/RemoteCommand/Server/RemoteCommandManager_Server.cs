@@ -11,19 +11,17 @@ namespace Metaseed.MVVM.Commands
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class RemoteCommandManager_Server
     {
-
         private RemoteCommandService_Server _service;
         public RemoteCommandManager_Server(RemoteCommandService_Server service)
         {
             _service = service;
         }
 
-
-        internal List<IRemoteCommand> GetCommands(string commandID)
+        internal List<RemoteCommandDelegate> GetCommands(string commandID)
         {
             if (Commands.ContainsKey(commandID))
             {
-                return Commands[commandID].Values.ToList();
+                return Commands[commandID].CommandDelegates.Values.ToList();
             }
             return null;
         }
@@ -31,44 +29,43 @@ namespace Metaseed.MVVM.Commands
         {
             get
             {
-                return (RemoteCommandDelegate)(Commands[commandID][Callback]);
+                return Commands[commandID].CommandDelegates[Callback];
             }
         }
-        internal readonly Dictionary<string, Dictionary<IRemoteCommandServiceCallback, IRemoteCommand>> Commands = new Dictionary<string, Dictionary<IRemoteCommandServiceCallback, IRemoteCommand>>();
+        internal readonly Dictionary<string, CompositeRemoteCommand> Commands = new Dictionary<string, CompositeRemoteCommand>();
 
         internal void Add(string commandID, CommandUIData uiData)
         {
+            var callback = Callback;
             if (Commands.ContainsKey(commandID))
             {
-                var clientCommandDic = Commands[commandID];
-                if (!clientCommandDic.ContainsKey(Callback))
-                {
-                    var command = new RemoteCommandDelegate(_service, commandID, Callback) { UIData = uiData };
-                    clientCommandDic.Add(Callback, command);
-                    if (_service.UIBuilder != null) _service.UIBuilder.GenerateUI(command);
-                }
-                else
-                {
-                    var fault = new ValidationFault
-                     {
-                         Result = false,
-                         Message = "Numbers cannot be zero",
-                         Description = "Invalid numbers"
-                     };
-                    throw new FaultException<ValidationFault>(fault);
-                }
+                var compositeRemoteCommand = Commands[commandID];
+                compositeRemoteCommand.Add(commandID, uiData);
             }
             else
             {
-                var clientCommandDic = new Dictionary<IRemoteCommandServiceCallback, IRemoteCommand>();
-                Commands.Add(commandID, clientCommandDic);
-                var command = new RemoteCommandDelegate(_service, commandID, Callback) { UIData = uiData };
-                clientCommandDic.Add(Callback, command);
-                if(_service.UIBuilder!=null)_service.UIBuilder.GenerateUI(command);
+                var compositeRemoteCommand = new CompositeRemoteCommand(_service, commandID){UIData = uiData};
+                this.Commands.Add(commandID,compositeRemoteCommand);
+                var command=compositeRemoteCommand.Add(commandID,uiData);
+                if (_service.UIBuilder != null) _service.UIBuilder.GenerateUI(compositeRemoteCommand);
             }
-
         }
 
+        internal void Remove(string commandID)
+        {
+            if (Commands.ContainsKey(commandID))
+            {
+                var callback = Callback;
+                var compositeRemoteCommand = Commands[commandID];
+
+                if (compositeRemoteCommand.CommandDelegates.Count == 0)
+                {
+                    Commands.Remove(commandID);
+                    if (_service.UIBuilder != null) _service.UIBuilder.RemoveUI(commandID);
+                }
+            }
+            
+        }
 
         IRemoteCommandServiceCallback Callback
         {

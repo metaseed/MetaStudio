@@ -48,8 +48,6 @@ namespace Metaseed.MVVM.Commands
          {
              CommandManager = new RemoteCommandManager_Server(this);
          }
-        
-        
 
         
         #region IRemoteCommandService
@@ -59,9 +57,9 @@ namespace Metaseed.MVVM.Commands
 
         }
 
-         void IRemoteCommandService.UnRegister(string commandID)
+        void IRemoteCommandService.UnRegister(string commandID)
         {
-            throw new NotImplementedException();
+            
         }
 
          void IRemoteCommandService.CanExecuteChanged(string commandID)

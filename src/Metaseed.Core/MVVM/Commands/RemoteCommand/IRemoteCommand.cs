@@ -15,6 +15,7 @@ namespace Metaseed.MVVM.Commands
     }
     public struct CommandUIData
     {
+        public string UIType { get; set; }
         public string Text { get; set; }
         public string IconURL { get; set; }
         public bool IsCheckable { get; set; }

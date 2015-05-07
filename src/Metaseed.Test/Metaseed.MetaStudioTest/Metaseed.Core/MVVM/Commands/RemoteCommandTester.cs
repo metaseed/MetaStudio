@@ -16,7 +16,7 @@ namespace Metaseed.MetaStudioTest.Metaseed.Core.MVVM.Commands
     public class RemoteCommandTester
     {
         [TestMethod]
-        public void TestRemoteCommandManager_Excute_CommandPara()
+        public void TestRemoteCommandManager_Register_Excute_CommandPara()
         {
             var remoteCommandServiceServer = new FakeRemoteCommandServer();
             var serviceController = new RemoteCommandServiceController(remoteCommandServiceServer);
@@ -29,11 +29,11 @@ namespace Metaseed.MetaStudioTest.Metaseed.Core.MVVM.Commands
                 var clientCommand = new MyClientCommand(remoteCommandService, "id",
                     new CommandUIData() { Text = "text", IconURL = "icon", IsCheckable = false, IsChecked = false });
                 remoteCommandService.Register(clientCommand);
-
-                bool r=clientCommand.event_Exec.WaitOne(2000);
+                ((UI)(remoteCommandServiceServer.UIBuilder)).TestExecute();
+                bool r=clientCommand.event_Exec.WaitOne(8000);
                 Assert.IsTrue(r);
                 clientCommand.RaiseCanExecuteChanged(null,null);
-                var c=clientCommand.event_CanExec.WaitOne(10000);
+                var c=clientCommand.event_CanExec.WaitOne(8000);
                 Assert.IsTrue(c);
                 remoteCommandService.Close();
                 

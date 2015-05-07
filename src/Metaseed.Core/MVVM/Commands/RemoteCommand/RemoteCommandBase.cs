@@ -19,13 +19,14 @@ namespace Metaseed.MVVM.Commands
 
         protected IRemoteCommandService CommandService { get { return _commandService; } }
 
-        virtual public bool CanExecute(object parameter)
-        {
-            return true;
-        }
+
         internal void RaiseCanExecuteChanged(object sender, EventArgs e)
         {
             CanExecuteChanged(sender, e);
+        }
+        virtual public bool CanExecute(object parameter)
+        {
+            return true;
         }
         virtual public void Execute(object parameter)
         {

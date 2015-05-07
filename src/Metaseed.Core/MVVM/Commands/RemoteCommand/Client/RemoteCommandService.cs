@@ -44,6 +44,7 @@ namespace Metaseed.MVVM.Commands
 
         void IRemoteCommandService.UnRegister(string commandID)
         {
+            commandManager.Remove(commandID);
             Channel.UnRegister(commandID);
         }
 

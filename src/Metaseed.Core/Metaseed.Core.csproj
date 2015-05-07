@@ -95,6 +95,7 @@
     <Compile Include="MVVM\Commands\RemoteCommand\Client\RemoteCommandManager.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\RemoteCommandBase.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\Client\RemoteCommandService.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\Server\CompositeRemoteCommand.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\Server\RemoteCommandDelegate.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\Server\RemoteCommandService_Server.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\Server\RemoteCommandManager_Server.cs" />
