@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using Fluent;
 
 using System.ComponentModel;
@@ -21,6 +22,24 @@ namespace Metaseed.MetaShell.Controls
         {
             this.Visibility = Visibility.Collapsed;
             this.DataContext = null;
+            this.Groups.CollectionChanged += Groups_CollectionChanged;
+        }
+
+        void Groups_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (Groups.Count >= 0)
+            {
+                foreach (var item in Groups)
+                {
+                    var element = item as UIElement;
+                    if (element != null && element.Visibility == Visibility.Visible)
+                    {
+                        this.Visibility = Visibility.Visible;
+                        return;
+                    }
+                }
+            }
+            this.Visibility = Visibility.Collapsed;
         }
         protected void AddToRibbon(RibbonContextualTabGroup group)
         {

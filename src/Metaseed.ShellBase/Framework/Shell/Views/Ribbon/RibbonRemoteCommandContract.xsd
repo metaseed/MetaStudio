@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="XMLSchema1"
+    targetNamespace="http://tempuri.org/XMLSchema1.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/XMLSchema1.xsd"
+    xmlns:mstns="http://tempuri.org/XMLSchema1.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="RibbonRemoteCommandUI_ExtrUIData">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RibbonTabGroup">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="BorderBrush" type="xs:string" >
+                <xs:annotation>
+                  <xs:documentation>
+                    value from System.Windows.Media.Brushes
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+
+              <xs:element name="BackgroundBrush" type="xs:string" >
+                <xs:annotation>
+                  <xs:documentation>
+                    value from System.Windows.Media.Brushes
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+
+              <xs:element name="HeaderLocalizedKey" type="xs:string">
+                 <xs:annotation>
+                  <xs:documentation>
+                    format is assemblyName:resourceFileName:resourceKeyName
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute  name="Name" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>
+                  If this is null or empty, means no contexual group with the ribbion tab
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="RibbonTab">
+          <xs:complexType>
+            <xs:sequence>
+
+              <xs:element name="HeaderLocalizedKey" type="xs:string">
+                 <xs:annotation>
+                  <xs:documentation>
+                    format is assemblyName:resourceFileName:resourceKeyName
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute  name="Name" type="xs:string" use="required">
+              <xs:annotation>
+                <xs:documentation>
+                  must not be null or empty, used to find the ribbion tab
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+            <xs:attribute  name="CreatNewIfCanNotFound" type="xs:boolean" default="false">
+              <xs:annotation>
+                <xs:documentation>
+                  if the named tab is not found, we create a new one or wait for the named tab created by other measures.
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+        
+      </xs:sequence>
+    </xs:complexType>
+  
+  </xs:element>
+</xs:schema>

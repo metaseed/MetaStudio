@@ -34,7 +34,7 @@ namespace Metaseed.MetaShell.Services
         private static object _lock = new object();
         static ILog Log = LogManager.GetCurrentClassLogger();
         static bool _created = false;
-        public static string HomeRibbonTabName = "RibbonTabHome";
+        public const string HomeRibbonTabName = "RibbonTabHome";
         private readonly IRibbonService _ribbonService;
         public ShellService(IRibbonService ribbonServce)
         {

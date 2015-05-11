@@ -67,9 +67,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Fluent.Ribbon.3.3.0\lib\net45\Fluent.dll</HintPath>
     </Reference>
-    <Reference Include="Metaseed.Core, Version=2.0.8.4, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Metaseed.Core, Version=2.0.8.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Metaseed.Core.2.0.8.4\lib\net451\Metaseed.Core.dll</HintPath>
+      <HintPath>..\..\packages\Metaseed.Core.2.0.8.5\lib\net451\Metaseed.Core.dll</HintPath>
     </Reference>
     <Reference Include="Metaseed.MetaCore, Version=2.0.8.4, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -179,6 +179,8 @@
     <Compile Include="Framework\Shell\Services\RibbonService.cs" />
     <Compile Include="Framework\Shell\Services\ShellService.cs" />
     <Compile Include="Framework\Shell\ViewModels\ShellViewModel.cs" />
+    <Compile Include="Framework\Shell\Views\Ribbon\RibbonRemoteCommandContract.designer.cs" />
+    <Compile Include="Framework\Shell\Views\Ribbon\RibbonRemoteCommandUIBuilder.cs" />
     <Compile Include="Framework\Shell\Views\ShellViewBase.cs" />
     <Compile Include="Framework\ViewModels\ContextUserInterface.cs" />
     <Compile Include="Framework\ViewModels\DocumentOpenOrderAttribute.cs" />
@@ -234,6 +236,9 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Fody.targets" />
+    <None Include="Framework\Shell\Views\Ribbon\RibbonRemoteCommandContract.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -247,7 +252,7 @@
     <None Include="_CreateNewNuGetPackage\RunMeToUploadNuGetPackage.cmd" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Framework\Shell\Views\Ribbon\" />
+    <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -12,6 +12,7 @@ namespace Metaseed.MetaShell.Services
         IRibbonService AddRibbonGroupBox(RibbonGroupBox ribbonGroupBox, string ribbonTabItemName);
         IRibbonService AddRibbonControl(IRibbonControl ribbonControl, RibbonGroupBox ribbonGroupBox);
         IRibbonService AddRibbonControl(IRibbonControl ribbonControl, string ribbonTabItemName, string ribbonGroupBoxName);
+        
         bool IsRibbonBackstageOpen { get; set; }
 
         event Action<RibbonTabItem> RibbonTabAdded;

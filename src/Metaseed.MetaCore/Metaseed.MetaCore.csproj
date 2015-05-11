@@ -60,9 +60,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Catel.MVVM.4.1.0\lib\net45\Catel.MVVM.dll</HintPath>
     </Reference>
-    <Reference Include="Metaseed.Core, Version=2.0.8.4, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Metaseed.Core, Version=2.0.8.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Metaseed.Core.2.0.8.4\lib\net451\Metaseed.Core.dll</HintPath>
+      <HintPath>..\..\packages\Metaseed.Core.2.0.8.5\lib\net451\Metaseed.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.Composition">
       <HintPath>..\..\packages\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>

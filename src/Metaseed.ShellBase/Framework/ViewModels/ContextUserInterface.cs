@@ -112,7 +112,7 @@ namespace Metaseed.MetaShell.ViewModels
                 var contextualUI = contextUIs[i];
                 if (contextualUI is ContextualToolViewModelBuilder)
                 {
-                    var shellService = this.GetDependencyResolver().Resolve<Metaseed.MetaShell.Services.IShellService>();
+                    var shellService = this.GetDependencyResolver().Resolve<IShellService>();
                     var tool = ((ShellService)shellService).GetTool((contextualUI as ContextualToolViewModelBuilder).ID) ??(contextualUI as ContextualToolViewModelBuilder).GetTool();
                     contextualUI = contextUIs[i] = tool;
                 }

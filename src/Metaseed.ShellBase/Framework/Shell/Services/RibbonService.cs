@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Catel;
@@ -18,7 +14,7 @@ namespace Metaseed.MetaShell.Services{
     {
         static readonly ILog Log = LogManager.GetCurrentClassLogger();
         Ribbon _ribbon;
-        Ribbon Ribbon
+        internal Ribbon Ribbon
         {
             get
             {
@@ -32,7 +28,7 @@ namespace Metaseed.MetaShell.Services{
             }
         }
 
-        void Tabs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        void Tabs_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action==NotifyCollectionChangedAction.Add)
             {
@@ -116,14 +112,6 @@ namespace Metaseed.MetaShell.Services{
             return this;
         }
 
-        public IRibbonService AddRibbonControl(IRibbonControl ribbonControl, RibbonGroupBox ribbonGroupBox)
-        {
-            Argument.IsNotNull("ribbonControl", ribbonControl);
-            Argument.IsNotNull("ribbonGroupBox", ribbonGroupBox);
-            Argument.IsNotNull("ribbonGroupBox.Name", ribbonGroupBox.Name);
-            ribbonGroupBox.Items.Add(ribbonControl);
-            return this;
-        }
         public IRibbonService AddRibbonGroupBox(RibbonGroupBox ribbonGroupBox, string ribbonTabItemName)
         {
             Argument.IsNotNull("ribbonTabItemName", ribbonTabItemName);
@@ -138,6 +126,16 @@ namespace Metaseed.MetaShell.Services{
             ribbonTabItem.Groups.Add(ribbonGroupBox);
             return this;
         }
+
+        public IRibbonService AddRibbonControl(IRibbonControl ribbonControl, RibbonGroupBox ribbonGroupBox)
+        {
+            Argument.IsNotNull("ribbonControl", ribbonControl);
+            Argument.IsNotNull("ribbonGroupBox", ribbonGroupBox);
+            Argument.IsNotNull("ribbonGroupBox.Name", ribbonGroupBox.Name);
+            ribbonGroupBox.Items.Add(ribbonControl);
+            return this;
+        }
+
         public IRibbonService AddRibbonControl(IRibbonControl ribbonControl, string ribbonTabItemName, string ribbonGroupBoxName)
         {
             Argument.IsNotNull("ribbonTabItemName", ribbonTabItemName);

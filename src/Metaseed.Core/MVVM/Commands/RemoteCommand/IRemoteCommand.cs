@@ -20,5 +20,6 @@ namespace Metaseed.MVVM.Commands
         public string IconURL { get; set; }
         public bool IsCheckable { get; set; }
         public bool? IsChecked { get; set; }
+        public string ExtraData { get; set; }
     }
 }
