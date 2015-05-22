@@ -34,25 +34,35 @@ namespace Metaseed.Diagnostics
             pDocked.Start();
             return pDocked;
         }
-
+        /// <summary>
+        /// start process and wait the started parameter to be true
+        /// </summary>
+        /// <param name="processName"></param>
+        /// <param name="arguments"></param>
+        /// <param name="started"></param>
+        /// <param name="hideMainWindow"></param>
+        /// <param name="removeMenubar"></param>
+        /// <param name="removeBorder"></param>
+        /// <returns></returns>
         public static Process StartProcess(string processName, string arguments, ref bool started,
             bool hideMainWindow = true, bool removeMenubar = true, bool removeBorder = true)
         {
             try
             {
-                Process pDocked = StartProcess(processName, arguments);
+                Process process = StartProcess(processName, arguments);
+                //wait and process message queue to make ui responsive
                 while (!started)
                 {
                     Thread.Sleep(10);
                     Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate { }));
                 }
-                IntPtr hWnd = pDocked.MainWindowHandle;
+                IntPtr hWnd = process.MainWindowHandle;
                 ShowWindow(hWnd, hideMainWindow ? WindowShowStyle.Hide : WindowShowStyle.Show);
                 if (removeMenubar)
                     HideMenubar(hWnd);
                 if (removeMenubar)
                     RemoveCaptionBarAndBorder(hWnd);
-                return pDocked;
+                return process;
             }
             catch (Exception ex)
             {

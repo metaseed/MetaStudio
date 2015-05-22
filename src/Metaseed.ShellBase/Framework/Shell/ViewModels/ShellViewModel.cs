@@ -1,35 +1,14 @@
-﻿using System.Collections.ObjectModel;
-using Catel.MVVM;
-using System.IO;
-using System.Windows;
-using System.Collections.Generic;
-using System;
-using System.Windows.Input;
-using Microsoft.Practices.Prism.Events;
-using Microsoft.Practices.Prism.Commands;
-using Microsoft.Practices.Prism.Regions;
-using Microsoft.Practices.ServiceLocation;
-using System.Net.Mime;
-using Catel.Logging;
+﻿using Catel.Logging;
 using Catel.IoC;
 using System.Reflection;
-using Catel.Data;
-using Xceed.Wpf.AvalonDock;
-using Xceed.Wpf.AvalonDock.Layout;
-using Xceed.Wpf.AvalonDock.Layout.Serialization;
-using System.IO.Packaging;
-using System.Linq;
 using System.Globalization;
-using Catel;
 using System.Windows.Data;
 using System.ComponentModel;
 namespace Metaseed.MetaShell.ViewModels
 {
-    using Views;
     using Services;
     using Infrastructure;
-    using Metaseed.Collections.Generic;
-    using Metaseed.Data;
+
     /// <summary>
     /// MainWindow view model.
     /// </summary>

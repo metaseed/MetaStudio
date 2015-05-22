@@ -9,14 +9,22 @@ namespace Metaseed.MVVM.Commands
 {
     public class CompositeRemoteCommand:RemoteCommandBase
     {
+        private bool passCanExcuteCall = true;//when binding we pass it
         public CompositeRemoteCommand(IRemoteCommandService commandService, string id)
             : base(commandService, id)
         {
+
         }
+        public RibbonRemoteCommandUIData DeserializedUIData;
         internal Dictionary<IRemoteCommandServiceCallback, RemoteCommandDelegate> CommandDelegates =
             new Dictionary<IRemoteCommandServiceCallback, RemoteCommandDelegate>();
         public override bool CanExecute(object parameter)
         {
+            if (passCanExcuteCall)
+            {
+                passCanExcuteCall = false;
+                return true;
+            }
             return CommandDelegates.Select(remoteCommandPair => remoteCommandPair.Value.CanExecute(parameter)).Any(canExcu => canExcu);
         }
 
@@ -36,7 +44,7 @@ namespace Metaseed.MVVM.Commands
                 return OperationContext.Current.GetCallbackChannel<IRemoteCommandServiceCallback>();
             }
         }
-        internal RemoteCommandDelegate Add(string commandID, CommandUIData uiData)
+        internal RemoteCommandDelegate Add(string commandID, string uiData)
         {
             var callback = Callback;
             if (!CommandDelegates.ContainsKey(callback))
@@ -48,13 +56,13 @@ namespace Metaseed.MVVM.Commands
             }
             else
             {
-                var fault = new ValidationFault
+                var fault = new RemoteCommandFault
                 {
                     Result = false,
                     Message = "The Remote Command Of This Client With Same ID Has Already Been Added!",
                     Description = "Invalid CommandID"
                 };
-                throw new FaultException<ValidationFault>(fault);
+                throw new FaultException<RemoteCommandFault>(fault);
             }
         }
 

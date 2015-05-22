@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Metaseed.MVVM.Commands;
+using Metaseed.MVVM.Commands.Ribbon;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Metaseed.MetaStudioTest.Metaseed.Core.MVVM.Commands
@@ -27,7 +28,7 @@ namespace Metaseed.MetaStudioTest.Metaseed.Core.MVVM.Commands
                 remoteCommandService.Open();
                 Debug.WriteLine("\n register command");
                 var clientCommand = new MyClientCommand(remoteCommandService, "id",
-                    new CommandUIData() { Text = "text", IconURL = "icon", IsCheckable = false, IsChecked = false });
+                    new CommandUIData() { Header = "text", IconURI = "icon", IsCheckable = false, IsChecked = false }.Serialize());
                 remoteCommandService.Register(clientCommand);
                 ((UI)(remoteCommandServiceServer.UIBuilder)).TestExecute();
                 bool r=clientCommand.event_Exec.WaitOne(8000);
@@ -44,7 +45,7 @@ namespace Metaseed.MetaStudioTest.Metaseed.Core.MVVM.Commands
                 remoteCommandService.Abort();
                 Assert.IsTrue(false);
             }
-            catch (FaultException<ValidationFault> e)
+            catch (FaultException<RemoteCommandFault> e)
             {
                 Debug.WriteLine("Message: {0}, Description: {1}", e.Detail.Message, e.Detail.Description);
                 remoteCommandService.Abort();

@@ -12,7 +12,6 @@ namespace Metaseed.MVVM.Commands
     public class RemoteCommandService:DuplexClientBase<IRemoteCommandService>, IRemoteCommandService
     {
         internal RemoteCommandManager commandManager;
-        private RemoteCommandServiceCallback _callback;
 
         public RemoteCommandService()
             : this(new RemoteCommandServiceCallback())
@@ -24,13 +23,12 @@ namespace Metaseed.MVVM.Commands
                 new NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/IRemoteCommandService")))
         {
             commandManager = new RemoteCommandManager(this);
-            _callback = callback;
-            _callback.RemoteCommandService = this;
+            callback.RemoteCommandService = this;
             
         }
 
 
-        void IRemoteCommandService.Register(string commandID, CommandUIData uiData)
+        void IRemoteCommandService.Register(string commandID, string uiData)
         {
             Register(new RemoteCommand(this, commandID, uiData));
         }
@@ -38,7 +36,7 @@ namespace Metaseed.MVVM.Commands
         public void Register(IRemoteCommand command)
         {
             commandManager.Add(command);
-            Channel.Register(command.ID, command.UIData);
+            Channel.Register(command.ID,command.UIType, command.UIData);
             
         }
 
@@ -54,17 +52,5 @@ namespace Metaseed.MVVM.Commands
         }
     }
 
-    public class RemoteCommandServiceCallback : IRemoteCommandServiceCallback
-    {
-        internal  RemoteCommandService RemoteCommandService;
-        public void Excute(string commandID, object parameter)
-        {
-            RemoteCommandService.commandManager[commandID].Execute(parameter);
-        }
 
-        public bool CanExcute(string commandID, object param)
-        {
-            return RemoteCommandService.commandManager[commandID].CanExecute(param);
-        }
-    }
 }

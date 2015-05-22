@@ -1,25 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace Metaseed.MVVM.Commands
 {
     public interface IRemoteCommand : ICommand
     {
         string ID { get; set; }
-        CommandUIData UIData { get; set; }
-       
-    }
-    public struct CommandUIData
-    {
-        public string UIType { get; set; }
-        public string Text { get; set; }
-        public string IconURL { get; set; }
-        public bool IsCheckable { get; set; }
-        public bool? IsChecked { get; set; }
-        public string ExtraData { get; set; }
+        string UIType { get; set; }
+        string UIData { get; set; }
     }
 }

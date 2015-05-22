@@ -1,5 +1,6 @@
 ﻿using Catel.IoC;
 using Metaseed.MetaShell.Services;
+using Metaseed.MVVM.Commands;
 
 namespace Metaseed.ShellBase
 {
@@ -16,6 +17,7 @@ namespace Metaseed.ShellBase
             ServiceLocator.Default.RegisterType<IMissingAssemblyResolverService, MissingAssemblyResolverService>();
             ServiceLocator.Default.RegisterType<IRibbonService, RibbonService>();
             ServiceLocator.Default.RegisterType<IShellService, ShellService>();
+
         }
     }
 }

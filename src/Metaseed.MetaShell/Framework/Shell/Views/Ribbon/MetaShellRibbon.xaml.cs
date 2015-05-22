@@ -1,24 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-using System.ComponentModel.Composition;
-using Microsoft.Practices.Prism.Events;
-using Microsoft.Practices.Prism.Regions;
-using System.ComponentModel;
-using Fluent;
-using System.Windows.Threading;
-using Xceed.Wpf.AvalonDock.Layout;
 using Catel.IoC;
 using Microsoft.Practices.Prism.Commands;
 namespace Metaseed.MetaShell.Views
@@ -55,6 +41,8 @@ namespace Metaseed.MetaShell.Views
             //DocumentsCompositeCollection.Add( ((ShellService)(ShellViewModel.ShellService)).DocumentsUnopen );
             //DocumentsCompositeCollection.Add(ShellViewModel.ShellService.Documents );
         }
+
+
         public CompositeCollection DocumentsCompositeCollection { get; set; }
         //public RibbonTabItem HomeRibbonTab { get { return RibbonTabHome; } }
         //public RibbonGroupBox FileRibbonGroupBox { get { return RibbonGroupBoxFile; } }

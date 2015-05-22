@@ -11,7 +11,7 @@ namespace Metaseed.MVVM.Commands
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
     public class RemoteCommandManager_Server
     {
-        private RemoteCommandService_Server _service;
+        private readonly RemoteCommandService_Server _service;
         public RemoteCommandManager_Server(RemoteCommandService_Server service)
         {
             _service = service;
@@ -34,7 +34,7 @@ namespace Metaseed.MVVM.Commands
         }
         internal readonly Dictionary<string, CompositeRemoteCommand> Commands = new Dictionary<string, CompositeRemoteCommand>();
 
-        internal void Add(string commandID, CommandUIData uiData)
+        internal void Add(string commandID, string uiData)
         {
             var callback = Callback;
             if (Commands.ContainsKey(commandID))
@@ -46,7 +46,7 @@ namespace Metaseed.MVVM.Commands
             {
                 var compositeRemoteCommand = new CompositeRemoteCommand(_service, commandID){UIData = uiData};
                 this.Commands.Add(commandID,compositeRemoteCommand);
-                var command=compositeRemoteCommand.Add(commandID,uiData);
+                compositeRemoteCommand.Add(commandID,uiData);
                 if (_service.UIBuilder != null) _service.UIBuilder.GenerateUI(compositeRemoteCommand);
             }
         }

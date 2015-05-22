@@ -35,7 +35,7 @@ namespace Metaseed.MVVM.Commands
         
         public event EventHandler CanExecuteChanged;
         public string ID { get; set; }
-        public CommandUIData UIData { get; set; }
+        public string UIData { get; set; }
     }
 
 

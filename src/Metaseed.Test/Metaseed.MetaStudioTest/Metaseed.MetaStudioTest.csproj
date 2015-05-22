@@ -66,15 +66,25 @@
     <Compile Include="Metaseed.Core\Data\ValidatableModelTestHelper.cs" />
     <Compile Include="Metaseed.Core\MVVM\Commands\FakeRemoteCommandServer.cs" />
     <Compile Include="Metaseed.Core\MVVM\Commands\RemoteCommandTester.cs" />
+    <Compile Include="Metaseed.Core\MVVM\Commands\RibbonRemoteCommandUIData_test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Metaseed.Core\Metaseed.Core.csproj">
       <Project>{e26d7625-0627-4055-add5-8ceab29e8003}</Project>
       <Name>Metaseed.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Metaseed.MetaCore\Metaseed.MetaCore.csproj">
+      <Project>{3ad5b418-a96d-4c42-bbb5-3f3b8b2ad7e3}</Project>
+      <Name>Metaseed.MetaCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Metaseed.MetaShell\Metaseed.MetaShell.csproj">
+      <Project>{ce011b57-4c59-4384-8176-527c8bef7090}</Project>
+      <Name>Metaseed.MetaShell</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

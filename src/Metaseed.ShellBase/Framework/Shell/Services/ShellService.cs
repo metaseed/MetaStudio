@@ -1,31 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Data;
 using System.Windows.Threading;
-using Microsoft.Practices.Prism.Regions;
 using System.Collections.ObjectModel;
 using System.Windows;
-using Fluent;
-using System.ComponentModel;
 using Catel.IoC;
 using Catel;
-using Catel.MVVM;
 using Catel.Logging;
 using System.Globalization;
 using Catel.Data;
-using System.IO.Packaging;
-using System.IO;
 
 namespace Metaseed.MetaShell.Services
 {
-    using Views;
     using ViewModels;
     using Infrastructure;
-    using Services;
-    using Metaseed.Windows.Media;
     //using Modules.PropertyGrid.ViewModels;
     using Metaseed.Collections.Generic;
     //using Metaseed.MetaShell.Framework.Shell.Views;
@@ -221,6 +209,7 @@ namespace Metaseed.MetaShell.Services
                 if (viewModel != null)
                     viewModel.IsAliveClosed = true;
             }
+            if (Application.Current.Dispatcher == null) return false;
             if (!Application.Current.Dispatcher.CheckAccess())
             Application.Current.Dispatcher.Invoke(new Action(() => { Documents.Remove(documentViewModel); }), DispatcherPriority.ContextIdle);
             

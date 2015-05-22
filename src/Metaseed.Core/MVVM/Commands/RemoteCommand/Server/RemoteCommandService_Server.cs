@@ -41,7 +41,7 @@ namespace Metaseed.MVVM.Commands
 
 
         internal  RemoteCommandManager_Server CommandManager;
-        internal IRemoteCommandUIBuilder UIBuilder { get; set; }
+        protected internal IRemoteCommandUIBuilder UIBuilder { get; set; }
 
 
          public RemoteCommandService_Server()
@@ -51,7 +51,7 @@ namespace Metaseed.MVVM.Commands
 
         
         #region IRemoteCommandService
-       public  void Register(string commandID, CommandUIData uiData)
+       public  void Register(string commandID, string uiData)
         {
             CommandManager.Add(commandID, uiData);
 

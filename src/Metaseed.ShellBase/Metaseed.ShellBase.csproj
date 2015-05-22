@@ -67,31 +67,28 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Fluent.Ribbon.3.3.0\lib\net45\Fluent.dll</HintPath>
     </Reference>
-    <Reference Include="Metaseed.Core, Version=2.0.8.5, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Practices.Prism.Composition, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Metaseed.Core.2.0.8.5\lib\net451\Metaseed.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Metaseed.MetaCore, Version=2.0.8.4, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Metaseed.MetaCore.2.0.8.4\lib\net451\Metaseed.MetaCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Prism.Composition">
       <HintPath>..\..\packages\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.Interactivity, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Prism.Interactivity.5.0.0\lib\NET45\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Prism.Mvvm">
+    <Reference Include="Microsoft.Practices.Prism.Mvvm, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Prism.Mvvm.Desktop">
+    <Reference Include="Microsoft.Practices.Prism.Mvvm.Desktop, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.Mvvm.Desktop.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Prism.PubSubEvents">
+    <Reference Include="Microsoft.Practices.Prism.PubSubEvents, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Prism.PubSubEvents.1.1.2\lib\portable-sl5+windowsphone8+windows8+net40+wpa81\Microsoft.Practices.Prism.PubSubEvents.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Prism.SharedInterfaces">
+    <Reference Include="Microsoft.Practices.Prism.SharedInterfaces, Version=1.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.SharedInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -176,11 +173,15 @@
     <Compile Include="Framework\Shell\Services\IShellService.cs" />
     <Compile Include="Framework\Shell\Services\Messager\IMessager.cs" />
     <Compile Include="Framework\Shell\Services\Messager\Messager.cs" />
+    <Compile Include="Framework\Shell\Services\RibbonRemoteCommandServer.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Framework\Shell\Services\RibbonService.cs" />
     <Compile Include="Framework\Shell\Services\ShellService.cs" />
     <Compile Include="Framework\Shell\ViewModels\ShellViewModel.cs" />
-    <Compile Include="Framework\Shell\Views\Ribbon\RibbonRemoteCommandContract.designer.cs" />
-    <Compile Include="Framework\Shell\Views\Ribbon\RibbonRemoteCommandUIBuilder.cs" />
+    <Compile Include="Framework\MVVM\Commands\RibbonRemoteCommandUIBuilder.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Framework\Shell\Views\ShellViewBase.cs" />
     <Compile Include="Framework\ViewModels\ContextUserInterface.cs" />
     <Compile Include="Framework\ViewModels\DocumentOpenOrderAttribute.cs" />
@@ -236,9 +237,6 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Fody.targets" />
-    <None Include="Framework\Shell\Views\Ribbon\RibbonRemoteCommandContract.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -271,6 +269,22 @@
   <ItemGroup>
     <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\No.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Framework\Shell\Views\Ribbon\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Metaseed.Core\Metaseed.Core.csproj">
+      <Project>{e26d7625-0627-4055-add5-8ceab29e8003}</Project>
+      <Name>Metaseed.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Metaseed.MetaCore\Metaseed.MetaCore.csproj">
+      <Project>{3ad5b418-a96d-4c42-bbb5-3f3b8b2ad7e3}</Project>
+      <Name>Metaseed.MetaCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -284,7 +298,7 @@
     <PostBuildEvent>REM Create a NuGet package for this project and place the .nupkg file in the project's output directory.
 REM If you see this in Visual Studio's Error List window, check the Output window's Build tab for the actual error.
 ECHO Creating NuGet package in Post-Build event...
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; '$(ProjectDir)_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1' -ProjectFilePath '$(ProjectPath)' -OutputDirectory '$(TargetDir)' -BuildConfiguration '$(ConfigurationName)' -BuildPlatform '$(PlatformName)'"</PostBuildEvent>
+REM PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; '$(ProjectDir)_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1' -ProjectFilePath '$(ProjectPath)' -OutputDirectory '$(TargetDir)' -BuildConfiguration '$(ConfigurationName)' -BuildPlatform '$(PlatformName)'"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
