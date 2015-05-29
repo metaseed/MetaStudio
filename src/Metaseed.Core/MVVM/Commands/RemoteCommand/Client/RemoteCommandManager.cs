@@ -18,9 +18,9 @@ namespace Metaseed.MVVM.Commands
                 return (RemoteCommand)_commands[commandID];
             }
         }
-        internal RemoteCommand Add(string commandID, string uiData)
+        internal RemoteCommand Add(string commandID,string uiType, string uiData)
         {
-            var command = new RemoteCommand(_remoteCommandService, commandID, uiData);
+            var command = new RemoteCommand(_remoteCommandService, commandID,uiType, uiData);
             _commands.Add(commandID, command);
             return command;
         }

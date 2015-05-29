@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Serialization;
 
 namespace Metaseed.MVVM.Commands
 {
@@ -11,10 +12,11 @@ namespace Metaseed.MVVM.Commands
     {
         private readonly IRemoteCommandService _commandService;
 
-        protected RemoteCommandBase(IRemoteCommandService commandService, string id)
+        protected RemoteCommandBase(IRemoteCommandService commandService, string id,string uiType)
         {
             _commandService = commandService;
             ID = id;
+            UIType = uiType;
         }
 
         protected IRemoteCommandService CommandService { get { return _commandService; } }
@@ -32,10 +34,12 @@ namespace Metaseed.MVVM.Commands
         {
             
         }
-        
         public event EventHandler CanExecuteChanged;
         public string ID { get; set; }
         public string UIData { get; set; }
+
+
+        public string UIType { get;  set; }
     }
 
 

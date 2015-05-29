@@ -18,54 +18,54 @@ namespace Metaseed.MVVM.Commands
 
         ServiceHost serviceHost;
         public IRemoteCommandService Start()
-          {
-              serviceHost = new ServiceHost(_commandServiceSingleton, new Uri[] { new Uri("net.pipe://localhost/") });
-             serviceHost.AddServiceEndpoint(typeof(IRemoteCommandService), new NetNamedPipeBinding(), "IRemoteCommandService");
-             serviceHost.Open();
-             foreach (var serviceEndpoint in serviceHost.Description.Endpoints)
-             {
-                 Debug.WriteLine(serviceEndpoint.ListenUri.AbsoluteUri);
-             }
-             return _commandServiceSingleton;
-         }
+        {
+            serviceHost = new ServiceHost(_commandServiceSingleton, new Uri[] { new Uri("net.pipe://localhost/") });
+            serviceHost.AddServiceEndpoint(typeof(IRemoteCommandService), new NetNamedPipeBinding(){SendTimeout = new TimeSpan(0,10,0)}, "IRemoteCommandService");
+            serviceHost.Open();
+            foreach (var serviceEndpoint in serviceHost.Description.Endpoints)
+            {
+                Debug.WriteLine(serviceEndpoint.ListenUri.AbsoluteUri);
+            }
+            return _commandServiceSingleton;
+        }
 
-          public void Stop()
-         {
-             if (serviceHost != null) serviceHost.Close();
-         }
+        public void Stop()
+        {
+            if (serviceHost != null) serviceHost.Close();
+        }
     }
-     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class RemoteCommandService_Server:IRemoteCommandService
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
+    public class RemoteCommandService_Server : IRemoteCommandService
     {
-        
 
 
-        internal  RemoteCommandManager_Server CommandManager;
+
+        internal RemoteCommandManager_Server CommandManager;
         protected internal IRemoteCommandUIBuilder UIBuilder { get; set; }
 
 
-         public RemoteCommandService_Server()
-         {
-             CommandManager = new RemoteCommandManager_Server(this);
-         }
-
-        
-        #region IRemoteCommandService
-       public  void Register(string commandID, string uiData)
+        public RemoteCommandService_Server()
         {
-            CommandManager.Add(commandID, uiData);
+            CommandManager = new RemoteCommandManager_Server(this);
+        }
+
+
+        #region IRemoteCommandService
+        public void Register(string commandID, string uiType, string uiData)
+        {
+            CommandManager.Add(commandID, uiType, uiData);
 
         }
 
         void IRemoteCommandService.UnRegister(string commandID)
         {
-            
+
         }
 
-         void IRemoteCommandService.CanExecuteChanged(string commandID)
-         {
-             CommandManager[commandID].RaiseCanExecuteChanged(this, null);
-         }
+        void IRemoteCommandService.CanExecuteChanged(string commandID)
+        {
+            CommandManager[commandID].RaiseCanExecuteChanged(this, null);
+        }
         #endregion IRemoteCommandService
 
 

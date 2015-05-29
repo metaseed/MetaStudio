@@ -10,13 +10,10 @@ namespace Metaseed.Modules
 
     public class ShellModule : MetaModule
     {
-        private RibbonRemoteCommandServer remoteCommandServiceServer;
         public ShellModule()
             : base("ShellModule")
         {
-            remoteCommandServiceServer = new RibbonRemoteCommandServer();
-            var serviceController = new RemoteCommandServiceController(remoteCommandServiceServer);
-            serviceController.Start();
+
         }
         public ShellModule(string moduleName) : base(moduleName) { }
 

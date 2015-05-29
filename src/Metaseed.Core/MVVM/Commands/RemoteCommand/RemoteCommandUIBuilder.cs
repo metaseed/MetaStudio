@@ -27,22 +27,22 @@ namespace Metaseed.MVVM.Commands
             }
             if (File.Exists(uriString))
             {
-                looseFilePath = uriString;
+                looseFilePath =Path.GetFullPath(uriString);
             }
             else if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + uriString))
             {
-                looseFilePath = AppDomain.CurrentDomain.BaseDirectory + uriString;
+                looseFilePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + uriString);
             }
             else if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/"+uriString))
             {
-                looseFilePath = AppDomain.CurrentDomain.BaseDirectory +"/"+ uriString;
+                looseFilePath = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory +"/"+ uriString);
             }
             try
             {
                 Uri uri;
                 if (looseFilePath != null)
                 {
-                    if (Uri.TryCreate(uriString, UriKind.RelativeOrAbsolute, out uri))
+                    if (Uri.TryCreate(looseFilePath, UriKind.RelativeOrAbsolute, out uri))
                     {
                         return new BitmapImage(uri);
                     }

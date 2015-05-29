@@ -9,7 +9,8 @@ namespace Metaseed.MVVM.Commands
 {
     public class RemoteCommandDelegate: RemoteCommandBase
     {
-        public RemoteCommandDelegate(IRemoteCommandService commandService, string id,IRemoteCommandServiceCallback callback):base( commandService,  id)
+        public RemoteCommandDelegate(IRemoteCommandService commandService, string id, string uiType, IRemoteCommandServiceCallback callback)
+            : base(commandService, id, uiType)
         {
             Callback = callback;
         }

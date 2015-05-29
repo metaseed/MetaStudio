@@ -6,6 +6,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Metaseed.MVVM.Commands
 {
@@ -24,17 +25,22 @@ namespace Metaseed.MVVM.Commands
         {
             commandManager = new RemoteCommandManager(this);
             callback.RemoteCommandService = this;
-            
+            this.Endpoint.Binding.SendTimeout=new TimeSpan(0,10,0);
         }
 
 
-        void IRemoteCommandService.Register(string commandID, string uiData)
+        void IRemoteCommandService.Register(string commandID, string uiType, string uiData)
         {
-            Register(new RemoteCommand(this, commandID, uiData));
+            Register(new RemoteCommand(this, commandID,uiType, uiData));
         }
 
         public void Register(IRemoteCommand command)
         {
+            if (this.State != CommunicationState.Opened)
+            {
+                MessageBox.Show("Can not regisger command, Remote Command Communication Error!");
+                return;
+            }
             commandManager.Add(command);
             Channel.Register(command.ID,command.UIType, command.UIData);
             
@@ -42,12 +48,22 @@ namespace Metaseed.MVVM.Commands
 
         void IRemoteCommandService.UnRegister(string commandID)
         {
+            if (this.State != CommunicationState.Opened)
+            {
+                MessageBox.Show("Can not unregister command, Remote Command Communication Error!");
+                return;
+            }
             commandManager.Remove(commandID);
             Channel.UnRegister(commandID);
         }
 
-         void IRemoteCommandService. CanExecuteChanged(string commandID)
+         void IRemoteCommandService.CanExecuteChanged(string commandID)
         {
+            if (this.State != CommunicationState.Opened)
+            {
+                MessageBox.Show("Can not call CanExecuteChanged, Remote Command Communication Error!");
+                return;
+            }
             Channel.CanExecuteChanged(commandID);
         }
     }

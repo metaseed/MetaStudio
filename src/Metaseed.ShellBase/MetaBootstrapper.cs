@@ -3,6 +3,7 @@ using System.Windows;
 using System.Reflection;
 using System.Linq;
 using System.IO;
+using Metaseed.MVVM.Commands;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
 using Catel;
@@ -20,15 +21,22 @@ namespace Metaseed.MetaShell
     /// </summary>
     public  class MetaBootstrapper<TShellView> : BootstrapperBase<TShellView> where TShellView : System.Windows.Window
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private RibbonRemoteCommandServer remoteCommandServiceServer;
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private readonly CallbackLogger _callbackLogger = new CallbackLogger();
         #region Constructors
-        public MetaBootstrapper()
+        public MetaBootstrapper(IRemoteCommandUIBuilder uiBuilder=null)
         {
 #if DEBUG
             Catel.Logging.LogManager.AddDebugListener(false);//note: could called multimes. if debug listener already registed,it do nothing.
 #endif
-
+            remoteCommandServiceServer = new RibbonRemoteCommandServer(uiBuilder);
+            var serviceController = new RemoteCommandServiceController(remoteCommandServiceServer);
+            serviceController.Start();
             //
             // Application Themes
             //

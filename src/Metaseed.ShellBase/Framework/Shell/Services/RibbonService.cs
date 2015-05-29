@@ -89,6 +89,7 @@ namespace Metaseed.MetaShell.Services{
                 }
             }
             Ribbon.Tabs.Add(ribbonTab);
+            //Metaseed.Windows.Threading.ExtensionMethods.Refresh((UIElement)Ribbon);
             return this;
         }
 

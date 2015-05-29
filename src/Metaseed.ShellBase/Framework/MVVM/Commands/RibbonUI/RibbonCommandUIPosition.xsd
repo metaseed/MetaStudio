@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CommandUIPosition"
+    targetNamespace="http://www.metaseed.com/RibbonCommandUIPosition.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://www.metaseed.com/RibbonCommandUIPosition.xsd"
+    xmlns:mstns="http://tempuri.org/RibbonCommandUIPosition.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:complexType name="RibbonUIPosition">
+    <xs:sequence>
+      
+    <xs:element name="RibbonTabGroup">
+      <xs:annotation>
+        <xs:documentation>
+          this data only needed when CreatNewIfCanNotFound is true.
+        </xs:documentation>
+      </xs:annotation>
+      <xs:complexType>
+        <xs:sequence>
+          <xs:element name="BorderBrush" type="xs:string" >
+            <xs:annotation>
+              <xs:documentation>
+                value from System.Windows.Media.Brushes
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+
+          <xs:element name="BackgroundBrush" type="xs:string" >
+            <xs:annotation>
+              <xs:documentation>
+                value from System.Windows.Media.Brushes
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+
+          <xs:element name="LocalizedHeader" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>
+                format is assemblyName:resourceFileName:resourceKeyName
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+
+        <xs:attribute  name="Name" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>
+              If this is null or empty, means no contexual group with the ribbion tab
+            </xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:complexType>
+    </xs:element>
+    <xs:element name="RibbonTab">
+      <xs:complexType>
+        <xs:sequence>
+
+          <xs:element name="LocalizedHeader" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>
+                format is assemblyName:resourceFileName:resourceKeyName
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute  name="Name" type="xs:string" use="required">
+          <xs:annotation>
+            <xs:documentation>
+              must not be null or empty, used to find the ribbion tab
+            </xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute  name="CreatNewIfCanNotFound" type="xs:boolean" default="true">
+          <xs:annotation>
+            <xs:documentation>
+              If the named tab is not found:
+              true:  we create a new one;
+              false: wait for the named tab created by other measures.
+            </xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:complexType>
+    </xs:element>
+    <xs:element name="GroupBox">
+      <xs:complexType>
+        <xs:sequence>
+          <xs:element name="Name" type="xs:string"> </xs:element>
+
+          <xs:element name="LocalizedHeader" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>
+                format is assemblyName:resourceFileName:resourceKeyName
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+
+        </xs:sequence>
+      </xs:complexType>
+    </xs:element>
+
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Metaseed.MVVM.Commands
 {
@@ -34,20 +35,33 @@ namespace Metaseed.MVVM.Commands
         }
         internal readonly Dictionary<string, CompositeRemoteCommand> Commands = new Dictionary<string, CompositeRemoteCommand>();
 
-        internal void Add(string commandID, string uiData)
+        internal void Add(string commandID,string uiType, string uiData)
         {
             var callback = Callback;
             if (Commands.ContainsKey(commandID))
             {
                 var compositeRemoteCommand = Commands[commandID];
-                compositeRemoteCommand.Add(commandID, uiData);
+                compositeRemoteCommand.Add(commandID,uiType, uiData);
             }
             else
             {
-                var compositeRemoteCommand = new CompositeRemoteCommand(_service, commandID){UIData = uiData};
+                var compositeRemoteCommand = new CompositeRemoteCommand(_service, commandID,uiType){UIData = uiData};
                 this.Commands.Add(commandID,compositeRemoteCommand);
-                compositeRemoteCommand.Add(commandID,uiData);
-                if (_service.UIBuilder != null) _service.UIBuilder.GenerateUI(compositeRemoteCommand);
+                compositeRemoteCommand.Add(commandID,uiType,uiData);
+
+                if (_service.UIBuilder != null)
+                {
+                    if (Application.Current!=null&&Application.Current.MainWindow != null)
+                    {
+                        Application.Current.MainWindow.Dispatcher.BeginInvoke(
+                            (Action) (() => _service.UIBuilder.GenerateUI(compositeRemoteCommand)));
+                    }
+                    else
+                    {
+                        _service.UIBuilder.GenerateUI(compositeRemoteCommand);
+                    }
+                }
+                ;
             }
         }
 
@@ -61,7 +75,16 @@ namespace Metaseed.MVVM.Commands
                 if (compositeRemoteCommand.CommandDelegates.Count == 0)
                 {
                     Commands.Remove(commandID);
-                    if (_service.UIBuilder != null) _service.UIBuilder.RemoveUI(commandID);
+                    if (Application.Current != null && Application.Current.MainWindow != null)
+                    {
+                        Application.Current.MainWindow.Dispatcher.BeginInvoke(
+                            (Action)(() => _service.UIBuilder.RemoveUI(commandID)));
+                    }
+                    else
+                    {
+                        _service.UIBuilder.RemoveUI(commandID);
+                    }
+                    
                 }
             }
             

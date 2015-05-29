@@ -94,8 +94,7 @@
     <Compile Include="AppEnvironment.cs" />
     <Compile Include="ExceptionHelper.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\Client\RemoteCommandServiceCallback.cs" />
-    <Compile Include="MVVM\Commands\RemoteCommand\Data\RibbonRemoteCommandContract.designer.cs" />
-    <Compile Include="MVVM\Commands\RemoteCommand\Data\RibbonRemoteCommandUIData.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\Data\CommandUIData.designer.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\IRemoteCommand.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\IRemoteCommandService.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\Client\RemoteCommand.cs" />
@@ -151,9 +150,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="MVVM\Commands\RemoteCommand\Data\CommandUIData.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="MVVM\Commands\RemoteCommand\Data\RibbonRemoteCommandContract.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />

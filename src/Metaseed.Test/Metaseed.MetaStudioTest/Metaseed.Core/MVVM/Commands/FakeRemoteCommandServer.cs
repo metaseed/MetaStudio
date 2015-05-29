@@ -13,10 +13,10 @@ namespace Metaseed.MetaStudioTest.Metaseed.Core.MVVM.Commands
 {
 
 
-    class MyClientCommand : RemoteCommand
+    public class MyClientCommand : RemoteCommand
     {
-        public MyClientCommand(IRemoteCommandService commandService, string id, string uiData)
-            : base(commandService, id, uiData)
+        public MyClientCommand(IRemoteCommandService commandService, string id,string type, string uiData)
+            : base(commandService, id,type, uiData)
         {
             UIData = uiData;
         }

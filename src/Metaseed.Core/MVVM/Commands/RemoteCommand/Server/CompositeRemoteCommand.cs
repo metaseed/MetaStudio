@@ -4,28 +4,37 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Metaseed.MVVM.Commands
 {
     public class CompositeRemoteCommand:RemoteCommandBase
     {
-        private bool passCanExcuteCall = true;//when binding we pass it
-        public CompositeRemoteCommand(IRemoteCommandService commandService, string id)
-            : base(commandService, id)
+        //private bool passCanExcuteCall = false;// we pass the command binding call at the first time, happened when binding applied 
+        public CompositeRemoteCommand(IRemoteCommandService commandService, string id,string uiType)
+            : base(commandService, id, uiType)
         {
 
         }
-        public RibbonRemoteCommandUIData DeserializedUIData;
+        public object DeserializedUIData;
         internal Dictionary<IRemoteCommandServiceCallback, RemoteCommandDelegate> CommandDelegates =
             new Dictionary<IRemoteCommandServiceCallback, RemoteCommandDelegate>();
         public override bool CanExecute(object parameter)
         {
-            if (passCanExcuteCall)
+            //if (passCanExcuteCall)
+            //{
+            //    passCanExcuteCall = false;
+            //    return true;
+            //}
+            foreach (var remoteCommandDelegate in CommandDelegates)
             {
-                passCanExcuteCall = false;
-                return true;
+                if (remoteCommandDelegate.Value.CanExecute(parameter))
+                {
+                    return true;
+                }
             }
-            return CommandDelegates.Select(remoteCommandPair => remoteCommandPair.Value.CanExecute(parameter)).Any(canExcu => canExcu);
+            return false;
+            //return CommandDelegates.Select(remoteCommandPair => remoteCommandPair.Value.CanExecute(parameter)).Any(canExcu => canExcu);
         }
 
 
@@ -44,12 +53,12 @@ namespace Metaseed.MVVM.Commands
                 return OperationContext.Current.GetCallbackChannel<IRemoteCommandServiceCallback>();
             }
         }
-        internal RemoteCommandDelegate Add(string commandID, string uiData)
+        internal RemoteCommandDelegate Add(string commandID, string uiType, string uiData)
         {
             var callback = Callback;
             if (!CommandDelegates.ContainsKey(callback))
             {
-                var command = new RemoteCommandDelegate(CommandService, commandID, callback) { UIData = uiData };
+                var command = new RemoteCommandDelegate(CommandService, commandID,uiType, callback) { UIData = uiData };
                 command.CanExecuteChanged += RaiseCanExecuteChanged;
                 CommandDelegates.Add(callback, command);
                 return command;

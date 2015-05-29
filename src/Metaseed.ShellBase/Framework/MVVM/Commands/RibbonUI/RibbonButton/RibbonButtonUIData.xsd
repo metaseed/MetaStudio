@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="XMLSchema1"
+    targetNamespace="http://metaseed.com/RibbonButtonUIData.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://metaseed.com/RibbonButtonUIData.xsd"
+    xmlns:mstns="http://metaseed.com/RibbonButtonUIData.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <!--<xs:include schemaLocation="./CommandUIData.xsd"/>-->
+  <xs:complexType name="RibbonButtonUIData">
+    <!--<xs:complexContent>
+      <xs:extension base="CommandUIData">-->
+        <xs:sequence>
+          <xs:element name="IconURI" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>
+                format is like: pack://application:,,,/assemblyName;component/Resources/Images/NewDoc.png
+                or icon file relative path from MetaStudio: i.e. ../no.png
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+
+          
+          <xs:element name="ShortCutKeys" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>
+                shortcut keys when user press Alt+ keys
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          
+          <xs:element name="LocalizedHeader" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>
+                format is assemblyName:resourceFileName:resourceKeyName
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+
+          <xs:element name="Size" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>
+                Large,
+                Middle,
+                Small,
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+
+          <xs:element name="ScreenTip">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="LocalizedTitle" type="xs:string">
+                  <xs:annotation>
+                    <xs:documentation>
+                      format is assemblyName:resourceFileName:resourceKeyName
+                    </xs:documentation>
+                  </xs:annotation>
+                </xs:element>
+
+                <xs:element name="LocalizedText" type="xs:string">
+                  <xs:annotation>
+                    <xs:documentation>
+                      format is assemblyName:resourceFileName:resourceKeyName
+                    </xs:documentation>
+                  </xs:annotation>
+                </xs:element>
+                <xs:element name="LocalizedDisableReason" type="xs:string">
+                  <xs:annotation>
+                    <xs:documentation>
+                      format is assemblyName:resourceFileName:resourceKeyName
+                    </xs:documentation>
+                  </xs:annotation>
+                </xs:element>
+                <xs:element name="IconURI" type="xs:string">
+                  <xs:annotation>
+                    <xs:documentation>
+                      for wpf format is like: /assemblyName;component/Resources/Images/NewDoc.png
+                    </xs:documentation>
+                  </xs:annotation>
+
+                </xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+
+        </xs:sequence>
+      <!--</xs:extension>
+    </xs:complexContent>-->
+  </xs:complexType>
+
+</xs:schema>

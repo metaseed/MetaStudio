@@ -8,11 +8,16 @@ using Metaseed.ShellBase.Framework.Shell.Views;
 
 namespace Metaseed.MetaShell.Services
 {
-    internal class RibbonRemoteCommandServer : RemoteCommandService_Server
+    public class RibbonRemoteCommandServer : RemoteCommandService_Server
     {
-            public RibbonRemoteCommandServer()
+        public RibbonRemoteCommandServer()
         {
             this.UIBuilder = new RibbonRemoteCommandUIBuilder();
+        }
+        public RibbonRemoteCommandServer(IRemoteCommandUIBuilder uiBuilder)
+        {
+            if (uiBuilder == null) uiBuilder = new RibbonRemoteCommandUIBuilder();
+            this.UIBuilder = uiBuilder;
         }
     }
 

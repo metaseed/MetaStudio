@@ -301,6 +301,7 @@
   <ItemGroup>
     <Folder Include="Framework\Helpers\" />
     <Folder Include="Framework\Modules\" />
+    <Folder Include="Framework\MVVM\Commands\" />
     <Folder Include="Framework\Prism\Regions\RegionAdapters\" />
     <Folder Include="Framework\Services\Helpers\" />
     <Folder Include="Framework\Views\Helpers\" />

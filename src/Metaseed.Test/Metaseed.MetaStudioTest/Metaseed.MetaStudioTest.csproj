@@ -44,6 +44,8 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Runtime.Serialization" />
@@ -66,7 +68,8 @@
     <Compile Include="Metaseed.Core\Data\ValidatableModelTestHelper.cs" />
     <Compile Include="Metaseed.Core\MVVM\Commands\FakeRemoteCommandServer.cs" />
     <Compile Include="Metaseed.Core\MVVM\Commands\RemoteCommandTester.cs" />
-    <Compile Include="Metaseed.Core\MVVM\Commands\RibbonRemoteCommandUIData_test.cs" />
+    <Compile Include="Metaseed.ShellBase\MVVM\Commands\RibbonRemoteCommandUIData_test.cs" />
+    <Compile Include="Metaseed.ShellBase\MVVM\Commands\RibbonRemoteCommandtest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -82,9 +85,9 @@
       <Project>{3ad5b418-a96d-4c42-bbb5-3f3b8b2ad7e3}</Project>
       <Name>Metaseed.MetaCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Metaseed.MetaShell\Metaseed.MetaShell.csproj">
-      <Project>{ce011b57-4c59-4384-8176-527c8bef7090}</Project>
-      <Name>Metaseed.MetaShell</Name>
+    <ProjectReference Include="..\..\Metaseed.ShellBase\Metaseed.ShellBase.csproj">
+      <Project>{6de48819-f267-4e1c-a965-8d4f4ed1c95a}</Project>
+      <Name>Metaseed.ShellBase</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
