@@ -63,7 +63,7 @@ namespace Metaseed.MVVM.Commands
 
         }
 
-        virtual public void RemoveUI(string commandID)
+        virtual public void RemoveUI(CompositeRemoteCommand command)
         {
 
         }

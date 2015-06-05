@@ -209,7 +209,7 @@ namespace Metaseed.MetaShell.Services
                 if (viewModel != null)
                     viewModel.IsAliveClosed = true;
             }
-            if (Application.Current.Dispatcher == null) return false;
+            if (Application.Current==null||Application.Current.Dispatcher == null) return false;
             if (!Application.Current.Dispatcher.CheckAccess())
             Application.Current.Dispatcher.Invoke(new Action(() => { Documents.Remove(documentViewModel); }), DispatcherPriority.ContextIdle);
             

@@ -104,11 +104,13 @@ namespace Metaseed.MetaShell.Services{
             if (ribbonTab.Group != null && ribbonTab.Group.Items.Count == 1)
             {
                 Ribbon.Tabs.Remove(ribbonTab);
+                ribbonTab.Group.Items.Remove(ribbonTab);
                 Ribbon.ContextualGroups.Remove(ribbonTab.Group);
             }
             else
             {
                 Ribbon.Tabs.Remove(ribbonTab);
+                if (ribbonTab.Group != null) ribbonTab.Group.Items.Remove(ribbonTab);
             }
             return this;
         }

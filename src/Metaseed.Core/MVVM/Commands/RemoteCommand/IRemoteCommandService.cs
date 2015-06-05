@@ -9,7 +9,7 @@ namespace Metaseed.MVVM.Commands
     /// The primary interface is used to send messages from client to service.
     /// The callback interface is used to send messages from service back to client.
     /// </summary>
-    [ServiceContract(Namespace = "http://Metaseed.MVVM.Commands", SessionMode = SessionMode.Required, CallbackContract = typeof(IRemoteCommandServiceCallback))]
+    [ServiceContract(Namespace = "http://Metaseed.MVVM.Commands", SessionMode = SessionMode.Allowed, CallbackContract = typeof(IRemoteCommandServiceCallback))]
     public interface IRemoteCommandService
     {
         /// <summary>

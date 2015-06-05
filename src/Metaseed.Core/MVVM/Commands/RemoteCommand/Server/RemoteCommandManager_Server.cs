@@ -51,7 +51,7 @@ namespace Metaseed.MVVM.Commands
 
                 if (_service.UIBuilder != null)
                 {
-                    if (Application.Current!=null&&Application.Current.MainWindow != null)
+                    if (Application.Current!=null&&Application.Current.MainWindow != null&&!Application.Current.MainWindow.Dispatcher.CheckAccess())
                     {
                         Application.Current.MainWindow.Dispatcher.BeginInvoke(
                             (Action) (() => _service.UIBuilder.GenerateUI(compositeRemoteCommand)));
@@ -61,7 +61,6 @@ namespace Metaseed.MVVM.Commands
                         _service.UIBuilder.GenerateUI(compositeRemoteCommand);
                     }
                 }
-                ;
             }
         }
 
@@ -72,17 +71,17 @@ namespace Metaseed.MVVM.Commands
                 var callback = Callback;
                 var compositeRemoteCommand = Commands[commandID];
 
-                if (compositeRemoteCommand.CommandDelegates.Count == 0)
+                if (compositeRemoteCommand.CommandDelegates.Count != 0)
                 {
                     Commands.Remove(commandID);
-                    if (Application.Current != null && Application.Current.MainWindow != null)
+                    if (Application.Current != null && Application.Current.MainWindow != null && !Application.Current.MainWindow.Dispatcher.CheckAccess())
                     {
                         Application.Current.MainWindow.Dispatcher.BeginInvoke(
-                            (Action)(() => _service.UIBuilder.RemoveUI(commandID)));
+                            (Action)(() => _service.UIBuilder.RemoveUI(compositeRemoteCommand)));
                     }
                     else
                     {
-                        _service.UIBuilder.RemoveUI(commandID);
+                        _service.UIBuilder.RemoveUI(compositeRemoteCommand);
                     }
                     
                 }

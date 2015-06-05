@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -25,7 +26,11 @@ namespace Metaseed.MVVM.Commands
         {
             commandManager = new RemoteCommandManager(this);
             callback.RemoteCommandService = this;
-            this.Endpoint.Binding.SendTimeout=new TimeSpan(0,10,0);
+            var timeout = TimeSpan.MaxValue;//new TimeSpan(0,10,0);
+            this.Endpoint.Binding.SendTimeout = timeout;
+            this.Endpoint.Binding.ReceiveTimeout = timeout;
+            this.Endpoint.Binding.OpenTimeout = timeout;
+            this.Endpoint.Binding.ReceiveTimeout = timeout;
         }
 
 
@@ -42,11 +47,12 @@ namespace Metaseed.MVVM.Commands
                 return;
             }
             commandManager.Add(command);
-            Channel.Register(command.ID,command.UIType, command.UIData);
-            
+            Channel.Register(command.ID, command.UIType, command.UIData);
+            //ThreadPool.QueueUserWorkItem((o)=>Channel.Register(command.ID, command.UIType, command.UIData));
+          
         }
 
-        void IRemoteCommandService.UnRegister(string commandID)
+        public void UnRegister(string commandID)
         {
             if (this.State != CommunicationState.Opened)
             {
@@ -55,6 +61,11 @@ namespace Metaseed.MVVM.Commands
             }
             commandManager.Remove(commandID);
             Channel.UnRegister(commandID);
+        }
+
+        void IRemoteCommandService.UnRegister(string commandID)
+        {
+            UnRegister(commandID);
         }
 
          void IRemoteCommandService.CanExecuteChanged(string commandID)

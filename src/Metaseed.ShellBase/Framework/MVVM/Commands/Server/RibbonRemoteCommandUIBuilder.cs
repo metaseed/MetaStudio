@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
@@ -14,6 +15,7 @@ using Catel.Logging;
 using Fluent;
 using Metaseed.MetaShell.Controls;
 using Metaseed.MetaShell.Services;
+using System.Linq;
 
 namespace Metaseed.MVVM.Commands
 {
@@ -25,8 +27,6 @@ namespace Metaseed.MVVM.Commands
     {
         private ILog _log = LogManager.GetCurrentClassLogger();
         protected readonly IShellService ShellService;
-        List<CompositeRemoteCommand> notAddedCommands = new List<CompositeRemoteCommand>();
-
         protected Fluent.Ribbon Ribbon
         {
             get { return ((RibbonService)(ShellService.Ribbon)).Ribbon; }
@@ -74,6 +74,7 @@ namespace Metaseed.MVVM.Commands
                     var groupBox = GetUiPosition(command);
                     if (groupBox == null) return;
                     var button = new Fluent.Button();
+                    button.Name = command.ID;
                     if (!string.IsNullOrEmpty(ribbonUiData.ShortCutKeys)) button.SetValue(KeyTip.KeysProperty, ribbonUiData.ShortCutKeys);
                     if (!string.IsNullOrEmpty(ribbonUiData.LocalizedHeader))
                         button.BindToLoc(Fluent.Button.HeaderProperty, ribbonUiData.LocalizedHeader);
@@ -122,12 +123,18 @@ namespace Metaseed.MVVM.Commands
                 return;
             }
         }
+
+        RibbonGroupBox GetUiPosition(CompositeRemoteCommand command)
+        {
+            RibbonTabItem ribbonTab;
+           return GetUiPosition(command, out ribbonTab);
+        }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="command"></param>
         /// <returns>null: Delay add</returns>
-        private RibbonGroupBox GetUiPosition(CompositeRemoteCommand command)
+        private RibbonGroupBox GetUiPosition(CompositeRemoteCommand command,out RibbonTabItem ribbonTab)
         {
             Argument.IsNotNull(() => command.DeserializedUIData);
             Argument.IsOfType(() => command.DeserializedUIData, typeof(RibbonUIData));
@@ -137,7 +144,11 @@ namespace Metaseed.MVVM.Commands
             string tabName = null;
             if (ribbonTabData == null || string.IsNullOrEmpty(ribbonTabData.Name))
                 tabName = "RibbonTabHome";
-            var ribbonTab = Ribbon.Tabs.FirstOrDefault(tab => tab.Name.Equals(tabName));
+            else
+            {
+                tabName = ribbonTabData.Name;
+            }
+            ribbonTab = Ribbon.Tabs.FirstOrDefault(tab => tab.Name.Equals(tabName));
             if (ribbonTab == null)
             {
                 if (ribbonTabData != null && ribbonTabData.CreatNewIfCanNotFound)
@@ -150,12 +161,11 @@ namespace Metaseed.MVVM.Commands
                     if (!string.IsNullOrEmpty(ribbonGroupData.Name))
                     {
                         //find or create
-                        var tabGroup =
-                            Ribbon.ContextualGroups.FirstOrDefault(ribbonGroup => ribbonGroup.Name.Equals(ribbonGroupData.Name));
+                        var tabGroup =Ribbon.ContextualGroups.FirstOrDefault(ribbonGroup => ribbonGroup.Name.Equals(ribbonGroupData.Name));
                         if (tabGroup == null)
                         {
                             var conv = new BrushConverter();
-                            tabGroup = new RibbonContextualTabGroup();
+                            tabGroup = new RibbonContextualTabGroup() { Visibility = Visibility.Visible, Name = ribbonGroupData.Name };
 
                             if (!string.IsNullOrEmpty(ribbonGroupData.BorderBrush))
                                 tabGroup.BorderBrush =
@@ -193,7 +203,7 @@ namespace Metaseed.MVVM.Commands
             var groupBox = ribbonTab.Groups.FirstOrDefault(g => g.Name.Equals(ribbonUiData.UiPosition.GroupBox.Name));
             if (groupBox == null)
             {
-                groupBox = new RibbonGroupBoxContextUI();
+                groupBox = new RibbonGroupBoxContextUI() { Name = ribbonUiData.UiPosition.GroupBox.Name };
                 if (string.IsNullOrEmpty(ribbonUiData.UiPosition.GroupBox.LocalizedHeader))
                 {
                     groupBox.Header = ribbonUiData.UiPosition.GroupBox.Name;
@@ -208,9 +218,18 @@ namespace Metaseed.MVVM.Commands
             return groupBox;
         }
 
-        override public void RemoveUI(string commandID)
+        override public void RemoveUI(CompositeRemoteCommand command)
         {
-
+            RibbonTabItem ribbonTab=null;
+            var groupBox=GetUiPosition(command,out ribbonTab);
+            var ui = groupBox.Items.Cast<FrameworkElement>().FirstOrDefault(item => item.Name.Equals(command.ID));
+            groupBox.Items.Remove(ui);
+            if (groupBox.Items.Count != 0) return;
+            ribbonTab.Groups.Remove(groupBox);
+            if (ribbonTab.Groups.Count == 0)
+            {
+                ShellService.Ribbon.RemoveRibbonTab(ribbonTab);
+            }
         }
     }
 }

@@ -108,6 +108,7 @@
     <Compile Include="MVVM\Commands\RemoteCommand\Server\RemoteCommandManager_Server.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\Server\IRemoteCommandUIBuilder.cs" />
     <Compile Include="ProcessHelper.cs" />
+    <Compile Include="Win32\Window.cs" />
     <Compile Include="Windows\HostedProcessWindow\ProcessWindowHelper.cs" />
     <Compile Include="EventArgs.cs" />
     <Compile Include="MVVM\View\IContextUI.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Windows\Data\Converters\UInt32ToStringConverter.cs" />
     <Compile Include="Windows\HostedProcessWindow\HostedProcessWindow.cs" />
     <Compile Include="Windows\FrameworkElementExport.cs" />
+    <Compile Include="Windows\Markup\NameValidationHelper.cs" />
     <Compile Include="Windows\Media\BaseWPFHelpers.cs" />
     <Compile Include="Windows\Media\FindNameInVisualTree.cs" />
     <Compile Include="Windows\Media\FindVisualDecendant.cs" />

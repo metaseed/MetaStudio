@@ -20,7 +20,14 @@ namespace Metaseed.MVVM.Commands
         public IRemoteCommandService Start()
         {
             serviceHost = new ServiceHost(_commandServiceSingleton, new Uri[] { new Uri("net.pipe://localhost/") });
-            serviceHost.AddServiceEndpoint(typeof(IRemoteCommandService), new NetNamedPipeBinding(){SendTimeout = new TimeSpan(0,10,0)}, "IRemoteCommandService");
+            var timeout = TimeSpan.MaxValue;/*new TimeSpan(0,10,0)*/
+            serviceHost.AddServiceEndpoint(typeof(IRemoteCommandService), new NetNamedPipeBinding()
+            {
+                SendTimeout = timeout,
+                ReceiveTimeout = timeout,
+                OpenTimeout = timeout,
+                CloseTimeout = timeout
+            }, "IRemoteCommandService");
             serviceHost.Open();
             foreach (var serviceEndpoint in serviceHost.Description.Endpoints)
             {
@@ -59,7 +66,7 @@ namespace Metaseed.MVVM.Commands
 
         void IRemoteCommandService.UnRegister(string commandID)
         {
-
+            CommandManager.Remove(commandID);
         }
 
         void IRemoteCommandService.CanExecuteChanged(string commandID)

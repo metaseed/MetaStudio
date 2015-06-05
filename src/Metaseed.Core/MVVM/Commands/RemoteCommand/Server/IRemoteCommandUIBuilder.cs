@@ -9,6 +9,6 @@ namespace Metaseed.MVVM.Commands
     public interface IRemoteCommandUIBuilder
     {
         void GenerateUI(CompositeRemoteCommand command);
-        void RemoveUI(string commandID);
+        void RemoveUI(CompositeRemoteCommand command);
     }
 }

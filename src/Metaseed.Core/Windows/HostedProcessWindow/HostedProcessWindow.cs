@@ -129,7 +129,16 @@ namespace Metaseed.Windows.Controls
             _iscreated = true;
             if (Process==null) throw new Exception("Please set the Process property of this HostedProcessWindow object!");
             Process.Refresh();
-            if (Process.MainWindowHandle == IntPtr.Zero) throw new Exception("Could not find the Process main window!");
+            if (Process.MainWindowHandle == IntPtr.Zero)
+            {
+                Process.Refresh();
+                Thread.Sleep(10);
+                Process.Refresh();
+            }
+            if (Process.MainWindowHandle == IntPtr.Zero)
+            {
+                throw new Exception("Could not find the Process main window!");
+            }
             ProcessWindowHelper.HideWindow(Process.MainWindowHandle);
             _hidenMenu=ProcessWindowHelper.HideMenubar(Process.MainWindowHandle);
             ProcessWindowHelper.RemoveCaptionBarAndBorder(Process.MainWindowHandle);
@@ -143,7 +152,7 @@ namespace Metaseed.Windows.Controls
 
         public void ShowMenubar()
         {
-            ProcessWindowHelper.ShowMenubar(Process.MainWindowHandle, _hidenMenu);
+            ProcessWindowHelper.ShowMenubar(Process.MainWindowHandle, _hidenMenu);          
         }
 
         public void HideMenubar()
