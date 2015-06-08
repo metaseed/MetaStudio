@@ -211,8 +211,15 @@ namespace Metaseed.MetaShell.Services
             }
             if (Application.Current==null||Application.Current.Dispatcher == null) return false;
             if (!Application.Current.Dispatcher.CheckAccess())
-            Application.Current.Dispatcher.Invoke(new Action(() => { Documents.Remove(documentViewModel); }), DispatcherPriority.ContextIdle);
-            
+            {
+                Application.Current.Dispatcher.Invoke(new Action(() => { Documents.Remove(documentViewModel); }),
+                    DispatcherPriority.ContextIdle);
+            }
+            else
+            {
+                Documents.Remove(documentViewModel);
+            }
+
             if (!IsClearing)
             {
                 var docUnopen = new DocumentUnopenBase() { ContentId = documentViewModel.ContentId, NameText = documentViewModel.Title, Description = documentViewModel.Description, KeepAliveWhenClose = documentViewModel.KeepAliveWhenClose };

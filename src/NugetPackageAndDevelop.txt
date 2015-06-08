@@ -1,10 +1,13 @@
 Develop:
-
+add the last minor version number
+add REM from lastline of the three projects' post build event script.
+ change Core reference of MetaCore and ShellBase to project reference
+ change MetaCore reference of ShellBase to project reference
 
 
 Nuget Package:
 change the version number
-remove REM from lastline of every project's post build event script.
+remove REM from lastline of the three projects' post build event script.
 rebuild Metaseed.Core and find it's pakcage and upgrade solution package to new version Core from local repository(solution output folder)
 rebuild MetaCore and upgrade solution pakcage to new verison MetaCore from local repository(solution output folder)
 rebuild MetaShell and upgrade solution pakcage to new verison MetaShell from local repository(solution output folder)

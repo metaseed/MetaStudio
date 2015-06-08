@@ -41,7 +41,7 @@ namespace Metaseed.MVVM.Commands
             if (serviceHost != null) serviceHost.Close();
         }
     }
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple,UseSynchronizationContext = false)]
     public class RemoteCommandService_Server : IRemoteCommandService
     {
 

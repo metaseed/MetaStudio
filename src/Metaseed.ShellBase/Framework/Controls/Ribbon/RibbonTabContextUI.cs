@@ -41,6 +41,7 @@ namespace Metaseed.MetaShell.Controls
             }
             this.Visibility = Visibility.Collapsed;
         }
+
         protected void AddToRibbon(RibbonContextualTabGroup group)
         {
             this.Group = group;

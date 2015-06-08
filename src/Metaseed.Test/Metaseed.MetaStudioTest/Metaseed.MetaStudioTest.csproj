@@ -56,15 +56,6 @@
     <Reference Include="Fluent">
       <HintPath>..\..\..\packages\Fluent.Ribbon.3.3.0\lib\net45\Fluent.dll</HintPath>
     </Reference>
-    <Reference Include="Metaseed.Core">
-      <HintPath>..\..\..\packages\Metaseed.Core.2.0.9.0\lib\net451\Metaseed.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Metaseed.MetaCore">
-      <HintPath>..\..\..\packages\Metaseed.MetaCore.2.0.9.0\lib\net451\Metaseed.MetaCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Metaseed.ShellBase">
-      <HintPath>..\..\..\packages\Metaseed.ShellBase.2.0.9.0\lib\net451\Metaseed.ShellBase.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Practices.Prism.Composition">
       <HintPath>..\..\..\packages\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>
     </Reference>
@@ -155,6 +146,20 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Metaseed.Core\Metaseed.Core.csproj">
+      <Project>{e26d7625-0627-4055-add5-8ceab29e8003}</Project>
+      <Name>Metaseed.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Metaseed.MetaCore\Metaseed.MetaCore.csproj">
+      <Project>{3ad5b418-a96d-4c42-bbb5-3f3b8b2ad7e3}</Project>
+      <Name>Metaseed.MetaCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Metaseed.ShellBase\Metaseed.ShellBase.csproj">
+      <Project>{6de48819-f267-4e1c-a965-8d4f4ed1c95a}</Project>
+      <Name>Metaseed.ShellBase</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

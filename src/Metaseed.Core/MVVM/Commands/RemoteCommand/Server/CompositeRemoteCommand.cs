@@ -10,7 +10,7 @@ namespace Metaseed.MVVM.Commands
 {
     public class CompositeRemoteCommand:RemoteCommandBase
     {
-        private bool passCanExcuteCall = true;// we pass the command binding call at the first time, happened when binding applied 
+        private bool passCanExcuteCall = false;// we pass the command binding call at the first time, happened when binding applied 
         public CompositeRemoteCommand(IRemoteCommandService commandService, string id,string uiType)
             : base(commandService, id, uiType)
         {
