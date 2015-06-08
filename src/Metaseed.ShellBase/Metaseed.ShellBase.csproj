@@ -67,6 +67,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Fluent.Ribbon.3.3.0\lib\net45\Fluent.dll</HintPath>
     </Reference>
+    <Reference Include="Metaseed.Core, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Metaseed.Core.2.0.9.0\lib\net451\Metaseed.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Metaseed.MetaCore, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Metaseed.MetaCore.2.0.9.0\lib\net451\Metaseed.MetaCore.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism.Composition, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>
@@ -285,16 +293,6 @@
   <ItemGroup>
     <Folder Include="Framework\Shell\Views\Ribbon\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Metaseed.Core\Metaseed.Core.csproj">
-      <Project>{e26d7625-0627-4055-add5-8ceab29e8003}</Project>
-      <Name>Metaseed.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Metaseed.MetaCore\Metaseed.MetaCore.csproj">
-      <Project>{3ad5b418-a96d-4c42-bbb5-3f3b8b2ad7e3}</Project>
-      <Name>Metaseed.MetaCore</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -308,7 +306,7 @@
     <PostBuildEvent>REM Create a NuGet package for this project and place the .nupkg file in the project's output directory.
 REM If you see this in Visual Studio's Error List window, check the Output window's Build tab for the actual error.
 ECHO Creating NuGet package in Post-Build event...
-REM PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; '$(ProjectDir)_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1' -ProjectFilePath '$(ProjectPath)' -OutputDirectory '$(TargetDir)' -BuildConfiguration '$(ConfigurationName)' -BuildPlatform '$(PlatformName)'"</PostBuildEvent>
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; '$(ProjectDir)_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1' -ProjectFilePath '$(ProjectPath)' -OutputDirectory '$(TargetDir)' -BuildConfiguration '$(ConfigurationName)' -BuildPlatform '$(PlatformName)'"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

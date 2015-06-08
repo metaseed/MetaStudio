@@ -70,6 +70,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Catel.Core.4.1.0\lib\net45\Catel.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Catel.Extensions.Controls, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Catel.Extensions.Controls.4.1.0\lib\net45\Catel.Extensions.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Catel.Extensions.Memento, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Catel.Extensions.Memento.4.0.0\lib\net45\Catel.Extensions.Memento.dll</HintPath>
+    </Reference>
     <Reference Include="Catel.Extensions.Prism, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Catel.Extensions.Prism5.4.1.0\lib\net45\Catel.Extensions.Prism.dll</HintPath>
@@ -81,6 +89,18 @@
     <Reference Include="Fluent, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e436e32a8c5546f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Fluent.Ribbon.3.3.0\lib\net45\Fluent.dll</HintPath>
+    </Reference>
+    <Reference Include="Metaseed.Core, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Metaseed.Core.2.0.9.0\lib\net451\Metaseed.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Metaseed.MetaCore, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Metaseed.MetaCore.2.0.9.0\lib\net451\Metaseed.MetaCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Metaseed.ShellBase, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Metaseed.ShellBase.2.0.9.0\lib\net451\Metaseed.ShellBase.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.Composition">
       <HintPath>..\..\packages\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>
@@ -108,6 +128,9 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Expression.Blend.Sdk.1.0.2\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -119,6 +142,38 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFLocalizeExtension, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\WpfLocalizeExtension.2.3\lib\net35\WPFLocalizeExtension.dll</HintPath>
+    </Reference>
+    <Reference Include="XAMLMarkupExtensions, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\XAMLMarkupExtensions.1.2\lib\net40\XAMLMarkupExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.4.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -160,21 +215,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Metaseed.MetaCore\Metaseed.MetaCore.csproj">
-      <Project>{3ad5b418-a96d-4c42-bbb5-3f3b8b2ad7e3}</Project>
-      <Name>Metaseed.MetaCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Metaseed.MetaShell\Metaseed.MetaShell.csproj">
       <Project>{ce011b57-4c59-4384-8176-527c8bef7090}</Project>
       <Name>Metaseed.MetaShell</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Metaseed.Core\Metaseed.Core.csproj">
-      <Project>{e26d7625-0627-4055-add5-8ceab29e8003}</Project>
-      <Name>Metaseed.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Metaseed.ShellBase\Metaseed.ShellBase.csproj">
-      <Project>{6de48819-f267-4e1c-a965-8d4f4ed1c95a}</Project>
-      <Name>Metaseed.ShellBase</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

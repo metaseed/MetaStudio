@@ -34,6 +34,7 @@ namespace Metaseed.MetaStudioTest.Metaseed.Core.MVVM.Commands
                 bool r=clientCommand.event_Exec.WaitOne(8000);
                 Assert.IsTrue(r);
                 clientCommand.RaiseCanExecuteChanged(null,null);
+                clientCommand.RaiseCanExecuteChanged(null, null);
                 var c=clientCommand.event_CanExec.WaitOne(8000);
                 Assert.IsTrue(c);
                 remoteCommandService.Close();
