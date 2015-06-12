@@ -35,7 +35,10 @@ namespace Metaseed.MetaShell.Controls
 
         public void Hide(object objectWithContext)
         {
-            
+            if (!_HasInitialized) Initialize();
+            if (!_HasInitialized) return;
+            _ribbonTabItem.IsSelected = false;
+            Ribbon.Refresh();
         }
 
         public void Initialize()

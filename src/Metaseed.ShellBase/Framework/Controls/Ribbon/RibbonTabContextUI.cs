@@ -29,11 +29,12 @@ namespace Metaseed.MetaShell.Controls
         {
             if (Groups.Count >= 0)
             {
-                foreach (var item in Groups)
+                foreach (var groupBox in Groups)
                 {
-                    var element = item as UIElement;
+                    var element = groupBox as UIElement;
                     if (element != null && element.Visibility == Visibility.Visible)
                     {
+                        //if any group box is visibile
                         this.Visibility = Visibility.Visible;
                         return;
                     }
@@ -49,6 +50,7 @@ namespace Metaseed.MetaShell.Controls
             if (string.IsNullOrEmpty(this.Name)) this.Name = this.GetType().Name;
             shellService.Ribbon.AddRibbonTab(this);
         }
+
         public virtual void Initialize()
         {
             //should call AddToRibbon in the derived class's ctor
@@ -124,7 +126,6 @@ namespace Metaseed.MetaShell.Controls
                 if (tabItem.Visibility == Visibility.Visible) return;
             }
             Group.Visibility = Visibility.Collapsed;
-
         }
         public event PropertyChangedEventHandler PropertyChanged;
         virtual protected void RaisePropertyChanged(string propertyName)
