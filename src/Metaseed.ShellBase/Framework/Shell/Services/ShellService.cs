@@ -36,8 +36,8 @@ namespace Metaseed.MetaShell.Services
             BindingOperations.EnableCollectionSynchronization(_documents, _lock);
             _documentsUnopen = new ObservableCollection<DocumentUnopenBase>();
             BindingOperations.EnableCollectionSynchronization(_documentsUnopen, _lock);
-            CurrentCulture = string.IsNullOrEmpty(Metaseed.ShellBase.Properties.Settings.Default.Culture)? CultureInfo.CurrentUICulture:new CultureInfo(Metaseed.ShellBase.Properties.Settings.Default.Culture) ;
-            CurrentTheme = string.IsNullOrEmpty(Metaseed.ShellBase.Properties.Settings.Default.Theme)  ? AppTheme.Office2013:(AppTheme)Enum.Parse(typeof(AppTheme), Metaseed.ShellBase.Properties.Settings.Default.Theme) ;
+            CurrentCulture = string.IsNullOrEmpty(Metaseed.ShellBase.Properties.Settings.Default.Culture) ? CultureInfo.CurrentUICulture : new CultureInfo(Metaseed.ShellBase.Properties.Settings.Default.Culture);
+            CurrentTheme = string.IsNullOrEmpty(Metaseed.ShellBase.Properties.Settings.Default.Theme) ? AppTheme.Office2013 : (AppTheme)Enum.Parse(typeof(AppTheme), Metaseed.ShellBase.Properties.Settings.Default.Theme);
         }
 
         IMessager _messager;
@@ -65,7 +65,7 @@ namespace Metaseed.MetaShell.Services
                 }
             }
         }
-       
+
         IDocumentViewModel _activeDocument;
         //public event PropertyChangedEventHandler ActiveDocumentChanged;
         /// <summary>
@@ -209,7 +209,7 @@ namespace Metaseed.MetaShell.Services
                 if (viewModel != null)
                     viewModel.IsAliveClosed = true;
             }
-            if (Application.Current==null||Application.Current.Dispatcher == null) return false;
+            if (Application.Current == null || Application.Current.Dispatcher == null) return false;
             if (!Application.Current.Dispatcher.CheckAccess())
             {
                 Application.Current.Dispatcher.Invoke(new Action(() => { Documents.Remove(documentViewModel); }),
@@ -220,7 +220,7 @@ namespace Metaseed.MetaShell.Services
                 Documents.Remove(documentViewModel);
             }
 
-            if (!IsClearing)
+            if (!IsClearing && (documentViewModel.ContentId != null))
             {
                 var docUnopen = new DocumentUnopenBase() { ContentId = documentViewModel.ContentId, NameText = documentViewModel.Title, Description = documentViewModel.Description, KeepAliveWhenClose = documentViewModel.KeepAliveWhenClose };
                 if (documentViewModel.KeepAliveWhenClose)
@@ -231,7 +231,7 @@ namespace Metaseed.MetaShell.Services
                 var model = documentViewModel as DocumentBaseViewModel;
                 if (model != null) model.OnAfterClose();
             }
-            
+
             DocumentClosedEvent.SendWith(documentViewModel);
             return true;
         }
@@ -268,7 +268,7 @@ namespace Metaseed.MetaShell.Services
                     break;
                 }
             }
-            
+
         }
         #endregion Documents
 
@@ -318,7 +318,7 @@ namespace Metaseed.MetaShell.Services
                 if (!value.Equals(currentTheme))
                 {
                     var currentThemeOld = currentTheme;
-                    
+
                     ChangeTheme(value);
                     this.RaisePropertyChanged(() => this.CurrentTheme);
                     Metaseed.ShellBase.Properties.Settings.Default.Theme = value.ToString();
@@ -364,7 +364,7 @@ namespace Metaseed.MetaShell.Services
                         {
                             owner.Resources.MergedDictionaries.RemoveAt(0);
                         }
-                        
+
                     }
                     switch (theme)
                     {
@@ -387,7 +387,7 @@ namespace Metaseed.MetaShell.Services
                 if (this.currentTheme != theme)
                 {
                     Application.Current.Resources.BeginInit();
-                    if (Application.Current.Resources.MergedDictionaries.Count>0)
+                    if (Application.Current.Resources.MergedDictionaries.Count > 0)
                     {
                         if (Application.Current.Resources.MergedDictionaries[0].Source.OriginalString.StartsWith("pack://application:,,,/Fluent;component/Themes/"))
                         {
@@ -399,10 +399,10 @@ namespace Metaseed.MetaShell.Services
                         case AppTheme.Office2010Black:
                         case AppTheme.Office2010Blue:
                         case AppTheme.Office2010Silver:
-                            Application.Current.Resources.MergedDictionaries.Insert(0,new ResourceDictionary { Source = new Uri("pack://application:,,,/Fluent;component/Themes/Generic.xaml") }); 
+                            Application.Current.Resources.MergedDictionaries.Insert(0, new ResourceDictionary { Source = new Uri("pack://application:,,,/Fluent;component/Themes/Generic.xaml") });
                             break;
                         case AppTheme.Office2013:
-                            Application.Current.Resources.MergedDictionaries.Insert(0,new ResourceDictionary { Source = new Uri("pack://application:,,,/Fluent;component/Themes/Office2013/Generic.xaml") });
+                            Application.Current.Resources.MergedDictionaries.Insert(0, new ResourceDictionary { Source = new Uri("pack://application:,,,/Fluent;component/Themes/Office2013/Generic.xaml") });
                             break;
                     }
 
@@ -417,7 +417,7 @@ namespace Metaseed.MetaShell.Services
                     }
                 }
             }));
-           
+
         }
     }
 }

@@ -80,7 +80,6 @@ namespace Metaseed.MetaShell.ViewModels
             InstanceTitleDataDirtyObj.IsDataDirty = true;
         }
 
-
         protected override async Task Close()
         {
              await base.Close();

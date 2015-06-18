@@ -96,36 +96,13 @@ namespace Metaseed.MetaShell.Controls
         public virtual void Show(object c)
         {
             SetDataContext(c);
-            if (Group.Visibility != Visibility.Visible)
-            {
-                //patch to RibbonContextualTabGroup static void OnVisibilityChanged
-                //because  that methord will set the tabs visibility to the group's visibility.
-                var visibilityBackup = new Visibility[Group.Items.Count];
-                for (int i = 0; i < Group.Items.Count; i++)
-                {
-                    visibilityBackup[i] = Group.Items[i].Visibility;
-                }
-                //patch end
-                Group.Visibility = Visibility.Visible;
-                //patch code
-                for (int i = 0; i < Group.Items.Count; i++)
-                {
-                    Group.Items[i].Visibility = visibilityBackup[i];
-                }
-            }
-            this.Visibility = Visibility.Visible;
-            this.IsSelected = true;
+            RibbonTabContextUIHelper.Show(this);
             Ribbon.Refresh();
         }
         public virtual void Hide(object c)
         {
             this.DataContext = null;
-            this.Visibility = Visibility.Collapsed;
-            foreach (var tabItem in Group.Items)
-            {
-                if (tabItem.Visibility == Visibility.Visible) return;
-            }
-            Group.Visibility = Visibility.Collapsed;
+            RibbonTabContextUIHelper.Hide(this);
         }
         public event PropertyChangedEventHandler PropertyChanged;
         virtual protected void RaisePropertyChanged(string propertyName)

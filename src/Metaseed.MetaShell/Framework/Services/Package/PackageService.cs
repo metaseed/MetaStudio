@@ -362,6 +362,7 @@ namespace Metaseed.MetaShell.Services
         }
         private void OnOpenDocumentCommandExecute(IPackageContent document)
         {
+            if (document == null) return;
             if (document is DocumentUnopen)
             {
                 var docUnopen = document as DocumentUnopen;

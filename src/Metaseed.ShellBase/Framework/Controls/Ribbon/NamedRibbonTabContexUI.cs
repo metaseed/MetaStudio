@@ -12,9 +12,10 @@ using Metaseed.Windows.Threading;
 
 namespace Metaseed.MetaShell.Controls
 {
-    public class NamedRibbonTabContexUI: IContextUI
+    public class NamedRibbonTabContexUI : IContextUI
     {
         private readonly string _ribbonTabName;
+        private readonly bool _hideOtherTabsInSameGroup;
         private bool _HasInitialized;
         protected readonly IShellService ShellService;
         private RibbonTabItem _ribbonTabItem;
@@ -22,10 +23,11 @@ namespace Metaseed.MetaShell.Controls
         {
             get { return ((RibbonService)(ShellService.Ribbon)).Ribbon; }
         }
-        public NamedRibbonTabContexUI(string ribbonTabName)
+        public NamedRibbonTabContexUI(string ribbonTabName, bool hideOtherTabsInSameGroup = true)
         {
             ShellService = ServiceLocator.Default.ResolveType<IShellService>();
             _ribbonTabName = ribbonTabName;
+            _hideOtherTabsInSameGroup = hideOtherTabsInSameGroup;
         }
 
         public bool HasInitialized
@@ -37,7 +39,14 @@ namespace Metaseed.MetaShell.Controls
         {
             if (!_HasInitialized) Initialize();
             if (!_HasInitialized) return;
-            _ribbonTabItem.IsSelected = false;
+            if (_hideOtherTabsInSameGroup)
+            {
+                RibbonTabContextUIHelper.Hide(_ribbonTabItem);
+            }
+            else
+            {
+                _ribbonTabItem.IsSelected = false;
+            }
             Ribbon.Refresh();
         }
 
@@ -46,7 +55,6 @@ namespace Metaseed.MetaShell.Controls
             _ribbonTabItem = Ribbon.Tabs.FirstOrDefault(tab => tab.Name.Equals(_ribbonTabName));
             if (_ribbonTabItem == null)
                 return;
-
             _HasInitialized = true;
         }
 
@@ -54,8 +62,15 @@ namespace Metaseed.MetaShell.Controls
         {
             if (!_HasInitialized) Initialize();
             if (!_HasInitialized) return;
-            _ribbonTabItem.Visibility = Visibility.Visible;
-            _ribbonTabItem.IsSelected = true;
+            if (_hideOtherTabsInSameGroup)
+            {
+                RibbonTabContextUIHelper.Show(_ribbonTabItem);
+            }
+            else
+            {
+                _ribbonTabItem.Visibility = Visibility.Visible;
+                _ribbonTabItem.IsSelected = true;
+            }
             Ribbon.Refresh();
         }
     }
