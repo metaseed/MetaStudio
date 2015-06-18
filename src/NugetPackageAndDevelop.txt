@@ -8,8 +8,8 @@ add REM from lastline of the three projects' post build event script.
 Nuget Package:
 change the version number
 remove REM from lastline of the three projects' post build event script.
-rebuild Metaseed.Core and find it's pakcage and upgrade solution package to new version Core from local repository(solution output folder)
-rebuild MetaCore and upgrade solution pakcage to new verison MetaCore from local repository(solution output folder)
-rebuild MetaShell and upgrade solution pakcage to new verison MetaShell from local repository(solution output folder)
-publish it using nuget pakcage explorer
+rebuild Metaseed.Core;
+upgrade MetaCore's package reference to new version Core from local repository(solution output folder), rebuild MetaCore. 
+upgrade MetaShell's pakcage reference to new verison MetaCore from local repository(solution output folder), rebuild MetaShell 
+publish them using nuget pakcage explorer
 copy the pakcages to other application's local repository

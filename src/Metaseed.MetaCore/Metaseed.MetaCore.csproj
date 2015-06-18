@@ -63,9 +63,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Catel.MVVM.4.1.0\lib\net45\Catel.MVVM.dll</HintPath>
     </Reference>
-    <Reference Include="Metaseed.Core, Version=2.0.9.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Metaseed.Core, Version=2.0.10.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Metaseed.Core.2.0.9.0\lib\net451\Metaseed.Core.dll</HintPath>
+      <HintPath>..\..\packages\Metaseed.Core.2.0.10.0\lib\net451\Metaseed.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.Composition">
       <HintPath>..\..\packages\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>
@@ -169,7 +169,9 @@
     <Compile Include="Windows\Interactivity\EnterKeyToUpdateTextBox.cs" />
     <Compile Include="__\SelfKill.cs" />
     <None Include="Fody.targets" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <Compile Include="Windows\Controls\AutoCompleteTextBox\AutoCompleteTextBox.cs" />
     <Compile Include="Windows\Controls\AutoCompleteTextBox\LimitedCollectionView.cs" />
     <Compile Include="Windows\Controls\AutoCompleteTextBox\LimitedListCollectionView.cs" />
