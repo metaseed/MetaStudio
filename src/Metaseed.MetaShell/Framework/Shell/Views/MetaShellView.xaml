@@ -55,9 +55,9 @@
 						     AnchorablesSource="{Binding ShellService.Tools}"
                              ActiveContent="{Binding ShellService.ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
             <!-- prism:RegionManager.RegionName="{x:Static infr:RegionNames.DocumentsRegion}"-->
-            <xcad:DockingManager.Theme>
+            <!--<xcad:DockingManager.Theme>
                 <xcad:AeroTheme />
-            </xcad:DockingManager.Theme>
+            </xcad:DockingManager.Theme>-->
             <xcad:DockingManager.LayoutTransform>
                 <ScaleTransform
                     ScaleX="{Binding Value, ElementName=zoomSlider}"

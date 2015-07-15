@@ -1,4 +1,6 @@
-﻿using Metaseed.MetaShell.Services;
+﻿using System.Collections.Generic;
+using System.Windows.Documents;
+using Metaseed.MetaShell.Services;
 using Microsoft.Practices.Prism.Modularity;
 using Catel.IoC;
 using Catel.Logging;
@@ -15,9 +17,8 @@ namespace Metaseed.Modules
         /// <summary>
         /// The modules directory name.
         /// </summary>
-        public const string ModulesDirectory = @".\Modules";
-        public const string MetaStudioModuleAssemblyFirstCharacter = "☯";
-        protected static ILog Log = LogManager.GetCurrentClassLogger();
+
+        protected static readonly ILog Log = LogManager.GetCurrentClassLogger();
         
         static  MetaModule()
         {

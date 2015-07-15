@@ -15,14 +15,14 @@ namespace Metaseed.MVVM.Commands
     {
         internal RemoteCommandManager commandManager;
 
-        public RemoteCommandService()
-            : this(new RemoteCommandServiceCallback())
+        public RemoteCommandService(string serviceID="")
+            : this(serviceID,new RemoteCommandServiceCallback())
         {
 
         }
-        public RemoteCommandService(RemoteCommandServiceCallback callback)
+        public RemoteCommandService(string serviceID,RemoteCommandServiceCallback callback)
             : base(new InstanceContext(callback), new ServiceEndpoint(ContractDescription.GetContract(typeof(IRemoteCommandService)),
-                new NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/IRemoteCommandService")))
+                new NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/" + serviceID + "IRemoteCommandService")))
         {
             commandManager = new RemoteCommandManager(this);
             callback.RemoteCommandService = this;

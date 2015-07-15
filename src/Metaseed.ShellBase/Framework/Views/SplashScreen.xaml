@@ -2,10 +2,85 @@
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:catel="http://catel.codeplex.com"
-                  WindowStartupLocation="CenterScreen" WindowStyle="None" Topmost="true" SizeToContent="WidthAndHeight" 
+                  xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+                  WindowStartupLocation="CenterScreen" WindowStyle="None"  SizeToContent="WidthAndHeight" 
                   Background="{x:Null}" ResizeMode="NoResize" AllowsTransparency="True" ShowInTaskbar="False" Width="500" Height="300">
     <Grid>
-        <Image x:Name="splashScreenImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Source="/Metaseed.ShellBase;component/Resources/Images/SplashScreen/L_6.jpg" Stretch="None"/>
+        <Grid.Resources>
+            <SolidColorBrush x:Key="CaptionButtonHoverOutterBorderBrush" Color="#FFA6ACB3" />
+            <LinearGradientBrush x:Key="CaptionButtonHoverInnerBorderBrush">
+                <GradientStop Color="#FFFFFFFF" Offset="0" />
+                <GradientStop Color="#FFF2F2F3" Offset="1" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="CaptionButtonHoverInnerBackgroundBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFFFFFFF" Offset="0" />
+                <GradientStop Color="#FFE7E8E9" Offset="1" />
+                <GradientStop Offset="0.49" Color="#FFFCFCFC" />
+                <GradientStop Offset="0.51" Color="#FFF8F8F8" />
+            </LinearGradientBrush>
+            <SolidColorBrush x:Key="CaptionButtonPressedOutterBorderBrush" Color="#FFA6ACB3" />
+            <SolidColorBrush x:Key="CaptionButtonPressedInnerBorderBrush" Color="#FFC2C7CE" />
+            <LinearGradientBrush x:Key="CaptionButtonPressedInnerBackgroundBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFDFE4EB" Offset="0" />
+                <GradientStop Color="#FFDFE4EB" Offset="1" />
+            </LinearGradientBrush>
+            <SolidColorBrush x:Key="CaptionButtonCloseHoverOutterBorderBrush" Color="#FF9B3D3D" />
+            <LinearGradientBrush x:Key="CaptionButtonCloseHoverInnerBorderBrush">
+                <GradientStop Color="#FFFF8482" Offset="0" />
+                <GradientStop Color="#FFEF7070" Offset="1" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="CaptionButtonCloseHoverInnerBackgroundBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFFF8483" Offset="0" />
+                <GradientStop Color="#FFE36162" Offset="1" />
+            </LinearGradientBrush>
+            <SolidColorBrush x:Key="CaptionButtonClosePressedOutterBorderBrush" Color="#FF9B3D3D" />
+            <SolidColorBrush x:Key="CaptionButtonClosePressedInnerBorderBrush" Color="#FFDA6163" />
+            <LinearGradientBrush x:Key="CaptionButtonClosePressedInnerBackgroundBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFEA7070" Offset="0" />
+                <GradientStop Color="#FFEA7070" Offset="1" />
+            </LinearGradientBrush>
+            <BitmapImage x:Key="ImageCaptionButtonClose" UriSource="pack://application:,,,/Metaseed.ShellBase;component/Resources/Images/CaptionButtonClose.png" PresentationOptions:Freeze="True" />
+            <Style x:Key="CaptionButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="35" />
+                <Setter Property="Height" Value="19" />
+                <Setter Property="Template" Value="{DynamicResource CaptionButtonControlTemplate}" />
+                <Setter Property="Focusable" Value="False" />
+            </Style>
+            <ControlTemplate x:Key="CaptionButtonControlTemplate" TargetType="{x:Type Button}">
+                <Grid Background="Transparent">
+                    <Border x:Name="hoverBorder" Margin="0" BorderBrush="{DynamicResource CaptionButtonHoverOutterBorderBrush}" BorderThickness="1" CornerRadius="2" Visibility="Collapsed">
+                        <Border x:Name="hoverBorderInner" BorderBrush="{DynamicResource CaptionButtonHoverInnerBorderBrush}" BorderThickness="1" CornerRadius="1" Background="{DynamicResource CaptionButtonHoverInnerBackgroundBrush}" />
+                    </Border>
+                    <Border x:Name="pressedBorder" Margin="0" BorderBrush="{DynamicResource CaptionButtonPressedOutterBorderBrush}" BorderThickness="1" CornerRadius="2" Visibility="Collapsed">
+                        <Border x:Name="pressedBorderInner" BorderBrush="{DynamicResource CaptionButtonPressedInnerBorderBrush}" BorderThickness="1" CornerRadius="1" Background="{DynamicResource CaptionButtonPressedInnerBackgroundBrush}" />
+                    </Border>
+                    <ContentPresenter Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+                <ControlTemplate.Triggers>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="IsMouseOver" Value="True" />
+                            <Condition Property="IsPressed" Value="False" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Visibility" TargetName="hoverBorder" Value="Visible" />
+                    </MultiTrigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Visibility" TargetName="pressedBorder" Value="Visible" />
+                    </Trigger>
+                    <Trigger Property="Background" Value="Red">
+                        <Setter Property="BorderBrush" TargetName="hoverBorder" Value="{DynamicResource CaptionButtonCloseHoverOutterBorderBrush}" />
+                        <Setter Property="BorderBrush" TargetName="hoverBorderInner" Value="{DynamicResource CaptionButtonCloseHoverInnerBorderBrush}" />
+                        <Setter Property="Background" TargetName="hoverBorderInner" Value="{DynamicResource CaptionButtonCloseHoverInnerBackgroundBrush}" />
+                        <Setter Property="BorderBrush" TargetName="pressedBorder" Value="{DynamicResource CaptionButtonClosePressedOutterBorderBrush}" />
+                        <Setter Property="BorderBrush" TargetName="pressedBorderInner" Value="{DynamicResource CaptionButtonClosePressedInnerBorderBrush}" />
+                        <Setter Property="Background" TargetName="pressedBorderInner" Value="{DynamicResource CaptionButtonClosePressedInnerBackgroundBrush}" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
+        </Grid.Resources>
+
+        <Image x:Name="splashScreenImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Source="/Metaseed.ShellBase;component/Resources/Images/SplashScreen/R_0.jpg" Stretch="None"/>
         <Grid x:Name="statusPanel"  HorizontalAlignment="Right" Margin="20,30,20,60">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
@@ -13,7 +88,7 @@
                 <RowDefinition Height="18"/>
                 <RowDefinition Height="85"/>
             </Grid.RowDefinitions>
-            <TextBlock x:Name="AppName" Text="MetaStduio" VerticalAlignment="Center" FontSize="48" FontWeight="Bold" FontStyle="Italic" Foreground="White">
+            <TextBlock x:Name="AppName" Text="MetaStduio" VerticalAlignment="Center" FontSize="48" FontWeight="Bold" FontStyle="Italic" Foreground="White" Margin="5,9,-5,5" Grid.RowSpan="2">
                 <TextBlock.Effect>
                     <DropShadowEffect ShadowDepth="1" RenderingBias="Quality" Color="Black"/>
                 </TextBlock.Effect>
@@ -37,6 +112,8 @@
                 <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" Color="Black"/>
             </TextBlock.Effect>
         </TextBlock>
- 
+        <Button Margin="462,2,2,281" Style="{DynamicResource CaptionButtonStyle}" Width="35" Height="19" BorderThickness="1,0,0,1" Click="ButtonBase_OnClick">
+            <Image Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="None" Source="{DynamicResource ImageCaptionButtonClose}" SnapsToDevicePixels="True"/>
+        </Button>
     </Grid>
 </catel:DataWindow>

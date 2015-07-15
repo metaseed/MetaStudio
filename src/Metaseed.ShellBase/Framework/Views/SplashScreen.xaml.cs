@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
 using Catel.Windows;
@@ -73,6 +74,11 @@ namespace Metaseed.MetaShell.Views
             {
                 // Swallow exception
             }
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

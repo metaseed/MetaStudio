@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Deployment.Application;
 using Metaseed.MetaShell.Views;
 using Metaseed.Modules;
+using Metaseed.MVVM.Commands;
 using Microsoft.Practices.Prism.Modularity;
 
 namespace Metaseed.MetaStudio
@@ -91,7 +92,7 @@ namespace Metaseed.MetaStudio
             //
             SplashScreenservice.ResisterService();
 
-            var bootstrapper = new MetaBootstrapper<MetaShellView>();
+            var bootstrapper = new MetaBootstrapper<MetaShellView>(new RibbonRemoteCommandUIBuilder(),"MetaStudio");
             bootstrapper.CreatedModuleCatalog+=(sender,e1)=>
             {
                 Type metaShellModuleType = typeof(MetaShellModule);

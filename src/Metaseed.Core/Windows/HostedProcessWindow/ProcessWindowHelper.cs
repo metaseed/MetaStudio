@@ -42,10 +42,10 @@ namespace Metaseed.Diagnostics
         /// <param name="started"></param>
         /// <param name="hideMainWindow"></param>
         /// <param name="removeMenubar"></param>
-        /// <param name="removeBorder"></param>
+        /// <param name="removeCaptionAndBorder"></param>
         /// <returns></returns>
         public static Process StartProcess(string processName, string arguments, ref bool started,
-            bool hideMainWindow = true, bool removeMenubar = true, bool removeBorder = true)
+            bool hideMainWindow = true, bool removeMenubar = true, bool removeCaptionAndBorder = true)
         {
             try
             {
@@ -71,8 +71,16 @@ namespace Metaseed.Diagnostics
             }
         }
 
+        //[DllImport("user32.dll")]
+        //static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
+
+        public const int GWL_EXSTYLE = -20;
+        public const int WS_EX_LAYERED = 0x80000;
+        //public const int LWA_ALPHA = 0x2;
+        //public const int LWA_COLORKEY = 0x1;
+
         public static Process StartProcess(string processName, string arguments, bool hasSplashScreen,
-            bool hideMainWindow = true, bool removeMenubar = true, bool removeBorder = true)
+            bool hideMainWindow = true, bool removeMenubar = true, bool removeCaptionAndBorder = false)
         {
             try
             {
@@ -114,11 +122,39 @@ namespace Metaseed.Diagnostics
                     hWnd = pDocked.MainWindowHandle; //cache the window handle
                     //Console.WriteLine(hWndDocked);                 
                 }
-                ShowWindow(hWnd, hideMainWindow ? WindowShowStyle.Hide : WindowShowStyle.Show);
-                //ShowWindow(hWndDocked, WindowShowStyle.Show);
+                //RECT rct;
+                //if (GetWindowRect(hWnd, out rct))
+                //{
+                //    pDocked.StartInfo.EnvironmentVariables["HasWindowPosition"] = true.ToString();
+                //    pDocked.StartInfo.EnvironmentVariables["WindowPosition"] = true.ToString();
+                //}
+                //else
+                //{
+                //    pDocked.StartInfo.EnvironmentVariables["HasWindowPosition"] = false.ToString();
+
+                //}
+                long style = GetWindowLong(hWnd, GWL_STYLE);
+                pDocked.StartInfo.EnvironmentVariables["WindowStyle"] = style.ToString();
+                if ((style & WS_MAXIMIZE) == WS_MAXIMIZE)
+                {
+                    //It's maximized
+                }
+                else if ((style & WS_MINIMIZE) == WS_MINIMIZE)
+                {
+                    //It's minimized
+                    ShowWindow(hWnd, WindowShowStyle.ShowMaximized);
+                }
+                var extStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
+                if ((extStyle & (WS_EX_LAYERED)) == WS_EX_LAYERED)
+                {
+                    SetWindowLong(hWnd, GWL_EXSTYLE, (IntPtr)(extStyle & (~WS_EX_LAYERED)));
+                }
+                pDocked.StartInfo.EnvironmentVariables["WindowExtStyle"] = extStyle.ToString();
+                //SetLayeredWindowAttributes(hWnd, 0, 0, LWA_COLORKEY);
+                ShowWindow(hWnd, hideMainWindow ? WindowShowStyle.Hide : WindowShowStyle.Show);//need
                 if (removeMenubar)
                     HideMenubar(hWnd);
-                if (removeMenubar)
+                if (removeCaptionAndBorder)
                     RemoveCaptionBarAndBorder(hWnd);
                 return pDocked;
             }
@@ -128,6 +164,8 @@ namespace Metaseed.Diagnostics
             }
             return null;
         }
+        const UInt32 WS_MINIMIZE = 0x20000000;
+        const UInt32 WS_MAXIMIZE = 0x1000000;
         public static Process StartProcess(string processName, string arguments, bool hasSplashScreen, string mainWindowTile, bool hideMainWindow = true)
         {
             var process = FindProcessAndWindow(processName, mainWindowTile);
@@ -173,18 +211,30 @@ namespace Metaseed.Diagnostics
             SetMenu(hWndDocked, IntPtr.Zero);
             return hmenu;
         }
-        public static bool ShowMenubar(IntPtr hWndDocked,IntPtr hMenu)
+        public static bool ShowMenubar(IntPtr hWndDocked, IntPtr hMenu)
         {
             return SetMenu(hWndDocked, hMenu);
         }
 
-        public static void RemoveCaptionBarAndBorder(IntPtr hWndDocked)
+        public static long RemoveCaptionBarAndBorder(IntPtr hWndDocked)
         {
             // Remove border and what not
-            long style = GetWindowLong(hWndDocked, GWL_STYLE);
-            style = style & ~WS_CAPTION & ~WS_THICKFRAME;
+            long styleBackup = GetWindowLong(hWndDocked, GWL_STYLE);
+            long style = styleBackup & ~WS_CAPTION & ~WS_THICKFRAME;
             // Removes Caption bar and the sizing border
             SetWindowLong(hWndDocked, GWL_STYLE, (IntPtr)style);
+            return (styleBackup);
+        }
+
+        public static void RecoverCaptionBarAndBorder(Process process)
+        {
+            IntPtr hWndDocked = process.MainWindowHandle;
+            //long styleBackup = GetWindowLong(hWndDocked, GWL_STYLE);
+            //long style = styleBackup | WS_CAPTION | WS_THICKFRAME;
+            var style=long.Parse(process.StartInfo.EnvironmentVariables["WindowStyle"]);
+            SetWindowLong(hWndDocked, GWL_STYLE, (IntPtr)(style));
+            var styleExt = long.Parse(process.StartInfo.EnvironmentVariables["WindowExtStyle"]);
+            SetWindowLong(hWndDocked, GWL_EXSTYLE, (IntPtr)(styleExt));
         }
 
         public static bool IsWindowShown(IntPtr hWnd)
@@ -211,6 +261,21 @@ namespace Metaseed.Diagnostics
         }
 
         #region InterOp
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int Left;        // x position of upper-left corner
+            public int Top;         // y position of upper-left corner
+            public int Right;       // x position of lower-right corner
+            public int Bottom;      // y position of lower-right corner
+        }
+
+
 
         private const int SWP_NOOWNERZORDER = 0x200;
         private const int SWP_NOREDRAW = 0x8;
@@ -313,7 +378,7 @@ namespace Metaseed.Diagnostics
         ///     If the window was previously hidden, the return value is zero.
         /// </returns>
         [DllImport("user32.dll")]
-        private static extern bool ShowWindow(IntPtr hWnd, WindowShowStyle nCmdShow);
+        internal static extern bool ShowWindow(IntPtr hWnd, WindowShowStyle nCmdShow);
 
         /// <summary>
         ///     Retrieves the show state and the restored, minimized, and maximized positions of the specified window.
@@ -352,7 +417,7 @@ namespace Metaseed.Diagnostics
         ///     Enumeration of the different ways of showing a window using
         ///     ShowWindow
         /// </summary>
-        private enum WindowShowStyle : uint
+        internal enum WindowShowStyle : uint
         {
             /// <summary>Hides the window and activates another window.</summary>
             /// <remarks>See SW_HIDE</remarks>
@@ -451,7 +516,7 @@ namespace Metaseed.Diagnostics
         [DllImport("user32.dll")]
         private static extern IntPtr GetMenu(IntPtr hWnd);
         [DllImport("user32.dll")]
-        private static extern bool SetMenu(IntPtr hWnd,IntPtr hMenu);
+        private static extern bool SetMenu(IntPtr hWnd, IntPtr hMenu);
 
         [DllImport("user32.dll")]
         private static extern int GetMenuItemCount(IntPtr hMenu);

@@ -63,10 +63,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Catel.MVVM.4.1.0\lib\net45\Catel.MVVM.dll</HintPath>
     </Reference>
-    <Reference Include="Metaseed.Core, Version=2.0.10.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Metaseed.Core.2.0.10.0\lib\net451\Metaseed.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Practices.Prism.Composition">
       <HintPath>..\..\packages\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>
     </Reference>
@@ -297,6 +293,12 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resource.zh-Hans.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Metaseed.Core\Metaseed.Core.csproj">
+      <Project>{e26d7625-0627-4055-add5-8ceab29e8003}</Project>
+      <Name>Metaseed.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

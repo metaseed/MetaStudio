@@ -27,7 +27,7 @@ namespace Metaseed.MetaShell.ViewModels
             InstanceTitleDataDirtyObj = new DataDirtyObject();
             this.DataDirtyManager.AddDataObject(InstanceTitleDataDirtyObj);
             this.DataDirtyManager.IsDataDirtyChangedEvent += DataDirtyManager_IsDataDirtyChangedEvent;
-            CanFloat = true;//if not, auto enter dragging status when switch document by click the document header(the two documents's contextual tools in one tool pane hide and show), then when mouse moving the document become a floating window,and some exception occurs when drag drop
+            //CanFloat = false;if not false, auto enter dragging status when switch document by click the document header(the two documents's contextual tools in one tool pane hide and show), then when mouse moving the document become a floating window,and some exception occurs when drag drop
         }
 
         void DataDirtyManager_IsDataDirtyChangedEvent(object sender, DataDirtyEventArgs e)
@@ -78,6 +78,11 @@ namespace Metaseed.MetaShell.ViewModels
         private void OnInstanceTitleChanged()
         {
             InstanceTitleDataDirtyObj.IsDataDirty = true;
+        }
+
+        public virtual void Show()
+        {
+            ShellService.OpenDocument(this);
         }
 
         protected override async Task Close()

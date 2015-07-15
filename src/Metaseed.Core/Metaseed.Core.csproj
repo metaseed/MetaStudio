@@ -135,6 +135,7 @@
     <Compile Include="Windows\Data\Converters\UInt32ToStringConverter.cs" />
     <Compile Include="Windows\HostedProcessWindow\HostedProcessWindow.cs" />
     <Compile Include="Windows\FrameworkElementExport.cs" />
+    <Compile Include="Windows\HostedProcessWindow\ProcessWindowHost.cs" />
     <Compile Include="Windows\Markup\NameValidationHelper.cs" />
     <Compile Include="Windows\Media\BaseWPFHelpers.cs" />
     <Compile Include="Windows\Media\FindNameInVisualTree.cs" />

@@ -213,7 +213,7 @@ namespace Metaseed.MetaShell.Services
             if (!Application.Current.Dispatcher.CheckAccess())
             {
                 Application.Current.Dispatcher.Invoke(new Action(() => { Documents.Remove(documentViewModel); }),
-                    DispatcherPriority.ContextIdle);
+                    DispatcherPriority.Normal);
             }
             else
             {

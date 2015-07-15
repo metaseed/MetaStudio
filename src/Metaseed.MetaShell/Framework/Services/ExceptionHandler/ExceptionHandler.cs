@@ -191,11 +191,6 @@ namespace Metaseed.MetaShell.Services
         }
 
 
-
-
-
-   
-
         private Boolean CheckForUpdateDue()
         {
             Boolean isUpdateDue = false;

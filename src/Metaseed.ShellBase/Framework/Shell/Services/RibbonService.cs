@@ -85,11 +85,16 @@ namespace Metaseed.MetaShell.Services{
                 if (Ribbon.Tabs[i].Group != null && Ribbon.Tabs[i].Group.Equals(ribbonTab.Group))
                 {
                     Ribbon.Tabs.Insert(i + 1, ribbonTab);
+                    ribbonTab.Group.UpdateInnerVisiblityAndGroupBorders();
+                    ribbonTab.Group.UpdateLayout();
                     return this;
                 }
             }
             Ribbon.Tabs.Add(ribbonTab);
-            //Metaseed.Windows.Threading.ExtensionMethods.Refresh((UIElement)Ribbon);
+            if (ribbonTab.Group != null)
+            {
+                ribbonTab.Group.UpdateInnerVisiblityAndGroupBorders();
+            }
             return this;
         }
 

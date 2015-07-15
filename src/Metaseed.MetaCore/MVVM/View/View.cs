@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Forms.Integration;
 using System.Windows.Markup;
 using Catel.Logging;
 using Catel.IoC;
@@ -10,6 +11,7 @@ using Catel;
 using Catel.MVVM;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Catel.MVVM.Views;
 using Catel.Windows;
 using Metaseed.MVVM.ViewModel;
 
@@ -41,23 +43,42 @@ namespace Metaseed.MVVM.View
             }
             if (args.NewValue == null)
                 return;//throw new Exception("The View.Model Dependency Property Could Only Be Set On The ContentControl");
+            var viewManager = ServiceLocator.Default.ResolveType<IViewManager>();
+
             var viewModel = args.NewValue;
-            var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-            var viewType = viewLocator.ResolveView(viewModel.GetType());
+            var vm = viewModel as IViewModel;
             FrameworkElement view = null;
-            if (viewType == null)
+            if (vm != null)
             {
-                Logger.Warning("Could not find ViewType of ViewModel-{0}, will use a Text Control", viewModel.GetType().Name);
-                view = new TextBlock
+                var views = viewManager.GetViewsOfViewModel(vm);
+                if (views.Length > 0)
+                    view = views[0] as FrameworkElement;
+            }
+            //creat view from type
+            if (view == null)
+            {
+                var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
+                var viewType = viewLocator.ResolveView(viewModel.GetType());
+
+                if (viewType == null)
                 {
-                    Text = string.Format("Cannot find view for view model:{0}.", viewModel.GetType().Name),
-                    DataContext = viewModel
-                };
+                    Logger.Warning("Could not find ViewType of ViewModel-{0}, will use a Text Control",
+                        viewModel.GetType().Name);
+                    view = new TextBlock
+                    {
+                        Text = string.Format("Cannot find view for view model:{0}.", viewModel.GetType().Name),
+                        DataContext = viewModel
+                    };
+                }
+                else
+                {
+                    view = ViewHelper.ConstructViewWithViewModel(viewType, viewModel);
+                    var iv = view as IView;
+                    if(iv!=null)
+                        viewManager.RegisterView(iv);
+                }
             }
-            else
-            {
-                view = ViewHelper.ConstructViewWithViewModel(viewType, viewModel);
-            }
+            //set view as content
             var contentControl = targetLocation as ContentControl;
             if (contentControl != null)
             {
@@ -73,7 +94,7 @@ namespace Metaseed.MVVM.View
                 viewM.SetViewAsContent(contentControl, view, viewM);
                 //var layoutDocControl = view.FindVisualAncestor(view, (v) => v is LayoutDocumentControl);
             }
-            
+
         }
         private static void SetContentProperty(object targetLocation, object view)
         {

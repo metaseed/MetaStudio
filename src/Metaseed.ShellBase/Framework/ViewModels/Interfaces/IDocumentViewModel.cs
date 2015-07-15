@@ -13,5 +13,6 @@ namespace Metaseed.MetaShell.ViewModels
         bool IsDeletable { get; }
         bool KeepAliveWhenClose { get; set; }
         bool IsAliveClosed { get; }
+        void Show();
 	}
 }

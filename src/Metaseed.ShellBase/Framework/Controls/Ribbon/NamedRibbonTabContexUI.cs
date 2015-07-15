@@ -60,7 +60,7 @@ namespace Metaseed.MetaShell.Controls
 
         public void Show(object objectWithContext)
         {
-            if (!_HasInitialized) Initialize();
+             Initialize();
             if (!_HasInitialized) return;
             if (_hideOtherTabsInSameGroup)
             {

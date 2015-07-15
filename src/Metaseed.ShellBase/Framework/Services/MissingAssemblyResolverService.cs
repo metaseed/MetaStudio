@@ -16,6 +16,8 @@ namespace Metaseed.MetaShell.Services
     /// </summary>
     public class MissingAssemblyResolverService : IMissingAssemblyResolverService
     {
+        public const string ModulesDirectory = @".\Modules";
+        public static readonly List<string> MetaStudioModuleAssemblyPrefix = new List<string>() { "☯", "M." };
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         static readonly List<string> _DllFileNamesOfApp;
         static public List<string> DllFileNamesOfApp { get { return _DllFileNamesOfApp; } }
@@ -35,11 +37,12 @@ namespace Metaseed.MetaShell.Services
             // Load shell files
             _DllFileNamesOfApp = new List<string>(Directory.GetFiles(Metaseed.AppEnvironment.AppPath, "*.dll"));
             // Load module files
-            AddAssemblyResolveFolder(Path.Combine(Metaseed.AppEnvironment.AppPath, MetaModule.ModulesDirectory));
+            AddAssemblyResolveFolder(Path.Combine(Metaseed.AppEnvironment.AppPath, ModulesDirectory));
         }
-
+        
         public static void AddAssemblyResolveFolder(string folerPath)
         {
+
             //store all dlls in folerPath and subFolders except language dlls.
             var dllFileNamesOfApp = new List<String>();
             dllFileNamesOfApp.AddRange(Directory.GetFiles(folerPath, "*.dll"));
@@ -55,10 +58,14 @@ namespace Metaseed.MetaShell.Services
             }
             foreach (var file in dllFileNamesOfApp)
             {
-                if (new FileInfo(file).Name.StartsWith(MetaModule.MetaStudioModuleAssemblyFirstCharacter))
+                foreach (var prefix in MetaStudioModuleAssemblyPrefix)
                 {
-                    _ModuleFiles.Add(file);
+                    if (new FileInfo(file).Name.StartsWith(prefix))
+                    {
+                        _ModuleFiles.Add(file);
+                    }
                 }
+                
             }
             _DllFileNamesOfApp.AddRange(dllFileNamesOfApp);
         }

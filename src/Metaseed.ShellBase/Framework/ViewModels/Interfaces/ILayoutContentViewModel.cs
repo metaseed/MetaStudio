@@ -24,6 +24,6 @@ namespace Metaseed.MetaShell.ViewModels
         ImageSource IconSource { get; }
         bool IsSelected { get; set; }
         void SaveState(Stream stream);
-        //bool IsManageable { get; }
+        //bool IsManageable { get; } 
     }
 }

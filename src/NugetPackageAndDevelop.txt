@@ -13,3 +13,4 @@ upgrade MetaCore's package reference to new version Core from local repository(s
 upgrade MetaShell's pakcage reference to new verison MetaCore from local repository(solution output folder), rebuild MetaShell 
 publish them using nuget pakcage explorer
 copy the pakcages to other application's local repository
+update packages in relavent projects.

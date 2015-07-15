@@ -29,14 +29,14 @@ namespace Metaseed.MetaShell
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private readonly CallbackLogger _callbackLogger = new CallbackLogger();
         #region Constructors
-        public MetaBootstrapper(IRemoteCommandUIBuilder uiBuilder=null)
+        public MetaBootstrapper(IRemoteCommandUIBuilder uiBuilder=null,string remoteCommandServiceID="")
         {
 #if DEBUG
             Catel.Logging.LogManager.AddDebugListener(false);//note: could called multimes. if debug listener already registed,it do nothing.
 #endif
             remoteCommandServiceServer = new RibbonRemoteCommandServer(uiBuilder);
             var serviceController = new RemoteCommandServiceController(remoteCommandServiceServer);
-            serviceController.Start();
+            serviceController.Start(remoteCommandServiceID);
             //
             // Application Themes
             //
@@ -53,10 +53,10 @@ namespace Metaseed.MetaShell
             //{
             //    Source = new Uri("pack://application:,,,/Fluent;Component/Themes/Office2010/Silver.xaml", UriKind.RelativeOrAbsolute)
             //});
-            application.Resources.MergedDictionaries.Add(new ResourceDictionary
-            {
-                Source = new Uri("pack://application:,,,/Xceed.Wpf.AvalonDock.Themes.Aero;component/Theme.xaml", UriKind.RelativeOrAbsolute)
-            });
+            //application.Resources.MergedDictionaries.Add(new ResourceDictionary
+            //{
+            //    Source = new Uri("pack://application:,,,/Xceed.Wpf.AvalonDock.Themes.Aero;component/Theme.xaml", UriKind.RelativeOrAbsolute)
+            //});
 
             AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
 
@@ -78,7 +78,7 @@ namespace Metaseed.MetaShell
 
         #region Properties
 
-        private string ModulesDirectory { get { return Path.Combine(Metaseed.AppEnvironment.AppPath, MetaModule.ModulesDirectory); } }
+        private string ModulesDirectory { get { return Path.Combine(Metaseed.AppEnvironment.AppPath, Services.MissingAssemblyResolverService.ModulesDirectory); } }
         #endregion
 
         #region Methods
