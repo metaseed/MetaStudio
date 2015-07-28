@@ -22,7 +22,7 @@ namespace Metaseed.MVVM.Commands
         }
         public RemoteCommandService(string serviceID,RemoteCommandServiceCallback callback)
             : base(new InstanceContext(callback), new ServiceEndpoint(ContractDescription.GetContract(typeof(IRemoteCommandService)),
-                new NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/" + serviceID + "IRemoteCommandService")))
+                new NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/" + serviceID + "/IRemoteCommandService")))
         {
             commandManager = new RemoteCommandManager(this);
             callback.RemoteCommandService = this;

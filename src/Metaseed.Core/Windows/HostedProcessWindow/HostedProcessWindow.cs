@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
@@ -13,6 +14,7 @@ using System.Windows.Threading;
 using Metaseed.Diagnostics;
 using Application = System.Windows.Application;
 using Control = System.Windows.Controls.Control;
+using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
 using Panel = System.Windows.Forms.Panel;
 using Point = System.Drawing.Point;
@@ -36,14 +38,14 @@ namespace Metaseed.Windows.Controls
             typeof(HostedProcessWindow)
             );
 
-        public HostedProcessWindow(bool autoKillHostedProcess=true)
+        public HostedProcessWindow(bool autoKillHostedProcess = true)
         {
             _autoKillHostedProcess = autoKillHostedProcess;
             SizeChanged += OnSizeChanged;
             Loaded += DockedProcessWindow_Loaded;
         }
 
-         bool _autoKillHostedProcess;
+        bool _autoKillHostedProcess;
 
         public bool AutoKillHostedProcess
         {
@@ -133,7 +135,12 @@ namespace Metaseed.Windows.Controls
             InvalidateVisual();
         }
 
-        private IntPtr _hidenMenu;
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        [DllImport("user32.dll")]
+        static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
+        [DllImport("kernel32.dll")]
+        static extern uint GetCurrentThreadId();
         virtual protected void HostMainWindow()
         {
             if (_iscreated) return;
@@ -143,41 +150,130 @@ namespace Metaseed.Windows.Controls
             if (Process.MainWindowHandle == IntPtr.Zero)
             {
                 Process.Refresh();
-                Thread.Sleep(10);
+                Thread.Sleep(20);
                 Process.Refresh();
             }
             if (Process.MainWindowHandle == IntPtr.Zero)
             {
                 throw new Exception("Could not find the Process main window!");
             }
-            ProcessWindowHelper.HideWindow(Process.MainWindowHandle);
-            _hidenMenu = ProcessWindowHelper.HideMenubar(Process.MainWindowHandle);
-            captionBorderStyleBackup=ProcessWindowHelper.RemoveCaptionBarAndBorder(Process.MainWindowHandle);
+            ProcessWindowHelper.customerizeWindow(Process, Process.MainWindowHandle, true, true, true);
             var panel = new Panel();
+            AddChildStyle();
             ProcessWindowHelper.SetParent(Process.MainWindowHandle, panel.Handle);
             var windowsFormsHost = new ProcessWindowHost { Child = panel };
             Content = windowsFormsHost;
+            //var grid = new Grid();
+            //Content = grid;
+            //grid.Children.Add(windowsFormsHost);
+            //var showMenuButton = new System.Windows.Controls.Button() { HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = System.Windows.VerticalAlignment.Top, Margin = new Thickness(0, -20, 0, 0), Content = "Menu" };
+            //showMenuButton.Width = 80;
+            //showMenuButton.Height = 30;
+            //showMenuButton.Click += showMenuButton_Click;
+            //var popup = new AirspacePopup() { PlacementTarget = windowsFormsHost ,FollowPlacementTarget=true,AllowOutsideScreenPlacement = true,IsOpen = true,Placement=PlacementMode.Top,Width = 80,Height=30};
+            //popup.Child = showMenuButton;
+            //grid.Children.Add(popup);
+
+
             SizeChangedFunction(this);
-            
+
             ProcessWindowHelper.ShowWindow(Process.MainWindowHandle);
             StartListeningForWindowChanges();
-            Application.Current.Exit += Current_Exit;
+            Application.Current.DispatcherUnhandledException += new System.Windows.Threading.DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnUnhandledException);
+            //uint dockedProcess;
+            //var dockedWindowThread = GetWindowThreadProcessId(Process.MainWindowHandle, out dockedProcess);
+            //var parentWindowThread = GetCurrentThreadId();
+            //AttachThreadInput(dockedWindowThread, parentWindowThread, true);
+            WindowHosted(this);
         }
 
+        public event Action<HostedProcessWindow> WindowHosted;
+
+        public void TemperaryShowMenubar(int seconds)
+        {
+            if (removeMenubarTimer != null)
+            {
+                HideMenubarCallback(null);
+            }
+            else
+            {
+                RemoveChildStyle();
+                ShowMenubar();
+                SizeChangedFunction(this);
+                removeMenubarTimer = new System.Threading.Timer(HideMenubarCallback, null, seconds * 1000, Timeout.Infinite);
+            }
+
+        }
+
+        private void HideMenubarCallback(Object state)
+        {
+            HideMenubar();
+            AddChildStyle();
+            if (removeMenubarTimer!=null)
+            removeMenubarTimer.Dispose();
+            removeMenubarTimer = null;
+        }
+        private System.Threading.Timer removeMenubarTimer;
+        private void AddChildStyle()
+        {
+            var style = ProcessWindowHelper.GetWindowLong(Process.MainWindowHandle, ProcessWindowHelper.GWL_STYLE);
+            style = style & ~(ProcessWindowHelper.WS_POPUP);
+            ProcessWindowHelper.SetWindowLong(Process.MainWindowHandle, ProcessWindowHelper.GWL_STYLE,
+                (IntPtr)(style | ProcessWindowHelper.WS_CHILD));
+        }
+
+        private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (handled)
+            {
+                return;
+            }
+            handled = true;
+            HandleException((Exception)e.ExceptionObject);
+        }
+
+        public void Float()
+        {
+            //RemoveChildStyle();
+        }
+
+        private void RemoveChildStyle()
+        {
+            var style = ProcessWindowHelper.GetWindowLong(Process.MainWindowHandle, ProcessWindowHelper.GWL_STYLE);
+            style = style & ~(ProcessWindowHelper.WS_CHILD);
+            ProcessWindowHelper.SetWindowLong(Process.MainWindowHandle, ProcessWindowHelper.GWL_STYLE,
+                (IntPtr)(((long)style)));
+        }
+
+        public void Dock()
+        {
+            //AddChildStyle();
+        }
+
+        bool handled = false;
+        void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            if (handled)
+            {
+                return;
+            }
+            handled = true;
+            HandleException(e.Exception);
+
+        }
         private long captionBorderStyleBackup;
-        private void Current_Exit(object sender, ExitEventArgs e)
+        private void HandleException(Exception e)
         {
             if (!AutoKillHostedProcess)
             {
+
+                ProcessWindowHelper.RecoverCaptionBarAndBorder(Process, Process.MainWindowHandle);
                 ShowMenubar();
-                ProcessWindowHelper.RecoverCaptionBarAndBorder(Process);
                 ProcessWindowHelper.SetParent(Process.MainWindowHandle, IntPtr.Zero);
-               
+
             }
         }
-
-
-
 
 
         #region Window Event Hook
@@ -282,16 +378,36 @@ namespace Metaseed.Windows.Controls
 
         public void ShowMenubar()
         {
-            ProcessWindowHelper.ShowMenubar(Process.MainWindowHandle, _hidenMenu);
+            var strMenuHandle = Process.StartInfo.EnvironmentVariables["MenuBarHandle"];
+            if (string.IsNullOrEmpty(strMenuHandle)) return;
+            int menu;
+            if (int.TryParse(strMenuHandle, out menu))
+            {
+                ProcessWindowHelper.ShowMenubar(Process.MainWindowHandle, (IntPtr)menu);
+            }
+        }
+
+        public bool HasMenubar()
+        {
+            var strMenuHandle = Process.StartInfo.EnvironmentVariables["MenuBarHandle"];
+            if (string.IsNullOrEmpty(strMenuHandle)) return false;
+            int menu;
+            if (int.TryParse(strMenuHandle, out menu))
+            {
+                return true;
+            }
+            return false;
         }
 
         public void HideMenubar()
         {
-            var menubar = ProcessWindowHelper.HideMenubar(Process.MainWindowHandle);
-            if (menubar != IntPtr.Zero)
-            {
-                _hidenMenu = menubar;
-            }
+            var mainWindowHanle = Process.MainWindowHandle;
+            var strMenuHandle = Process.StartInfo.EnvironmentVariables["MenuBarHandle"];
+            if (string.IsNullOrEmpty(strMenuHandle)) return;
+            var hmenu = ProcessWindowHelper.GetMenu(mainWindowHanle);
+            if (hmenu == IntPtr.Zero) return;
+            Process.StartInfo.EnvironmentVariables["MenuBarHandle"] = hmenu.ToString();
+            ProcessWindowHelper.HideMenubar(mainWindowHanle);
         }
         ~HostedProcessWindow()
         {
@@ -306,8 +422,10 @@ namespace Metaseed.Windows.Controls
                 _isdisposed = true;
                 try
                 {
-                    if (AutoKillHostedProcess)
+                    //if (AutoKillHostedProcess)
                     {
+                        //_process.CloseMainWindow();
+                        //_process.WaitForExit(5000);
                         if (_iscreated && !Process.HasExited)
                         {
                             Process.Kill();

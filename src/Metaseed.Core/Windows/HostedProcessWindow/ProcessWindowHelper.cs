@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Point = System.Drawing.Point;
-
 namespace Metaseed.Diagnostics
 {
     public static class ProcessWindowHelper
@@ -80,7 +79,7 @@ namespace Metaseed.Diagnostics
         //public const int LWA_COLORKEY = 0x1;
 
         public static Process StartProcess(string processName, string arguments, bool hasSplashScreen,
-            bool hideMainWindow = true, bool removeMenubar = true, bool removeCaptionAndBorder = false)
+            bool hideMainWindow = true, bool removeMenubar = false, bool removeCaptionAndBorder = false)
         {
             try
             {
@@ -133,6 +132,20 @@ namespace Metaseed.Diagnostics
                 //    pDocked.StartInfo.EnvironmentVariables["HasWindowPosition"] = false.ToString();
 
                 //}
+                customerizeWindow(pDocked, hWnd,hideMainWindow, removeMenubar, removeCaptionAndBorder);
+                return pDocked;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+            return null;
+        }
+
+        internal static void customerizeWindow(Process pDocked,IntPtr hWnd,bool hideMainWindow, bool removeMenubar, bool removeCaptionAndBorder)
+        {
+            if (!pDocked.StartInfo.EnvironmentVariables.ContainsKey("WindowStyle"))
+            {
                 long style = GetWindowLong(hWnd, GWL_STYLE);
                 pDocked.StartInfo.EnvironmentVariables["WindowStyle"] = style.ToString();
                 if ((style & WS_MAXIMIZE) == WS_MAXIMIZE)
@@ -144,26 +157,28 @@ namespace Metaseed.Diagnostics
                     //It's minimized
                     ShowWindow(hWnd, WindowShowStyle.ShowMaximized);
                 }
+            }
+            if (!pDocked.StartInfo.EnvironmentVariables.ContainsKey("WindowExtStyle"))
+            {
                 var extStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
                 if ((extStyle & (WS_EX_LAYERED)) == WS_EX_LAYERED)
                 {
-                    SetWindowLong(hWnd, GWL_EXSTYLE, (IntPtr)(extStyle & (~WS_EX_LAYERED)));
+                    SetWindowLong(hWnd, GWL_EXSTYLE, (IntPtr) (extStyle & (~WS_EX_LAYERED)));
                 }
                 pDocked.StartInfo.EnvironmentVariables["WindowExtStyle"] = extStyle.ToString();
-                //SetLayeredWindowAttributes(hWnd, 0, 0, LWA_COLORKEY);
-                ShowWindow(hWnd, hideMainWindow ? WindowShowStyle.Hide : WindowShowStyle.Show);//need
-                if (removeMenubar)
-                    HideMenubar(hWnd);
-                if (removeCaptionAndBorder)
-                    RemoveCaptionBarAndBorder(hWnd);
-                return pDocked;
             }
-            catch (Exception ex)
+            //SetLayeredWindowAttributes(hWnd, 0, 0, LWA_COLORKEY);
+            ShowWindow(hWnd, hideMainWindow ? WindowShowStyle.Hide : WindowShowStyle.Show); //need
+            var hmenu = GetMenu(hWnd);
+            pDocked.StartInfo.EnvironmentVariables["MenuBarHandle"] = hmenu.ToString();
+            if (removeMenubar)
             {
-                MessageBox.Show(ex.Message, "Error");
+               HideMenubar(hWnd);
             }
-            return null;
+            if (removeCaptionAndBorder)
+                RemoveCaptionBarAndBorder(hWnd);
         }
+
         const UInt32 WS_MINIMIZE = 0x20000000;
         const UInt32 WS_MAXIMIZE = 0x1000000;
         public static Process StartProcess(string processName, string arguments, bool hasSplashScreen, string mainWindowTile, bool hideMainWindow = true)
@@ -205,6 +220,7 @@ namespace Metaseed.Diagnostics
             DrawMenuBar(hWndDocked);
         }
 
+
         public static IntPtr HideMenubar(IntPtr hWndDocked)
         {
             var hmenu = GetMenu(hWndDocked);
@@ -226,15 +242,18 @@ namespace Metaseed.Diagnostics
             return (styleBackup);
         }
 
-        public static void RecoverCaptionBarAndBorder(Process process)
+        public static void RecoverCaptionBarAndBorder(Process process,IntPtr hWnd)
         {
-            IntPtr hWndDocked = process.MainWindowHandle;
             //long styleBackup = GetWindowLong(hWndDocked, GWL_STYLE);
             //long style = styleBackup | WS_CAPTION | WS_THICKFRAME;
-            var style=long.Parse(process.StartInfo.EnvironmentVariables["WindowStyle"]);
-            SetWindowLong(hWndDocked, GWL_STYLE, (IntPtr)(style));
-            var styleExt = long.Parse(process.StartInfo.EnvironmentVariables["WindowExtStyle"]);
-            SetWindowLong(hWndDocked, GWL_EXSTYLE, (IntPtr)(styleExt));
+            var styleString=process.StartInfo.EnvironmentVariables["WindowStyle"];
+            if (string.IsNullOrEmpty(styleString)) return;
+            var style = long.Parse(styleString);
+            SetWindowLong(hWnd, GWL_STYLE, (IntPtr)(style));
+            var extStyleString = process.StartInfo.EnvironmentVariables["WindowExtStyle"];
+            if (string.IsNullOrEmpty(extStyleString)) return;
+            var styleExt = long.Parse(extStyleString);
+            SetWindowLong(hWnd, GWL_EXSTYLE, (IntPtr)(styleExt));
         }
 
         public static bool IsWindowShown(IntPtr hWnd)
@@ -287,9 +306,10 @@ namespace Metaseed.Diagnostics
         private const int SWP_ASYNCWINDOWPOS = 0x4000;
         private const int SWP_NOMOVE = 0x2;
         private const int SWP_NOSIZE = 0x1;
-        private const int GWL_STYLE = (-16);
+        internal const int GWL_STYLE = (-16);
         private const int WS_VISIBLE = 0x10000000;
-        private const int WS_CHILD = 0x40000000;
+        internal const int WS_CHILD = 0x40000000;
+        internal const uint WS_POPUP = 0x80000000;
         private const int WS_CAPTION = 0x00C00000;
         private const int WS_THICKFRAME = 0x00040000;
 
@@ -305,7 +325,7 @@ namespace Metaseed.Diagnostics
         public static extern long SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
         [DllImport("user32.dll", EntryPoint = "GetWindowLong", SetLastError = true)]
-        private static extern long GetWindowLong(IntPtr hwnd, int nIndex);
+        internal static extern long GetWindowLong(IntPtr hwnd, int nIndex);
 
         [DllImport("user32.dll", EntryPoint = "SetWindowLong", SetLastError = true)]
         public static extern int SetWindowLong([In] IntPtr hWnd, int nIndex, IntPtr dwNewLong);
@@ -514,7 +534,7 @@ namespace Metaseed.Diagnostics
         public static uint MF_REMOVE = 0x1000;
 
         [DllImport("user32.dll")]
-        private static extern IntPtr GetMenu(IntPtr hWnd);
+        internal static extern IntPtr GetMenu(IntPtr hWnd);
         [DllImport("user32.dll")]
         private static extern bool SetMenu(IntPtr hWnd, IntPtr hMenu);
 

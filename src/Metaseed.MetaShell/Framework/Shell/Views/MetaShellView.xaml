@@ -10,7 +10,6 @@
                      xmlns:infr="clr-namespace:Metaseed.MetaShell.Infrastructure"
                      xmlns:shellControls="clr-namespace:Metaseed.MetaShell.Controls"
                      xmlns:views="clr-namespace:Metaseed.MetaShell.Views"
-                     
                      ShowInTaskbar="True" ResizeMode="CanResizeWithGrip" SizeToContent="Manual" 
                      WindowStartupLocation="Manual" WindowState="Maximized"
                      
@@ -18,6 +17,7 @@
                      xmlns:controls="clr-namespace:Metaseed.MetaShell.Controls;assembly=Metaseed.ShellBase"
                      xmlns:views1="clr-namespace:Metaseed.MetaShell.Views;assembly=Metaseed.ShellBase"
                      xmlns:views2="clr-namespace:Metaseed.ShellBase.Framework.Shell.Views;assembly=Metaseed.ShellBase"
+                     xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Xceed.Wpf.AvalonDock"
                      lex:LocalizeDictionary.DesignCulture="zh-Hans"
                      lex:ResxLocalizationProvider.DefaultAssembly="Metaseed.MetaShell"
                      lex:ResxLocalizationProvider.DefaultDictionary="ShellViewResource"
@@ -28,8 +28,6 @@
 
     <!-- Resources -->
     <fluent:RibbonWindow.Resources>
-        <xcad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-        <views1:NullableValueConverter x:Key="NullableValueConverter" />
         <views1:ActiveDocumentConverter x:Key="ActiveDocumentConverter"/>
     </fluent:RibbonWindow.Resources>
 
@@ -51,6 +49,10 @@
         <!--prism:RegionManager.RegionName="{x:Static infr:RegionNames.RibbonRegion}"-->
 
         <xcad:DockingManager Grid.Row="1" x:Name="DockingManager" 
+                             DocumentHeaderTemplateSelector="{StaticResource DocumentHeaderTemplateSelector}"
+                             DocumentTitleTemplateSelector="{StaticResource DocumentTitleTemplateSelector}" 
+                             AnchorableHeaderTemplate="{StaticResource AnchorableHeaderTemplate}"
+                             LayoutItemContainerStyleSelector="{StaticResource LayoutItemContainerStyleSelector}"
                              DocumentsSource="{Binding ShellService.Documents}"
 						     AnchorablesSource="{Binding ShellService.Tools}"
                              ActiveContent="{Binding ShellService.ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
@@ -58,32 +60,13 @@
             <!--<xcad:DockingManager.Theme>
                 <xcad:AeroTheme />
             </xcad:DockingManager.Theme>-->
+
             <xcad:DockingManager.LayoutTransform>
                 <ScaleTransform
                     ScaleX="{Binding Value, ElementName=zoomSlider}"
                     ScaleY="{Binding Value, ElementName=zoomSlider}"/>
             </xcad:DockingManager.LayoutTransform>
-            <xcad:DockingManager.AnchorableHeaderTemplate>
-                <!--x:Key="AnchorableHeaderTemplate" the default templete header icon size is not set Width="16" Height="16"-->
-                <DataTemplate>
-                    <Grid>
-                        <Grid.Resources>
-                            <xcad:NullToDoNothingConverter x:Key="NullToDoNothingConverter"/>
-                        </Grid.Resources>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Image x:Name="icon" Source="{Binding IconSource, Converter={StaticResource NullToDoNothingConverter}}" Stretch="Uniform" Width="16" Height="16"/>
-                        <TextBlock x:Name="title" Margin="4,0,0,0" Text="{Binding Title}" TextTrimming="CharacterEllipsis" Grid.Column="1"/>
-                    </Grid>
-                    <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding IconSource}" Value="{x:Null}">
-                            <Setter Property="Margin" Value="0" TargetName="title"/>
-                        </DataTrigger>
-                    </DataTemplate.Triggers>
-                </DataTemplate>
-            </xcad:DockingManager.AnchorableHeaderTemplate>
+
             <xcad:DockingManager.LayoutItemTemplate>
                 <DataTemplate>
                     <ContentControl msmvvm:View.Model="{Binding}" IsTabStop="False" />
@@ -110,39 +93,6 @@
                     </controls:PanesTemplateSelector.ToolsTemplate>
                 </controls:PanesTemplateSelector>
             </xcad:DockingManager.LayoutItemTemplateSelector>-->
-            <xcad:DockingManager.LayoutItemContainerStyleSelector>
-                <controls:PanesStyleSelector>
-                    <controls:PanesStyleSelector.DocumentStyle>
-                        <Style TargetType="{x:Type xcad:LayoutItem}">
-                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
-                            <Setter Property="Title" Value="{Binding  Model.Title, Mode=OneWay}" />
-                            <Setter Property="CanClose" Value="{Binding  Model.CanClose}" />
-                            <Setter Property="CanFloat" Value="{Binding  Model.CanFloat}" />
-                            <Setter Property="ToolTip" Value="{Binding  Model.Description, Mode=OneWay}" />
-                            <Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
-                            <Setter Property="IconSource" Value="{Binding Model.IconSource, Converter={StaticResource NullableValueConverter}}" />
-                            <Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
-                            <Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
-                           
-                        </Style>
-                    </controls:PanesStyleSelector.DocumentStyle>
-                    <controls:PanesStyleSelector.ToolStyle>
-                        <Style TargetType="{x:Type xcad:LayoutAnchorableItem}">
-                            <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
-                            <Setter Property="Title" Value="{Binding Model.Title, Mode=OneWay}" />
-                            <Setter Property="CanClose" Value="{Binding  Model.CanClose}" />
-                            <Setter Property="CanFloat" Value="{Binding  Model.CanFloat}" />
-                            <Setter Property="ToolTip" Value="{Binding  Model.Description, Mode=OneWay}" />
-                            <Setter Property="CloseCommand" Value="{Binding Model.CloseCommand}" />
-                            <Setter Property="IconSource" Value="{Binding Model.IconSource, Converter={StaticResource NullableValueConverter}}" />
-                            <Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
-                            <Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
-                            <Setter Property="CanHide" Value="{Binding  Model.CanHide}" />
-                            <Setter Property="Visibility" Value="{Binding Model.IsVisible, Mode=TwoWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={x:Static Visibility.Hidden}}"/>
-                        </Style>
-                    </controls:PanesStyleSelector.ToolStyle>
-                </controls:PanesStyleSelector>
-            </xcad:DockingManager.LayoutItemContainerStyleSelector>
             <xcad:LayoutRoot>
                 <xcad:LayoutPanel Orientation="Vertical" x:Name="LayoutPanelVertical">
                     <!--metaShellPrismRegion:AvalonDockRegion.RegionName="{x:Static infr:RegionNames.ToolboxLeftRegion}"-->

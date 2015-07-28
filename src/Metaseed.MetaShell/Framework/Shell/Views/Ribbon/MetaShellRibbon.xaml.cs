@@ -49,6 +49,9 @@ namespace Metaseed.MetaShell.Views
 
         private void AddPluginButton_Click(object sender, RoutedEventArgs e)
         {
+            int a = 0;
+            var b = 7/a;
+            b = b++;
             Microsoft.Win32.FileDialog dialog;
             dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.Title = "Add Plugin To The Application(Chose A CANStudio Plugin File)";

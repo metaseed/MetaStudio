@@ -11,21 +11,21 @@ using Xceed.Wpf.AvalonDock.Layout;
 namespace Metaseed.MetaShell.Controls
 {
     using ViewModels;
-    public class PanesTemplateSelector : DataTemplateSelector
+    public class DocumentTitleTemplateSelector : DataTemplateSelector
     {
-        public PanesTemplateSelector()
+        public DocumentTitleTemplateSelector()
         {
 
         }
 
 
-        public DataTemplate DocumentsTemplate
+        public DataTemplate DocumentsTitleTemplate
         {
             get;
             set;
         }
 
-        public DataTemplate ToolsTemplate
+        public DataTemplate HostedProcessDocumentTitleTemplate
         {
             get;
             set;
@@ -34,12 +34,11 @@ namespace Metaseed.MetaShell.Controls
         public override DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container)
         {
             var itemAsLayoutContent = item as LayoutContent;
-
-            if (item is IToolViewModel)
-                return ToolsTemplate;
-
-            if (item is ILayoutContentViewModel)
-                return DocumentsTemplate;
+            if (itemAsLayoutContent == null) return base.SelectTemplate(item, container);
+            if (itemAsLayoutContent.Content is HostedProcessDocumentViewModel)
+                return HostedProcessDocumentTitleTemplate;
+            if (itemAsLayoutContent.Content is DocumentBaseViewModel)
+                return DocumentsTitleTemplate;
             return base.SelectTemplate(item, container);
         }
     }

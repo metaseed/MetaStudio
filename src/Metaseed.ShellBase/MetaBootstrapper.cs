@@ -57,7 +57,10 @@ namespace Metaseed.MetaShell
             //{
             //    Source = new Uri("pack://application:,,,/Xceed.Wpf.AvalonDock.Themes.Aero;component/Theme.xaml", UriKind.RelativeOrAbsolute)
             //});
-
+            application.Resources.MergedDictionaries.Add(new ResourceDictionary
+            {
+                Source = new Uri("pack://application:,,,/Metaseed.ShellBase;component/Themes/Generic/generic.xaml", UriKind.RelativeOrAbsolute)
+            });
             AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
 
             string modulesDirectory = ModulesDirectory;
