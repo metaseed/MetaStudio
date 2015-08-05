@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace Metaseed.MVVM.Commands
 {
+    public enum ServiceIDType
+    {
+        SystemGlobal,
+        SingleAppInstance,
+        MultiAppInstance
+    }
     public class RemoteCommandServiceController
     {
         private readonly IRemoteCommandService _commandServiceSingleton;
@@ -17,8 +23,24 @@ namespace Metaseed.MVVM.Commands
         }
 
         ServiceHost serviceHost;
-        public IRemoteCommandService Start(string serviceID="")
+        public IRemoteCommandService Start(ServiceIDType serviceType = ServiceIDType.SystemGlobal)
         {
+            string serviceID;
+            switch (serviceType)
+            {
+                case ServiceIDType.SingleAppInstance:
+                    serviceID = System.IO.Path.GetFileName(System.Windows.Forms.Application.ExecutablePath);
+                    break;
+                case ServiceIDType.MultiAppInstance:
+                    serviceID = System.IO.Path.GetFileName(System.Windows.Forms.Application.ExecutablePath) + "/" + Guid.NewGuid().ToString();
+                    break;
+                case ServiceIDType.SystemGlobal:
+                default:
+                    serviceID = "default";
+                    break;
+            }
+            serviceID = serviceID.Trim();
+            RemoteCommandService_Server.ServiceID = serviceID;
             serviceHost = new ServiceHost(_commandServiceSingleton, new Uri[] { new Uri("net.pipe://localhost/" + serviceID + "/IRemoteCommandService") });
             var timeout = TimeSpan.MaxValue;/*new TimeSpan(0,10,0)*/
             serviceHost.AddServiceEndpoint(typeof(IRemoteCommandService), new NetNamedPipeBinding()
@@ -45,7 +67,7 @@ namespace Metaseed.MVVM.Commands
     public class RemoteCommandService_Server : IRemoteCommandService
     {
 
-
+        internal static string ServiceID;
 
         internal RemoteCommandManager_Server CommandManager;
         protected internal IRemoteCommandUIBuilder UIBuilder { get; set; }

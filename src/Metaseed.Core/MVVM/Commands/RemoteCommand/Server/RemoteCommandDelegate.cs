@@ -21,8 +21,16 @@ namespace Metaseed.MVVM.Commands
             var r= base.CanExecute(parameter);
             if (r)
             {
-                var re=Callback.CanExcute(this.ID, parameter);
-                if (re) return true;
+                try
+                {
+                    var re=Callback.CanExcute(this.ID, parameter);
+                    if (re) return true;
+                }
+                catch (Exception)
+                {
+                    System.Diagnostics.Debug.WriteLine("Exception occured while call remote command CanExecute method, command id is "+this.ID);
+                }
+                
             }
             return false;
         }

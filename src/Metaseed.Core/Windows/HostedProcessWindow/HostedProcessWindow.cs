@@ -141,6 +141,7 @@ namespace Metaseed.Windows.Controls
         static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
         [DllImport("kernel32.dll")]
         static extern uint GetCurrentThreadId();
+
         virtual protected void HostMainWindow()
         {
             if (_iscreated) return;

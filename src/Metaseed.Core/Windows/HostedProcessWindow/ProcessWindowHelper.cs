@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Metaseed.MVVM.Commands;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -16,9 +17,11 @@ namespace Metaseed.Diagnostics
     {
         public static Process StartProcess(string processName, string arguments)
         {
+            arguments +=( " -remoteCommandServiceID=" + RemoteCommandService_Server.ServiceID+" ");
             var pDocked = new Process
             {
                 EnableRaisingEvents = true,
+                
                 StartInfo = new ProcessStartInfo(processName, arguments)
                 {
                     CreateNoWindow = true,
@@ -170,6 +173,7 @@ namespace Metaseed.Diagnostics
             //SetLayeredWindowAttributes(hWnd, 0, 0, LWA_COLORKEY);
             ShowWindow(hWnd, hideMainWindow ? WindowShowStyle.Hide : WindowShowStyle.Show); //need
             var hmenu = GetMenu(hWnd);
+            if(hmenu!=IntPtr.Zero)
             pDocked.StartInfo.EnvironmentVariables["MenuBarHandle"] = hmenu.ToString();
             if (removeMenubar)
             {

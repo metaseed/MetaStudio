@@ -29,7 +29,7 @@ namespace Metaseed.MetaShell
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private readonly CallbackLogger _callbackLogger = new CallbackLogger();
         #region Constructors
-        public MetaBootstrapper(IRemoteCommandUIBuilder uiBuilder=null,string remoteCommandServiceID="")
+        public MetaBootstrapper(IRemoteCommandUIBuilder uiBuilder=null, ServiceIDType remoteCommandServiceID = ServiceIDType.SystemGlobal)
         {
 #if DEBUG
             Catel.Logging.LogManager.AddDebugListener(false);//note: could called multimes. if debug listener already registed,it do nothing.

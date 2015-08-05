@@ -11,7 +11,9 @@ using System;
 using Catel.Runtime.Serialization;
 using System.ComponentModel;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
-
+using Xceed.Wpf.AvalonDock;
+using Catel.MVVM.Views;
+using Xceed.Wpf.AvalonDock.Layout;
 
 namespace Metaseed.MetaShell.ViewModels
 {
@@ -20,6 +22,9 @@ namespace Metaseed.MetaShell.ViewModels
     using Metaseed.Views;
     using ComponentModel;
     using Metaseed.Data;
+    using System.Linq;
+    using System.Windows;
+
     public class DocumentBaseViewModel : LayoutContentViewModel, IDocumentViewModel
     {
         public DocumentBaseViewModel()
@@ -90,7 +95,29 @@ namespace Metaseed.MetaShell.ViewModels
              await base.Close();
             //PackageBeforeOpenEvent.Unregister(this, new Action<PackageBeforeOpenEvent>(PackageBeforeOpenEventHandler));
         }
-        
+
+        protected override void OnIsFloatingChanged(bool isFloating)
+        {
+            base.OnIsFloatingChanged(isFloating);
+            if (isFloating)
+            {
+                var dockingManager = this.GetDependencyResolver().Resolve<DockingManager>();
+                dockingManager.FloatingWindows.ToList().ForEach(window =>
+                {
+                    var floatingWindow = window.Model as LayoutDocumentFloatingWindow;
+                    if (object.ReferenceEquals(floatingWindow.RootDocument.Content,this))
+                    {
+                        window.Icon = IconSource;
+                        window.Title = Title;
+                        window.ShowInTaskbar = true;
+                        return;
+                    }
+                });
+            }
+            else
+            {
+            }
+        }
         /// <summary>
         /// called only when oldValue or newVlaue is me
         /// </summary>
@@ -123,9 +150,6 @@ namespace Metaseed.MetaShell.ViewModels
         {
             get { return _contextualUi; }
         }
-
-
-
 
         private IMementoService _mementoService;
         public IMementoService MementoService

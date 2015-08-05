@@ -3,8 +3,10 @@
                     xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Xceed.Wpf.AvalonDock"
                     xmlns:controls="clr-namespace:Metaseed.MetaShell.Controls"
                     xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
-                    xmlns:views="clr-namespace:Metaseed.MetaShell.Views">
-
+                    xmlns:views="clr-namespace:Metaseed.MetaShell.Views"
+                    xmlns:msmvvm="clr-namespace:Metaseed.MVVM.View;assembly=Metaseed.MetaCore"
+                    >
+    
     <!--used by docked document-->
     <controls:DocumentHeaderTemplateSelector x:Key="DocumentHeaderTemplateSelector">
         <controls:DocumentHeaderTemplateSelector.DocumentsHeaderTemplate>
@@ -55,8 +57,9 @@
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
                             <Condition Binding="{Binding Path=IsSelected}" Value="true"/>
-                            <Condition Binding="{Binding Path=IsActive}" Value="true"/>
+                            <!--<Condition Binding="{Binding Path=IsActive}" Value="true"/>-->
                             <Condition Binding="{Binding Path=Content.HasMenubar}" Value="true"/>
+                            <Condition Binding="{Binding Path=Content.ShowMenubarButton}" Value="true"/>
                         </MultiDataTrigger.Conditions>
                         <Setter Property="Visibility" Value="Visible" TargetName="ShowMenubarButton"  />
                     </MultiDataTrigger>
@@ -113,9 +116,8 @@
 
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding Path=IsSelected}" Value="true"/>
-                            <Condition Binding="{Binding Path=IsActive}" Value="true"/>
                             <Condition Binding="{Binding Path=Content.HasMenubar}" Value="true"/>
+                            <Condition Binding="{Binding Path=Content.ShowMenubarButton}" Value="true"/>
                         </MultiDataTrigger.Conditions>
                         <Setter Property="Visibility" Value="Visible" TargetName="ShowMenubarButton"  />
                     </MultiDataTrigger>
@@ -143,6 +145,9 @@
                 <Setter Property="Visibility" Value="Collapsed" TargetName="icon"/>
             </DataTrigger>
         </DataTemplate.Triggers>
+    </DataTemplate>
+    <DataTemplate x:Key="LayoutItemTemplate">
+        <ContentControl  msmvvm:View.Model="{Binding}" IsTabStop="False" />
     </DataTemplate>
     <views:NullableValueConverter x:Key="NullableValueConverter" />
     <xcad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>

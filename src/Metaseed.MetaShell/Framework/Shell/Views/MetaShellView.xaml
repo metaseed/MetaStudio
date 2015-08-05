@@ -53,6 +53,7 @@
                              DocumentTitleTemplateSelector="{StaticResource DocumentTitleTemplateSelector}" 
                              AnchorableHeaderTemplate="{StaticResource AnchorableHeaderTemplate}"
                              LayoutItemContainerStyleSelector="{StaticResource LayoutItemContainerStyleSelector}"
+                             LayoutItemTemplate="{StaticResource LayoutItemTemplate}"
                              DocumentsSource="{Binding ShellService.Documents}"
 						     AnchorablesSource="{Binding ShellService.Tools}"
                              ActiveContent="{Binding ShellService.ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
@@ -67,11 +68,6 @@
                     ScaleY="{Binding Value, ElementName=zoomSlider}"/>
             </xcad:DockingManager.LayoutTransform>
 
-            <xcad:DockingManager.LayoutItemTemplate>
-                <DataTemplate>
-                    <ContentControl msmvvm:View.Model="{Binding}" IsTabStop="False" />
-                </DataTemplate>
-            </xcad:DockingManager.LayoutItemTemplate>
             <xcad:DockingManager.LayoutUpdateStrategy>
                 <controls:LayoutInitializer/>
             </xcad:DockingManager.LayoutUpdateStrategy>

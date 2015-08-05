@@ -92,7 +92,7 @@ namespace Metaseed.MetaStudio
             //
             SplashScreenservice.ResisterService();
 
-            var bootstrapper = new MetaBootstrapper<MetaShellView>(new RibbonRemoteCommandUIBuilder(),"MetaStudio");
+            var bootstrapper = new MetaBootstrapper<MetaShellView>(new RibbonRemoteCommandUIBuilder(),ServiceIDType.MultiAppInstance);
             bootstrapper.CreatedModuleCatalog+=(sender,e1)=>
             {
                 Type metaShellModuleType = typeof(MetaShellModule);

@@ -35,6 +35,7 @@ namespace Metaseed.MVVM.View
         /// </summary>
         public static readonly DependencyProperty ModelProperty =
             DependencyProperty.RegisterAttached("Model", typeof(object), typeof(View), new PropertyMetadata(null, new PropertyChangedCallback(View.OnModelChanged)));
+
         private static void OnModelChanged(DependencyObject targetLocation, DependencyPropertyChangedEventArgs args)
         {
             if (args.OldValue == args.NewValue)
@@ -42,15 +43,15 @@ namespace Metaseed.MVVM.View
                 return;
             }
             if (args.NewValue == null)
-                return;//throw new Exception("The View.Model Dependency Property Could Only Be Set On The ContentControl");
-            var viewManager = ServiceLocator.Default.ResolveType<IViewManager>();
+                return;
 
+            var viewManager = ServiceLocator.Default.ResolveType<IViewManager>();
             var viewModel = args.NewValue;
-            var vm = viewModel as IViewModel;
             FrameworkElement view = null;
-            if (vm != null)
+            var ivm = viewModel as IViewModel;
+            if (ivm != null)
             {
-                var views = viewManager.GetViewsOfViewModel(vm);
+                var views = viewManager.GetViewsOfViewModel(ivm);
                 if (views.Length > 0)
                     view = views[0] as FrameworkElement;
             }
@@ -58,7 +59,17 @@ namespace Metaseed.MVVM.View
             if (view == null)
             {
                 var viewLocator = ServiceLocator.Default.ResolveType<IViewLocator>();
-                var viewType = viewLocator.ResolveView(viewModel.GetType());
+                Type viewType;
+                var contentPresenter = viewModel as ContentPresenter;
+                if (contentPresenter!=null &&contentPresenter.Content!= null)
+                {
+                    viewModel = contentPresenter.Content;
+                    viewType = viewLocator.ResolveView(contentPresenter.Content.GetType());
+                }
+                else
+                {
+                    viewType = viewLocator.ResolveView(viewModel.GetType());
+                }
 
                 if (viewType == null)
                 {
@@ -92,7 +103,6 @@ namespace Metaseed.MVVM.View
             if (viewM != null)
             {
                 viewM.SetViewAsContent(contentControl, view, viewM);
-                //var layoutDocControl = view.FindVisualAncestor(view, (v) => v is LayoutDocumentControl);
             }
 
         }

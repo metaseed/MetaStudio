@@ -42,7 +42,6 @@ namespace Metaseed.MetaShell.Views
             //DocumentsCompositeCollection.Add(ShellViewModel.ShellService.Documents );
         }
 
-
         public CompositeCollection DocumentsCompositeCollection { get; set; }
         //public RibbonTabItem HomeRibbonTab { get { return RibbonTabHome; } }
         //public RibbonGroupBox FileRibbonGroupBox { get { return RibbonGroupBoxFile; } }

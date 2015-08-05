@@ -15,14 +15,34 @@ namespace Metaseed.MVVM.Commands
     {
         internal RemoteCommandManager commandManager;
 
-        public RemoteCommandService(string serviceID="")
-            : this(serviceID,new RemoteCommandServiceCallback())
+        public RemoteCommandService(ServiceIDType serviceIDType= ServiceIDType.SystemGlobal)
+            : this(serviceIDType,new RemoteCommandServiceCallback())
         {
 
         }
-        public RemoteCommandService(string serviceID,RemoteCommandServiceCallback callback)
+        static string GenerateServiceID(ServiceIDType serviceIDType)
+        {
+            var args= Environment.GetCommandLineArgs();
+            var pre = "-remoteCommandServiceID=";
+            foreach (var arg in args)
+            {
+                if (arg.Contains(pre))
+                {
+                    var start = arg.IndexOf(pre) + pre.Length;
+                    var commandServiceID = arg.Substring(start);
+                    return commandServiceID;
+                }
+            }
+            if (serviceIDType != ServiceIDType.SystemGlobal)
+            {
+                var processName=System.IO.Path.GetFileName(System.Windows.Forms.Application.ExecutablePath);
+                MessageBox.Show("Could not find -remoteCommandServiceID process argument in process: "+ processName, "Error", MessageBoxButton.OK,MessageBoxImage.Error);
+            }
+            return "default";
+        }
+        public RemoteCommandService(ServiceIDType serviceIDType,RemoteCommandServiceCallback callback)
             : base(new InstanceContext(callback), new ServiceEndpoint(ContractDescription.GetContract(typeof(IRemoteCommandService)),
-                new NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/" + serviceID + "/IRemoteCommandService")))
+                new NetNamedPipeBinding(), new EndpointAddress("net.pipe://localhost/" + GenerateServiceID(serviceIDType) + "/IRemoteCommandService")))
         {
             commandManager = new RemoteCommandManager(this);
             callback.RemoteCommandService = this;

@@ -10,7 +10,6 @@ using System.Windows.Input;
 using Catel.IoC;
 using Metaseed.Windows.Controls;
 using Microsoft.Practices.Prism.Commands;
-using Xceed.Wpf.AvalonDock;
 
 namespace Metaseed.MetaShell.ViewModels
 {
@@ -44,6 +43,18 @@ namespace Metaseed.MetaShell.ViewModels
             }
         }
 
+        private bool _ShowMenubarButton=true;
+
+        public bool ShowMenubarButton
+        {
+            get { return _ShowMenubarButton; }
+            set
+            {
+                _ShowMenubarButton = value;
+                RaisePropertyChanged("ShowMenubarButton");
+            }
+        }
+
         void ProcessWindow_WindowHosted(HostedProcessWindow obj)
         {
             if (ProcessWindow.HasMenubar())
@@ -72,12 +83,7 @@ namespace Metaseed.MetaShell.ViewModels
             base.OnIsFloatingChanged(isFloating);
             if (isFloating)
             {
-                var dockingManager = this.GetDependencyResolver().Resolve<DockingManager>();
 
-                dockingManager.FloatingWindows.ToList().ForEach(window =>
-                {
-                    window.ShowInTaskbar = true;
-                });
                 ProcessWindow.Float();
             }
             else
@@ -123,8 +129,10 @@ namespace Metaseed.MetaShell.ViewModels
                 return _closeCommand ?? (_closeCommand = new DelegateCommand(() =>
                 {
                     ShellService.CloseDocument(this);
-                    Process.Kill();
-
+                    if (!Process.HasExited)
+                    {
+                        Process.Kill();
+                    }
                 }, () => true));
             }
         }

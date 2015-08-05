@@ -32,6 +32,12 @@ namespace Metaseed.Windows.Media
             }
             return dependencyObject;
         }
+        //use visual. public bool IsAncestorOf(DependencyObject descendant);
+        //public static bool IsVisualAncestor(this DependencyObject decendant,DependencyObject ancestor, int maxDepth = -1)
+        //{
+        //    var foundAncestor =decendant.FindVisualAncestor((dependencyObject) => dependencyObject == ancestor,maxDepth);
+        //    return foundAncestor != null;
+        //}
         public static T FindVisualAncestor<T>(this DependencyObject startElement, int maxDepth = -1) where T : class
         {
             var reference = startElement;
