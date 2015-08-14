@@ -78,10 +78,13 @@ namespace Metaseed.Windows.Controls
             get { return ProcessWindowHelper.IsWindowShown(Process.MainWindowHandle); }
         }
 
+        
         private void DockedProcessWindow_Loaded(object sender, RoutedEventArgs e)
         {
             HostMainWindow();
+            
         }
+        
 
         public void Show()
         {
@@ -98,6 +101,12 @@ namespace Metaseed.Windows.Controls
             var ctrl = (Control)e.Source;
             SizeChangedFunction(ctrl);
         }
+
+        internal void Update()
+        {
+            SizeChangedFunction(this);
+        }
+
         virtual protected void SizeChangedFunction(Control control)
         {
             if (!_iscreated) return;
@@ -150,7 +159,6 @@ namespace Metaseed.Windows.Controls
             Process.Refresh();
             if (Process.MainWindowHandle == IntPtr.Zero)
             {
-                Process.Refresh();
                 Thread.Sleep(20);
                 Process.Refresh();
             }
@@ -162,22 +170,9 @@ namespace Metaseed.Windows.Controls
             var panel = new Panel();
             AddChildStyle();
             ProcessWindowHelper.SetParent(Process.MainWindowHandle, panel.Handle);
-            var windowsFormsHost = new ProcessWindowHost { Child = panel };
+            var windowsFormsHost = new ProcessWindowHost { Child = panel, ProcessWindow=this };
             Content = windowsFormsHost;
-            //var grid = new Grid();
-            //Content = grid;
-            //grid.Children.Add(windowsFormsHost);
-            //var showMenuButton = new System.Windows.Controls.Button() { HorizontalAlignment = System.Windows.HorizontalAlignment.Center, VerticalAlignment = System.Windows.VerticalAlignment.Top, Margin = new Thickness(0, -20, 0, 0), Content = "Menu" };
-            //showMenuButton.Width = 80;
-            //showMenuButton.Height = 30;
-            //showMenuButton.Click += showMenuButton_Click;
-            //var popup = new AirspacePopup() { PlacementTarget = windowsFormsHost ,FollowPlacementTarget=true,AllowOutsideScreenPlacement = true,IsOpen = true,Placement=PlacementMode.Top,Width = 80,Height=30};
-            //popup.Child = showMenuButton;
-            //grid.Children.Add(popup);
-
-
             SizeChangedFunction(this);
-
             ProcessWindowHelper.ShowWindow(Process.MainWindowHandle);
             StartListeningForWindowChanges();
             Application.Current.DispatcherUnhandledException += new System.Windows.Threading.DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException);
@@ -188,7 +183,6 @@ namespace Metaseed.Windows.Controls
             //AttachThreadInput(dockedWindowThread, parentWindowThread, true);
             WindowHosted(this);
         }
-
         public event Action<HostedProcessWindow> WindowHosted;
 
         public void TemperaryShowMenubar(int seconds)
@@ -216,13 +210,7 @@ namespace Metaseed.Windows.Controls
             removeMenubarTimer = null;
         }
         private System.Threading.Timer removeMenubarTimer;
-        private void AddChildStyle()
-        {
-            var style = ProcessWindowHelper.GetWindowLong(Process.MainWindowHandle, ProcessWindowHelper.GWL_STYLE);
-            style = style & ~(ProcessWindowHelper.WS_POPUP);
-            ProcessWindowHelper.SetWindowLong(Process.MainWindowHandle, ProcessWindowHelper.GWL_STYLE,
-                (IntPtr)(style | ProcessWindowHelper.WS_CHILD));
-        }
+
 
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
@@ -239,12 +227,14 @@ namespace Metaseed.Windows.Controls
             //RemoveChildStyle();
         }
 
-        private void RemoveChildStyle()
+        public void AddChildStyle()
         {
-            var style = ProcessWindowHelper.GetWindowLong(Process.MainWindowHandle, ProcessWindowHelper.GWL_STYLE);
-            style = style & ~(ProcessWindowHelper.WS_CHILD);
-            ProcessWindowHelper.SetWindowLong(Process.MainWindowHandle, ProcessWindowHelper.GWL_STYLE,
-                (IntPtr)(((long)style)));
+            ProcessWindowHelper.AddChildStyle(Process.MainWindowHandle);
+        }
+
+        public void RemoveChildStyle()
+        {
+            ProcessWindowHelper.RemoveChildStyle(Process.MainWindowHandle);
         }
 
         public void Dock()
@@ -403,12 +393,9 @@ namespace Metaseed.Windows.Controls
         public void HideMenubar()
         {
             var mainWindowHanle = Process.MainWindowHandle;
-            var strMenuHandle = Process.StartInfo.EnvironmentVariables["MenuBarHandle"];
-            if (string.IsNullOrEmpty(strMenuHandle)) return;
-            var hmenu = ProcessWindowHelper.GetMenu(mainWindowHanle);
-            if (hmenu == IntPtr.Zero) return;
-            Process.StartInfo.EnvironmentVariables["MenuBarHandle"] = hmenu.ToString();
-            ProcessWindowHelper.HideMenubar(mainWindowHanle);
+            var hMenu=ProcessWindowHelper.HideMenubar(mainWindowHanle);
+            if(hMenu!=IntPtr.Zero)
+            Process.StartInfo.EnvironmentVariables["MenuBarHandle"] = hMenu.ToString();
         }
         ~HostedProcessWindow()
         {

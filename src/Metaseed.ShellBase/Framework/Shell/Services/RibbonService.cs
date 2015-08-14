@@ -192,5 +192,7 @@ namespace Metaseed.MetaShell.Services{
             }
         }
 
+        //public IRibbonService SwitchTo()
+
     }
 }

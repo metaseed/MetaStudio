@@ -97,6 +97,14 @@
     <Compile Include="ExceptionHelper.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\Client\RemoteCommandServiceCallback.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\Data\CommandUIData.designer.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\Data\RibbonUI\RibbonButton\RibbonButtonUIData.cs">
+      <DependentUpon>RibbonButtonUIData.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Commands\RemoteCommand\Data\RibbonUI\RibbonButton\RibbonButtonUIData.designer.cs">
+      <DependentUpon>RibbonButtonUIData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\Commands\RemoteCommand\Data\RibbonUI\RibbonCommandUIPosition.designer.cs" />
+    <Compile Include="MVVM\Commands\RemoteCommand\Data\RibbonUI\RibbonUIData.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\IRemoteCommand.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\IRemoteCommandService.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\Client\RemoteCommand.cs" />
@@ -110,7 +118,29 @@
     <Compile Include="MVVM\Commands\RemoteCommand\Server\RemoteCommandManager_Server.cs" />
     <Compile Include="MVVM\Commands\RemoteCommand\Server\IRemoteCommandUIBuilder.cs" />
     <Compile Include="ProcessHelper.cs" />
+    <Compile Include="Win32\Class1.cs" />
     <Compile Include="Win32\Window.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\BalloonIcon.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\BalloonFlags.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\IconDataMembers.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\IconState.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\MouseEvent.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\NotifyCommand.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\NotifyIconData.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\NotifyIconVersion.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\Point.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\TrayInfo.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\WinApi.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\WindowClass.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Interop\WindowMessageSink.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\PopupActivationMode.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\RoutedEventHelper.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\SimpleControls\Balloon.xaml.cs">
+      <DependentUpon>Balloon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\TaskbarIcon.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\TaskbarIcon.Declarations.cs" />
+    <Compile Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Util.cs" />
     <Compile Include="Windows\Forms\MenuStripEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -169,6 +199,12 @@
     <None Include="MVVM\Commands\RemoteCommand\Data\CommandUIData.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="MVVM\Commands\RemoteCommand\Data\RibbonUI\RibbonButton\RibbonButtonUIData.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="MVVM\Commands\RemoteCommand\Data\RibbonUI\RibbonCommandUIPosition.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -187,6 +223,27 @@
   <ItemGroup>
     <None Include="_CreateNewNuGetPackage\DoNotModify\NuGet.exe" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\Controls\NotifyIcon\NotifyIconWpf\DefaultTrayIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Images\Close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Images\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Images\Info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\Controls\NotifyIcon\NotifyIconWpf\Images\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Windows\Controls\NotifyIcon\NotifyIconWpf\SimpleControls\Balloon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -202,7 +259,7 @@ REM If you see this in Visual Studio's Error List window, check the Output windo
 ECHO Creating NuGet package in Post-Build event...
 
 
-  PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; '$(ProjectDir)_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1' -ProjectFilePath '$(ProjectPath)' -OutputDirectory '$(TargetDir)' -BuildConfiguration '$(ConfigurationName)' -BuildPlatform '$(PlatformName)'"</PostBuildEvent>
+REM PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; '$(ProjectDir)_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1' -ProjectFilePath '$(ProjectPath)' -OutputDirectory '$(TargetDir)' -BuildConfiguration '$(ConfigurationName)' -BuildPlatform '$(PlatformName)'"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -105,6 +105,7 @@ namespace Metaseed.MetaShell.ViewModels
                 }
             }
         }
+
         public void Show(object obj)
         {
             for (int i = 0; i < contextUIs.Count; i++)

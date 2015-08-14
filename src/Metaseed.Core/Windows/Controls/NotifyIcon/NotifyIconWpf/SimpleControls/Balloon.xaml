@@ -1,0 +1,123 @@
+﻿<UserControl
+  x:Class="Metaseed.Windows.Controls.Balloon"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:tb="http://www.metaseed.com"
+  x:Name="me"
+  Height="140"
+  Width="260">
+	<UserControl.Resources>
+		<Storyboard x:Key="FadeIn">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="grid" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:01" Value="0.95"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:03" Value="0.95"/>
+<!--				<SplineDoubleKeyFrame KeyTime="00:00:05" Value="0"/>-->
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="HighlightCloseButton">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="imgClose" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="0.4"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="FadeCloseButton">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="imgClose" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0.4"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="FadeBack">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="grid" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="FadeOut" Completed="OnFadeOutCompleted" >
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="grid" Storyboard.TargetProperty="(UIElement.Opacity)">
+				<SplineDoubleKeyFrame KeyTime="00:00:00" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0.2"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+	</UserControl.Resources>
+	<UserControl.Triggers>
+		<EventTrigger RoutedEvent="tb:TaskbarIcon.BalloonShowing">
+			<BeginStoryboard Storyboard="{StaticResource FadeIn}" x:Name="FadeIn_BeginStoryboard"/>
+		</EventTrigger>
+		<EventTrigger RoutedEvent="Mouse.MouseEnter" SourceName="imgClose">
+			<BeginStoryboard Storyboard="{StaticResource HighlightCloseButton}" x:Name="HighlightCloseButton_BeginStoryboard"/>
+		</EventTrigger>
+		<EventTrigger RoutedEvent="Mouse.MouseLeave" SourceName="imgClose">
+			<BeginStoryboard Storyboard="{StaticResource FadeCloseButton}" x:Name="FadeCloseButton_BeginStoryboard"/>
+		</EventTrigger>
+		<EventTrigger RoutedEvent="Mouse.MouseEnter">
+			<StopStoryboard BeginStoryboardName="FadeIn_BeginStoryboard"/>
+			<BeginStoryboard x:Name="FadeBack_BeginStoryboard1" Storyboard="{StaticResource FadeBack}"/>
+		</EventTrigger>
+		<EventTrigger RoutedEvent="tb:TaskbarIcon.BalloonClosing">
+			<BeginStoryboard Storyboard="{StaticResource FadeOut}" x:Name="FadeOut_BeginStoryboard"/>
+		</EventTrigger>
+	</UserControl.Triggers>
+  <Grid x:Name="grid" MouseEnter="grid_MouseEnter">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="42*" />
+            <RowDefinition Height="98*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="72*" />
+            <ColumnDefinition Width="188*" />
+        </Grid.ColumnDefinitions>
+        <Border
+      HorizontalAlignment="Stretch"
+      Margin="5"
+      BorderThickness="1,1,1,1"
+      BorderBrush="DarkSlateBlue" Grid.ColumnSpan="2" Grid.RowSpan="2">
+    	<Border.Effect>
+    		<DropShadowEffect Color="Bisque"/>
+    	</Border.Effect>
+      <Border.Background>
+        <LinearGradientBrush
+          EndPoint="0.5,1"
+          StartPoint="0.5,0">
+          <GradientStop
+            Color="Green"
+            Offset="0" />
+          <GradientStop
+            Color="LightGreen"
+            Offset="1" />
+        </LinearGradientBrush>
+      </Border.Background>
+    </Border>
+    <Image Width="50" Height="50"
+      HorizontalAlignment="Left" Margin="8,8"
+      Grid.RowSpan="5"
+      Source="{Binding Path=IconSource, ElementName=me}"
+      Stretch="Uniform"  VerticalAlignment="Top"  />
+    <TextBlock
+      Foreground="White"
+      TextWrapping="Wrap" Text="{Binding Path=Description, ElementName=me, Mode=Default}" Grid.Column="1" Grid.Row="1">
+    </TextBlock>
+    <Path
+      Fill="#FFFFFFFF"
+      Stretch="Fill"
+      VerticalAlignment="Bottom"
+      Height="2" 
+      Data="M26,107 L220.04123,107" SnapsToDevicePixels="True" Grid.Column="1">
+      <Path.Stroke>
+        <LinearGradientBrush
+          EndPoint="0.9,0.5"
+          StartPoint="0,0.5">
+          <GradientStop
+            Color="#00ECAD25"
+            Offset="1" />
+          <GradientStop
+            Color="#FFECAD25"
+            Offset="0" />
+        </LinearGradientBrush>
+      </Path.Stroke>
+    </Path>
+        <TextBlock Margin="0,10,30,0" VerticalAlignment="Top" Height="32" Text="{Binding Path=Title, ElementName=me, Mode=Default}" TextWrapping="Wrap" Foreground="Chartreuse" FontWeight="Bold" Grid.Column="1"   />
+        <Image HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="16" Height="16" Source="/Metaseed.Core;component/Windows/Controls/NotifyIcon/NotifyIconWpf/Images/Close.png" Stretch="Fill" Opacity="0.4" ToolTip="Close Balloon" x:Name="imgClose" MouseDown="imgClose_MouseDown" Grid.Column="1" />
+
+  </Grid>
+</UserControl>

@@ -17,11 +17,11 @@ namespace Metaseed.Diagnostics
     {
         public static Process StartProcess(string processName, string arguments)
         {
-            arguments +=( " -remoteCommandServiceID=" + RemoteCommandService_Server.ServiceID+" ");
+            arguments += (" -remoteCommandServiceID=" + RemoteCommandService_Server.ServiceID + " ");
             var pDocked = new Process
             {
                 EnableRaisingEvents = true,
-                
+
                 StartInfo = new ProcessStartInfo(processName, arguments)
                 {
                     CreateNoWindow = true,
@@ -135,7 +135,7 @@ namespace Metaseed.Diagnostics
                 //    pDocked.StartInfo.EnvironmentVariables["HasWindowPosition"] = false.ToString();
 
                 //}
-                customerizeWindow(pDocked, hWnd,hideMainWindow, removeMenubar, removeCaptionAndBorder);
+                customerizeWindow(pDocked, hWnd, hideMainWindow, removeMenubar, removeCaptionAndBorder);
                 return pDocked;
             }
             catch (Exception ex)
@@ -145,7 +145,7 @@ namespace Metaseed.Diagnostics
             return null;
         }
 
-        internal static void customerizeWindow(Process pDocked,IntPtr hWnd,bool hideMainWindow, bool removeMenubar, bool removeCaptionAndBorder)
+        internal static void customerizeWindow(Process pDocked, IntPtr hWnd, bool hideMainWindow, bool removeMenubar, bool removeCaptionAndBorder)
         {
             if (!pDocked.StartInfo.EnvironmentVariables.ContainsKey("WindowStyle"))
             {
@@ -166,18 +166,18 @@ namespace Metaseed.Diagnostics
                 var extStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
                 if ((extStyle & (WS_EX_LAYERED)) == WS_EX_LAYERED)
                 {
-                    SetWindowLong(hWnd, GWL_EXSTYLE, (IntPtr) (extStyle & (~WS_EX_LAYERED)));
+                    SetWindowLong(hWnd, GWL_EXSTYLE, (IntPtr)(extStyle & (~WS_EX_LAYERED)));
                 }
                 pDocked.StartInfo.EnvironmentVariables["WindowExtStyle"] = extStyle.ToString();
             }
             //SetLayeredWindowAttributes(hWnd, 0, 0, LWA_COLORKEY);
             ShowWindow(hWnd, hideMainWindow ? WindowShowStyle.Hide : WindowShowStyle.Show); //need
             var hmenu = GetMenu(hWnd);
-            if(hmenu!=IntPtr.Zero)
-            pDocked.StartInfo.EnvironmentVariables["MenuBarHandle"] = hmenu.ToString();
+            if (hmenu != IntPtr.Zero)
+                pDocked.StartInfo.EnvironmentVariables["MenuBarHandle"] = hmenu.ToString();
             if (removeMenubar)
             {
-               HideMenubar(hWnd);
+                HideMenubar(hWnd);
             }
             if (removeCaptionAndBorder)
                 RemoveCaptionBarAndBorder(hWnd);
@@ -215,6 +215,20 @@ namespace Metaseed.Diagnostics
             return null;
         }
 
+        public static void AddChildStyle(IntPtr window)
+        {
+            var style = GetWindowLong(window, GWL_STYLE);
+            style = style & ~(WS_POPUP);
+            SetWindowLong(window, GWL_STYLE, (IntPtr)(style | WS_CHILD));
+        }
+
+        public static void RemoveChildStyle(IntPtr window)
+        {
+            var style = GetWindowLong(window, GWL_STYLE);
+            style = style & ~(WS_CHILD);
+            SetWindowLong(window, GWL_STYLE, (IntPtr)(((long)style)));
+        }
+
         public static void HideMenubar1(IntPtr hWndDocked)
         {
             var hmenu = GetMenu(hWndDocked);
@@ -223,7 +237,8 @@ namespace Metaseed.Diagnostics
                 RemoveMenu(hmenu, 0, (MF_BYPOSITION | MF_REMOVE));
             DrawMenuBar(hWndDocked);
         }
-
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
 
         public static IntPtr HideMenubar(IntPtr hWndDocked)
         {
@@ -246,11 +261,11 @@ namespace Metaseed.Diagnostics
             return (styleBackup);
         }
 
-        public static void RecoverCaptionBarAndBorder(Process process,IntPtr hWnd)
+        public static void RecoverCaptionBarAndBorder(Process process, IntPtr hWnd)
         {
             //long styleBackup = GetWindowLong(hWndDocked, GWL_STYLE);
             //long style = styleBackup | WS_CAPTION | WS_THICKFRAME;
-            var styleString=process.StartInfo.EnvironmentVariables["WindowStyle"];
+            var styleString = process.StartInfo.EnvironmentVariables["WindowStyle"];
             if (string.IsNullOrEmpty(styleString)) return;
             var style = long.Parse(styleString);
             SetWindowLong(hWnd, GWL_STYLE, (IntPtr)(style));

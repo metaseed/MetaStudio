@@ -68,14 +68,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Fluent.Ribbon.3.3.0\lib\net45\Fluent.dll</HintPath>
     </Reference>
-    <Reference Include="Metaseed.Core, Version=2.0.16.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Metaseed.Core.2.0.16.0\lib\net451\Metaseed.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Metaseed.MetaCore, Version=2.0.16.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Metaseed.MetaCore.2.0.16.0\lib\net451\Metaseed.MetaCore.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.Practices.Prism.Composition, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Prism.Composition.5.0.0\lib\NET45\Microsoft.Practices.Prism.Composition.dll</HintPath>
@@ -173,10 +165,6 @@
     <Compile Include="Framework\Modules\AllSubDirectoriesModuleCatalog.cs" />
     <Compile Include="Framework\Modules\MetaModule.cs" />
     <Compile Include="Framework\Modules\MetaStudioModuleCatalog.cs" />
-    <Compile Include="Framework\MVVM\Commands\RibbonUI\RibbonUIData.cs" />
-    <Compile Include="Framework\MVVM\Commands\RibbonUI\RibbonButton\RibbonButtonUIData.designer.cs" />
-    <Compile Include="Framework\MVVM\Commands\RibbonUI\RibbonButton\RibbonButtonUIData.cs" />
-    <Compile Include="Framework\MVVM\Commands\RibbonUI\RibbonCommandUIPosition.designer.cs" />
     <Compile Include="Framework\Services\IMissingAssemblyResolverService.cs" />
     <Compile Include="Framework\Services\IPrint.cs" />
     <Compile Include="Framework\Services\Logging\CallbackLogger.cs" />
@@ -258,12 +246,6 @@
       <LastGenOutput>Resources.zh-Hans.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="Framework\MVVM\Commands\RibbonUI\RibbonCommandUIPosition.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Framework\MVVM\Commands\RibbonUI\RibbonButton\RibbonButtonUIData.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -310,6 +292,16 @@
   <ItemGroup>
     <Resource Include="Resources\Images\menu.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Metaseed.Core\Metaseed.Core.csproj">
+      <Project>{e26d7625-0627-4055-add5-8ceab29e8003}</Project>
+      <Name>Metaseed.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Metaseed.MetaCore\Metaseed.MetaCore.csproj">
+      <Project>{3ad5b418-a96d-4c42-bbb5-3f3b8b2ad7e3}</Project>
+      <Name>Metaseed.MetaCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -324,7 +316,7 @@
 REM If you see this in Visual Studio's Error List window, check the Output window's Build tab for the actual error.
 ECHO Creating NuGet package in Post-Build event...
 
- PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; '$(ProjectDir)_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1' -ProjectFilePath '$(ProjectPath)' -OutputDirectory '$(TargetDir)' -BuildConfiguration '$(ConfigurationName)' -BuildPlatform '$(PlatformName)'"</PostBuildEvent>
+REM  PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; '$(ProjectDir)_CreateNewNuGetPackage\DoNotModify\CreateNuGetPackage.ps1' -ProjectFilePath '$(ProjectPath)' -OutputDirectory '$(TargetDir)' -BuildConfiguration '$(ConfigurationName)' -BuildPlatform '$(PlatformName)'"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\..\packages\Fody.1.29.0\build\Fody.targets" Condition="Exists('..\..\packages\Fody.1.29.0\build\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
