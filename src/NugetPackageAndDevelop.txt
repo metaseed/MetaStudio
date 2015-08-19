@@ -6,12 +6,12 @@ add REM from lastline of the three projects' post build event script.
 
 
 Nuget Package:
-------------update Extended.Wpf.Toolkit to 2.5.0
 change the version number
 remove REM from lastline of the three projects' post build event script.
 rebuild Metaseed.Core;
 upgrade MetaCore's package reference to new version Core from local repository(solution output folder), rebuild MetaCore. 
-upgrade MetaShell's pakcage reference to new verison MetaCore from local repository(solution output folder), rebuild MetaShell 
+upgrade ShellBase's pakcage reference to new verison MetaCore from local repository(solution output folder), rebuild MetaShell 
 publish them using nuget pakcage explorer
+update the test application's packages
 copy the pakcages to other application's local repository
 update packages in relavent projects.

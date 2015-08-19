@@ -221,7 +221,7 @@ namespace Metaseed.ShellBase.Framework.Shell.Views
 
         //IEventAggregator eventAggregator;
         #endregion
-      public ShellRibbon Ribbon { get; internal set; }
+      public ShellRibbon Ribbon { get; internal protected set; }
       
       protected  void CustomiseMainWindowIcon(string applicationIconLocation)
       {
