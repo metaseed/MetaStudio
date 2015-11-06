@@ -6,7 +6,7 @@ add REM from lastline of the three projects' post build event script.
 
 
 Nuget Package:
-change the version number
+change the version number and set last minor version to zero
 remove REM from lastline of the three projects' post build event script.
 rebuild Metaseed.Core;
 upgrade MetaCore's package reference to new version Core from local repository(solution output folder), rebuild MetaCore. 

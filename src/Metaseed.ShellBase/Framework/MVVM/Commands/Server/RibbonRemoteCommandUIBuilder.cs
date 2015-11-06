@@ -94,7 +94,7 @@ namespace Metaseed.MVVM.Commands
                         button.Icon = GetBitmap(ribbonUiData.IconURI);
                         button.LargeIcon = GetBitmap(ribbonUiData.IconURI);
                     }
-
+                    
                     RibbonControlSize size;
                     button.SetValue(Fluent.Button.SizeProperty,
                         RibbonControlSize.TryParse(ribbonUiData.Size, out size) ? size : RibbonControlSize.Large);

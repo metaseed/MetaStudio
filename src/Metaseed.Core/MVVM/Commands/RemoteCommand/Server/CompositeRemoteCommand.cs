@@ -53,13 +53,26 @@ namespace Metaseed.MVVM.Commands
                 return OperationContext.Current.GetCallbackChannel<IRemoteCommandServiceCallback>();
             }
         }
+
+        void CompositeRaiseCanExecuteChanged(object sender, EventArgs e)
+        {
+            if (Application.Current != null && Application.Current.Dispatcher != null && !Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.BeginInvoke((Action)(() => this.RaiseCanExecuteChanged(this,e)));
+            }
+            else
+            {
+                this.RaiseCanExecuteChanged(this, e);
+            }
+        }
+
         internal RemoteCommandDelegate Add(string commandID, string uiType, string uiData)
         {
             var callback = Callback;
             if (!CommandDelegates.ContainsKey(callback))
             {
                 var command = new RemoteCommandDelegate(CommandService, commandID,uiType, callback) { UIData = uiData };
-                command.CanExecuteChanged += RaiseCanExecuteChanged;
+                command.CanExecuteChanged += CompositeRaiseCanExecuteChanged;
                 CommandDelegates.Add(callback, command);
                 return command;
             }
@@ -75,13 +88,12 @@ namespace Metaseed.MVVM.Commands
             }
         }
 
-
-
         internal void Remove(string commandID)
         {
             var callback = Callback;
             if (CommandDelegates.ContainsKey(callback))
             {
+                CommandDelegates[callback].CanExecuteChanged -= CompositeRaiseCanExecuteChanged;
                 CommandDelegates.Remove(callback);
             }
         }

@@ -78,13 +78,13 @@ namespace Metaseed.Windows.Controls
             get { return ProcessWindowHelper.IsWindowShown(Process.MainWindowHandle); }
         }
 
-        
+
         private void DockedProcessWindow_Loaded(object sender, RoutedEventArgs e)
         {
             HostMainWindow();
-            
+
         }
-        
+
 
         public void Show()
         {
@@ -170,19 +170,22 @@ namespace Metaseed.Windows.Controls
             var panel = new Panel();
             AddChildStyle();
             ProcessWindowHelper.SetParent(Process.MainWindowHandle, panel.Handle);
-            var windowsFormsHost = new ProcessWindowHost { Child = panel, ProcessWindow=this };
+            var windowsFormsHost = new ProcessWindowHost { Child = panel, ProcessWindow = this };
             Content = windowsFormsHost;
             SizeChangedFunction(this);
             ProcessWindowHelper.ShowWindow(Process.MainWindowHandle);
             StartListeningForWindowChanges();
             Application.Current.DispatcherUnhandledException += new System.Windows.Threading.DispatcherUnhandledExceptionEventHandler(Current_DispatcherUnhandledException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(OnUnhandledException);
-            //uint dockedProcess;
-            //var dockedWindowThread = GetWindowThreadProcessId(Process.MainWindowHandle, out dockedProcess);
-            //var parentWindowThread = GetCurrentThreadId();
-            //AttachThreadInput(dockedWindowThread, parentWindowThread, true);
+            uint dockedProcess;
+            dockedWindowThread = GetWindowThreadProcessId(Process.MainWindowHandle, out dockedProcess);
+            parentWindowThread = GetCurrentThreadId();
+            AttachThreadInput(dockedWindowThread, parentWindowThread, true);
             WindowHosted(this);
         }
+
+        private uint dockedWindowThread = 0;
+        private uint parentWindowThread = 0;
         public event Action<HostedProcessWindow> WindowHosted;
 
         public void TemperaryShowMenubar(int seconds)
@@ -205,8 +208,8 @@ namespace Metaseed.Windows.Controls
         {
             HideMenubar();
             AddChildStyle();
-            if (removeMenubarTimer!=null)
-            removeMenubarTimer.Dispose();
+            if (removeMenubarTimer != null)
+                removeMenubarTimer.Dispose();
             removeMenubarTimer = null;
         }
         private System.Threading.Timer removeMenubarTimer;
@@ -258,7 +261,8 @@ namespace Metaseed.Windows.Controls
         {
             if (!AutoKillHostedProcess)
             {
-
+                if (dockedWindowThread != 0 && parentWindowThread != 0)
+                    AttachThreadInput(dockedWindowThread, parentWindowThread, false);
                 ProcessWindowHelper.RecoverCaptionBarAndBorder(Process, Process.MainWindowHandle);
                 ShowMenubar();
                 ProcessWindowHelper.SetParent(Process.MainWindowHandle, IntPtr.Zero);
@@ -393,9 +397,9 @@ namespace Metaseed.Windows.Controls
         public void HideMenubar()
         {
             var mainWindowHanle = Process.MainWindowHandle;
-            var hMenu=ProcessWindowHelper.HideMenubar(mainWindowHanle);
-            if(hMenu!=IntPtr.Zero)
-            Process.StartInfo.EnvironmentVariables["MenuBarHandle"] = hMenu.ToString();
+            var hMenu = ProcessWindowHelper.HideMenubar(mainWindowHanle);
+            if (hMenu != IntPtr.Zero)
+                Process.StartInfo.EnvironmentVariables["MenuBarHandle"] = hMenu.ToString();
         }
         ~HostedProcessWindow()
         {

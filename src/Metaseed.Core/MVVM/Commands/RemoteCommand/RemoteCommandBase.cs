@@ -24,7 +24,9 @@ namespace Metaseed.MVVM.Commands
 
         internal void RaiseCanExecuteChanged(object sender, EventArgs e)
         {
-            CanExecuteChanged(sender, e);
+            var handler = CanExecuteChanged;
+            if(handler!=null)
+                handler(sender, e);
         }
         virtual public bool CanExecute(object parameter)
         {

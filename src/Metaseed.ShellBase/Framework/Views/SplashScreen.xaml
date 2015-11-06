@@ -107,7 +107,7 @@
         </Grid>
         <!--According To The License, You Should Always Keep The 'Powered By MetaStudio' At The Right Corner Of Splash Screen, 
         Unless You Got A Written Permission From Metaseed. http://www.metaseed.com-->
-        <TextBlock Text="Powered By MetaStudio" Margin="0,0,3,3"  Foreground="White"  HorizontalAlignment="Right" VerticalAlignment="Bottom" FontStyle="Italic" FontSize="10"  >
+        <TextBlock Text="Powered By MetaStudio" Margin="0,0,3,3"  Foreground="White"  HorizontalAlignment="Right" VerticalAlignment="Bottom" FontStyle="Italic" FontSize="8"  >
             <TextBlock.Effect>
                 <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" Color="Black"/>
             </TextBlock.Effect>

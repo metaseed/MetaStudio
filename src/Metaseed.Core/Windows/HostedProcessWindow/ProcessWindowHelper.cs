@@ -185,6 +185,8 @@ namespace Metaseed.Diagnostics
 
         const UInt32 WS_MINIMIZE = 0x20000000;
         const UInt32 WS_MAXIMIZE = 0x1000000;
+        private const UInt32 WS_MINIMIZEBOX = 0x00020000;
+        private const UInt32 WS_MAXIMIZEBOX = 0x00010000;
         public static Process StartProcess(string processName, string arguments, bool hasSplashScreen, string mainWindowTile, bool hideMainWindow = true)
         {
             var process = FindProcessAndWindow(processName, mainWindowTile);
