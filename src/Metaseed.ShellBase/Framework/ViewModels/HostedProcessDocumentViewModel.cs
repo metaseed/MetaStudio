@@ -118,7 +118,7 @@ namespace Metaseed.MetaShell.ViewModels
                 _isdisposed = true;
 
             }
-            ProcessWindow.Dispose();
+            if(ProcessWindow!=null)ProcessWindow.Dispose();
         }
 
         private ICommand _closeCommand;

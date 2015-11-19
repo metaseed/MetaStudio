@@ -147,6 +147,10 @@ namespace Metaseed.Diagnostics
 
         internal static void customerizeWindow(Process pDocked, IntPtr hWnd, bool hideMainWindow, bool removeMenubar, bool removeCaptionAndBorder)
         {
+            if (hWnd == IntPtr.Zero)
+            {
+                throw new Exception("main window handle is Zero!");
+            }
             if (!pDocked.StartInfo.EnvironmentVariables.ContainsKey("WindowStyle"))
             {
                 long style = GetWindowLong(hWnd, GWL_STYLE);

@@ -6,6 +6,7 @@ add REM from lastline of the three projects' post build event script.
 
 
 Nuget Package:
+(change $versionNumber in Config.ps1(3 projects) to "")
 change the version number and set last minor version to zero
 remove REM from lastline of the three projects' post build event script.
 rebuild Metaseed.Core;
@@ -15,3 +16,8 @@ publish them using nuget pakcage explorer
 update the test application's packages
 copy the pakcages to other application's local repository
 update packages in relavent projects.
+
+==============
+MW Project:
+change the $versionNumber in Config.ps1(3 projects) to (2.2)
+follow the 'Nuget Package' list

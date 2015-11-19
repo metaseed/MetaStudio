@@ -25,7 +25,7 @@ namespace Metaseed.Windows.Controls
     {
         private bool _iscreated;
         private bool _isdisposed;
-
+        public event Action<HostedProcessWindow> WindowHosted;
         public static DependencyProperty LeftProperty = DependencyProperty.Register(
             "LeftProperty",
             typeof(int),
@@ -42,7 +42,12 @@ namespace Metaseed.Windows.Controls
         {
             _autoKillHostedProcess = autoKillHostedProcess;
             SizeChanged += OnSizeChanged;
-            Loaded += DockedProcessWindow_Loaded;
+            Loaded += HostedProcessWindow_Loaded;//if not hosted we can finally do it here
+        }
+
+        private void HostedProcessWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            HostMainWindow();
         }
 
         bool _autoKillHostedProcess;
@@ -78,14 +83,6 @@ namespace Metaseed.Windows.Controls
             get { return ProcessWindowHelper.IsWindowShown(Process.MainWindowHandle); }
         }
 
-
-        private void DockedProcessWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            HostMainWindow();
-
-        }
-
-
         public void Show()
         {
             ProcessWindowHelper.ShowWindow(Process.MainWindowHandle);
@@ -109,7 +106,7 @@ namespace Metaseed.Windows.Controls
 
         virtual protected void SizeChangedFunction(Control control)
         {
-            if (!_iscreated) return;
+            if (!_iscreated || Math.Abs(ActualWidth) < 0.5|| Math.Abs(ActualHeight) < 0.5) return;
             if (Process.MainWindowHandle != IntPtr.Zero)
             {
                 //http://stackoverflow.com/questions/3286175/how-do-i-convert-a-wpf-size-to-physical-pixels/3286419#3286419   
@@ -118,12 +115,14 @@ namespace Metaseed.Windows.Controls
                 var pixelHeight =
                     (int)(ActualHeight * Screen.PrimaryScreen.WorkingArea.Height / SystemParameters.WorkArea.Height);
                 //exclue the unnecessary rearrangement 
-                if (pixelWidth != (int)this.MinWidth || pixelHeight != (int)this.MinHeight)
-                {
-                    ProcessWindowHelper.MoveWindow(Process.MainWindowHandle, 0, 0, pixelWidth, pixelHeight, true);
-                    //the below line is needed, if some control in hosted window using OnResize to do layout, in this case the last line is used to trigger the control's layout, the next line won't trigger, it just move the window to change its position.
-                    ProcessWindowHelper.MoveWindow(Process.MainWindowHandle, 0, 0, pixelWidth, pixelHeight, true);
-                }
+                if (pixelWidth <= (int)this.MinWidth)
+                    pixelWidth= (int)this.MinWidth;
+                if (pixelHeight <= (int) this.MinHeight)
+                    pixelHeight = (int) this.MinHeight;
+                ProcessWindowHelper.MoveWindow(Process.MainWindowHandle, 0, 0, pixelWidth, pixelHeight, true);
+                //the below line is needed, if some control in hosted window using OnResize to do layout, in this case the last line is used to trigger the control's layout, the next line won't trigger, it just move the window to change its position.
+                ProcessWindowHelper.MoveWindow(Process.MainWindowHandle, 0, 0, pixelWidth, pixelHeight, true);
+                
                 //var win = Window.GetWindow(control);
                 //if (win != null)
                 //{
@@ -181,12 +180,11 @@ namespace Metaseed.Windows.Controls
             dockedWindowThread = GetWindowThreadProcessId(Process.MainWindowHandle, out dockedProcess);
             parentWindowThread = GetCurrentThreadId();
             AttachThreadInput(dockedWindowThread, parentWindowThread, true);
-            WindowHosted(this);
+            if(WindowHosted!=null) WindowHosted(this);
         }
 
         private uint dockedWindowThread = 0;
         private uint parentWindowThread = 0;
-        public event Action<HostedProcessWindow> WindowHosted;
 
         public void TemperaryShowMenubar(int seconds)
         {
