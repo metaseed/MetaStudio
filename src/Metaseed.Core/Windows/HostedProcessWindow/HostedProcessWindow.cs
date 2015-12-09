@@ -222,6 +222,34 @@ namespace Metaseed.Windows.Controls
             handled = true;
             HandleException((Exception)e.ExceptionObject);
         }
+        bool handled = false;
+        void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            if (handled)
+            {
+                return;
+            }
+            handled = true;
+            HandleException(e.Exception);
+
+        }
+        private long captionBorderStyleBackup;
+        private void HandleException(Exception e)
+        {
+            HandleDockedProcess();
+        }
+
+        private void HandleDockedProcess()
+        {
+            if (!AutoKillHostedProcess)
+            {
+                if (dockedWindowThread != 0 && parentWindowThread != 0)
+                    AttachThreadInput(dockedWindowThread, parentWindowThread, false);
+                ProcessWindowHelper.RecoverCaptionBarAndBorder(Process, Process.MainWindowHandle);
+                ShowMenubar();
+                ProcessWindowHelper.SetParent(Process.MainWindowHandle, IntPtr.Zero);
+            }
+        }
 
         public void Float()
         {
@@ -242,32 +270,6 @@ namespace Metaseed.Windows.Controls
         {
             //AddChildStyle();
         }
-
-        bool handled = false;
-        void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
-        {
-            if (handled)
-            {
-                return;
-            }
-            handled = true;
-            HandleException(e.Exception);
-
-        }
-        private long captionBorderStyleBackup;
-        private void HandleException(Exception e)
-        {
-            if (!AutoKillHostedProcess)
-            {
-                if (dockedWindowThread != 0 && parentWindowThread != 0)
-                    AttachThreadInput(dockedWindowThread, parentWindowThread, false);
-                ProcessWindowHelper.RecoverCaptionBarAndBorder(Process, Process.MainWindowHandle);
-                ShowMenubar();
-                ProcessWindowHelper.SetParent(Process.MainWindowHandle, IntPtr.Zero);
-
-            }
-        }
-
 
         #region Window Event Hook
         //public enum HookType : int

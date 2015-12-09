@@ -10,7 +10,7 @@ namespace Metaseed.MetaShell.Controls
 {
     public class RibbonTabContextUIHelper
     {
-        public static void Show(RibbonTabItem tab)
+        public static void Show(RibbonTabItem tab, Ribbon ribbon)
         {
             if (tab.Group == null) return;
             if (tab.Group.Visibility != Visibility.Visible)
@@ -31,7 +31,8 @@ namespace Metaseed.MetaShell.Controls
                 }
             }
             tab.Visibility = Visibility.Visible;
-            tab.IsSelected = true;
+            if (ribbon!=null&& !ribbon.IsCollapsed)
+                tab.IsSelected = true;
         }
 
         public static void Hide(RibbonTabItem tab)

@@ -64,12 +64,13 @@ namespace Metaseed.MetaShell.Controls
             if (!_HasInitialized) return;
             if (_hideOtherTabsInSameGroup)
             {
-                RibbonTabContextUIHelper.Show(_ribbonTabItem);
+                RibbonTabContextUIHelper.Show(_ribbonTabItem, Ribbon);
             }
             else
             {
                 _ribbonTabItem.Visibility = Visibility.Visible;
-                _ribbonTabItem.IsSelected = true;
+                if(!Ribbon.IsCollapsed)
+                    _ribbonTabItem.IsSelected = true;
             }
             Ribbon.Refresh();
         }

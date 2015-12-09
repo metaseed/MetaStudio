@@ -96,7 +96,7 @@ namespace Metaseed.MetaShell.Controls
         public virtual void Show(object c)
         {
             SetDataContext(c);
-            RibbonTabContextUIHelper.Show(this);
+            RibbonTabContextUIHelper.Show(this,Ribbon);
             Ribbon.Refresh();
         }
         public virtual void Hide(object c)
