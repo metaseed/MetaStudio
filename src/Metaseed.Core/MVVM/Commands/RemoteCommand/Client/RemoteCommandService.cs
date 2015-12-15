@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -63,7 +64,7 @@ namespace Metaseed.MVVM.Commands
         {
             if (this.State != CommunicationState.Opened)
             {
-                MessageBox.Show("Can not regisger command, Remote Command Communication Error!");
+                Debug.WriteLine("Can not regisger command, Remote Command Communication Error!","Error");
                 return;
             }
             commandManager.Add(command);
@@ -76,7 +77,7 @@ namespace Metaseed.MVVM.Commands
         {
             if (this.State != CommunicationState.Opened)
             {
-                MessageBox.Show("Can not unregister command, Remote Command Communication Error!");
+                Debug.WriteLine("Can not unregister command, Remote Command Communication Error!","Error");
                 return;
             }
             commandManager.Remove(commandID);
@@ -92,7 +93,7 @@ namespace Metaseed.MVVM.Commands
         {
             if (this.State != CommunicationState.Opened)
             {
-                MessageBox.Show("Can not call CanExecuteChanged, Remote Command Communication Error!");
+                Debug.WriteLine("Can not call CanExecuteChanged, Remote Command Communication Error!","Error");
                 return;
             }
             Channel.CanExecuteChanged(commandID);
