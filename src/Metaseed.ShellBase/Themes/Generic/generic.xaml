@@ -42,8 +42,8 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Image x:Name="icon" Source="{Binding IconSource, Converter={StaticResource NullToDoNothingConverter}}" Stretch="Uniform" Width="16" Height="16"/>
-                    <TextBlock x:Name="title" Margin="4,0,0,0" Text="{Binding Title}" TextTrimming="CharacterEllipsis" Grid.Column="2"/>
-                    <Button x:Name="ShowMenubarButton" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Column="1" Width="18" Height="18" Margin="5,0,0,0" Visibility="Collapsed" 
+                    <TextBlock x:Name="title" Margin="4,0,0,0" Text="{Binding Title}" TextTrimming="CharacterEllipsis" Grid.Column="1"/>
+                    <Button x:Name="ShowMenubarButton" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Column="2" Width="18" Height="18" Margin="5,0,0,0" Visibility="Collapsed" 
                                         Command="{Binding Path=Content.ShowMenubarCommand}"
                                         ToolTip="temporarily show menu">
                         <Image Source="pack://application:,,,/Metaseed.ShellBase;component/Resources/Images/menu.png" Stretch="Uniform" />
@@ -102,8 +102,8 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Image x:Name="icon" Source="{Binding IconSource, Converter={StaticResource NullToDoNothingConverter}}" Stretch="Uniform" Width="16" Height="16"/>
-                    <TextBlock x:Name="title" Margin="4,0,0,0" Text="{Binding Title}" TextTrimming="CharacterEllipsis" Grid.Column="2"/>
-                    <Button shell:WindowChrome.IsHitTestVisibleInChrome="True" Focusable="False" x:Name="ShowMenubarButton" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Column="1" Width="18" Height="18" Margin="5,0,0,0" Visibility="Collapsed" 
+                    <TextBlock x:Name="title" Margin="4,0,0,0" Text="{Binding Title}" TextTrimming="CharacterEllipsis" Grid.Column="1"/>
+                    <Button shell:WindowChrome.IsHitTestVisibleInChrome="True" Focusable="False" x:Name="ShowMenubarButton" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Column="2" Width="18" Height="18" Margin="5,0,0,0" Visibility="Collapsed" 
                                         Command="{Binding Path=Content.ShowMenubarCommand}"
                                         ToolTip="temporarily show menu">
                         <Image Source="pack://application:,,,/Metaseed.ShellBase;component/Resources/Images/menu.png" Stretch="Uniform" />

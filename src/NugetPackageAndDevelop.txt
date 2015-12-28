@@ -7,7 +7,7 @@ add REM from lastline of the three projects' post build event script.
 
 Nuget Package:
 (change $versionNumber in Config.ps1(3 projects) to "")
-change the version number and set last minor version to zero
+change the version number(GlobalAssemblyInfo.cs) and set last minor version to zero
 remove REM from lastline of the three projects' post build event script.
 rebuild Metaseed.Core;
 upgrade MetaCore's package reference to new version Core from local repository(solution output folder), rebuild MetaCore. 
@@ -19,5 +19,5 @@ update packages in relavent projects.
 
 ==============
 MW Project:
-change the $versionNumber in Config.ps1(3 projects) to (2.2)
+change the $versionNumber in _CreateNewNuGetPackage/Config.ps1(3 projects) to (2.2)
 follow the 'Nuget Package' list
