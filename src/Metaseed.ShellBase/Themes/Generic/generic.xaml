@@ -45,7 +45,7 @@
                     <TextBlock x:Name="title" Margin="4,0,0,0" Text="{Binding Title}" TextTrimming="CharacterEllipsis" Grid.Column="1"/>
                     <Button x:Name="ShowMenubarButton" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Column="2" Width="18" Height="18" Margin="5,0,0,0" Visibility="Collapsed" 
                                         Command="{Binding Path=Content.ShowMenubarCommand}"
-                                        ToolTip="temporarily show menu">
+                                        ToolTip="temporarily show menu" HorizontalAlignment="Right">
                         <Image Source="pack://application:,,,/Metaseed.ShellBase;component/Resources/Images/menu.png" Stretch="Uniform" />
                     </Button>
                 </Grid>
@@ -105,7 +105,7 @@
                     <TextBlock x:Name="title" Margin="4,0,0,0" Text="{Binding Title}" TextTrimming="CharacterEllipsis" Grid.Column="1"/>
                     <Button shell:WindowChrome.IsHitTestVisibleInChrome="True" Focusable="False" x:Name="ShowMenubarButton" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Grid.Column="2" Width="18" Height="18" Margin="5,0,0,0" Visibility="Collapsed" 
                                         Command="{Binding Path=Content.ShowMenubarCommand}"
-                                        ToolTip="temporarily show menu">
+                                        ToolTip="temporarily show menu" HorizontalAlignment="Right">
                         <Image Source="pack://application:,,,/Metaseed.ShellBase;component/Resources/Images/menu.png" Stretch="Uniform" />
                     </Button>
                 </Grid>

@@ -23,7 +23,7 @@ namespace Metaseed.MetaShell.Controls
         {
             get { return ((RibbonService)(ShellService.Ribbon)).Ribbon; }
         }
-        public NamedRibbonTabContexUI(string ribbonTabName, bool hideOtherTabsInSameGroup = true)
+        public NamedRibbonTabContexUI(string ribbonTabName,bool hideOtherTabsInSameGroup = true)
         {
             ShellService = ServiceLocator.Default.ResolveType<IShellService>();
             _ribbonTabName = ribbonTabName;
