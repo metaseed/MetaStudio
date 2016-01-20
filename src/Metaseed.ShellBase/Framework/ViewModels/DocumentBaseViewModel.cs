@@ -102,20 +102,19 @@ namespace Metaseed.MetaShell.ViewModels
             if (isFloating)
             {
                 var dockingManager = this.GetDependencyResolver().Resolve<DockingManager>();
-                dockingManager.FloatingWindows.ToList().ForEach(window =>
+                foreach (var window in dockingManager.FloatingWindows.ToList())
                 {
+                    if(window==null)continue;
                     var floatingWindow = window.Model as LayoutDocumentFloatingWindow;
-                    if (object.ReferenceEquals(floatingWindow.RootDocument.Content,this))
+                    if (floatingWindow == null || floatingWindow.RootDocument==null) continue;
+                    if (object.ReferenceEquals(floatingWindow.RootDocument.Content, this))
                     {
                         window.Icon = IconSource;
                         window.Title = Title;
                         window.ShowInTaskbar = true;
-                        return;
+                        break ;
                     }
-                });
-            }
-            else
-            {
+                }
             }
         }
         /// <summary>
