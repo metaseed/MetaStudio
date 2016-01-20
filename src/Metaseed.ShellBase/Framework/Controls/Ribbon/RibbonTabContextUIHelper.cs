@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Fluent;
+using Metaseed.Windows.Threading;
 
 namespace Metaseed.MetaShell.Controls
 {
@@ -31,7 +32,8 @@ namespace Metaseed.MetaShell.Controls
                 }
             }
             tab.Visibility = Visibility.Visible;
-            if (ribbon!=null&& !ribbon.IsCollapsed)
+            tab.Group.UpdateLayout();
+            if (ribbon!=null&& !ribbon.IsAutomaticCollapseEnabled)
                 tab.IsSelected = true;
         }
 
@@ -39,11 +41,11 @@ namespace Metaseed.MetaShell.Controls
         {
             if (tab.Group == null) return;
             tab.Visibility = Visibility.Collapsed;
-            foreach (var tabItem in tab.Group.Items)
-            {
-                if (tabItem.Visibility == Visibility.Visible) return;
-            }
-            tab.Group.Visibility = Visibility.Collapsed;
+            bool hasVisibleItem = tab.Group.Items.Any(tabItem => tabItem.Visibility == Visibility.Visible);
+            if (!hasVisibleItem)
+                tab.Group.Visibility = Visibility.Collapsed;
+            tab.Group.UpdateLayout();
+
         }
 
     }

@@ -370,7 +370,7 @@ namespace Metaseed.Windows.Controls
 
         }
         #endregion
-
+      
         public void ShowMenubar()
         {
             var strMenuHandle = Process.StartInfo.EnvironmentVariables["MenuBarHandle"];
@@ -378,10 +378,13 @@ namespace Metaseed.Windows.Controls
             int menu;
             if (int.TryParse(strMenuHandle, out menu))
             {
+                OnBeforeShowMenubar();
                 ProcessWindowHelper.ShowMenubar(Process.MainWindowHandle, (IntPtr)menu);
+                OnAfterShowMenubar();
             }
         }
-
+        virtual protected void OnBeforeShowMenubar() { }
+        virtual protected void OnAfterShowMenubar() { }
         public bool HasMenubar()
         {
             var strMenuHandle = Process.StartInfo.EnvironmentVariables["MenuBarHandle"];
