@@ -106,7 +106,7 @@ namespace Metaseed.Windows.Controls
 
         virtual protected void SizeChangedFunction(Control control)
         {
-            if (!_iscreated || Math.Abs(ActualWidth) < 0.5|| Math.Abs(ActualHeight) < 0.5) return;
+            if (!_iscreated || Math.Abs(ActualWidth) <= 1|| Math.Abs(ActualHeight) <= 1) return;
             if (Process.MainWindowHandle != IntPtr.Zero)
             {
                 //http://stackoverflow.com/questions/3286175/how-do-i-convert-a-wpf-size-to-physical-pixels/3286419#3286419   
@@ -234,9 +234,10 @@ namespace Metaseed.Windows.Controls
 
         }
         private long captionBorderStyleBackup;
-        private void HandleException(Exception e)
+        protected virtual void HandleException(Exception e)
         {
             HandleDockedProcess();
+            MessageBox.Show(e.Message + Environment.NewLine + e.StackTrace);
         }
 
         private void HandleDockedProcess()

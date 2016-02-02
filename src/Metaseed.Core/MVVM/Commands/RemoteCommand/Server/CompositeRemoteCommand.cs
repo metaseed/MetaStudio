@@ -26,14 +26,7 @@ namespace Metaseed.MVVM.Commands
                 passCanExcuteCall = false;
                 return true;
             }
-            foreach (var remoteCommandDelegate in CommandDelegates)
-            {
-                if (remoteCommandDelegate.Value.CanExecute(parameter))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return CommandDelegates.Values.ToList().Any(remoteCommandDelegate => remoteCommandDelegate.CanExecute(parameter));
             //return CommandDelegates.Select(remoteCommandPair => remoteCommandPair.Value.CanExecute(parameter)).Any(canExcu => canExcu);
         }
 
@@ -41,9 +34,9 @@ namespace Metaseed.MVVM.Commands
         public override void Execute(object parameter)
         {
             base.Execute(parameter);
-            foreach (var remoteCommandPair in CommandDelegates)
+            foreach (var remoteCommand in CommandDelegates.Values.ToList())
             {
-                remoteCommandPair.Value.Execute(parameter);
+                remoteCommand.Execute(parameter);
             }
         }
         IRemoteCommandServiceCallback Callback

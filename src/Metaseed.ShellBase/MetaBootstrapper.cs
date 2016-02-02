@@ -25,18 +25,30 @@ namespace Metaseed.MetaShell
         /// 
         /// </summary>
         /// <returns></returns>
-        private RibbonRemoteCommandServer remoteCommandServiceServer;
+        private IRemoteCommandService remoteCommandServiceServer;
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private readonly CallbackLogger _callbackLogger = new CallbackLogger();
         #region Constructors
-        public MetaBootstrapper(IRemoteCommandUIBuilder uiBuilder=null, ServiceIDType remoteCommandServiceID = ServiceIDType.SystemGlobal)
+
+        public MetaBootstrapper(IRemoteCommandUIBuilder uiBuilder = null,
+            ServiceIDType remoteCommandServiceID = ServiceIDType.SystemGlobal):this(new RibbonRemoteCommandServer(uiBuilder),remoteCommandServiceID)
         {
+            
+        }
+
+        public MetaBootstrapper(IRemoteCommandService remoteCommandService = null, ServiceIDType remoteCommandServiceID = ServiceIDType.SystemGlobal)
+        { 
 #if DEBUG
             Catel.Logging.LogManager.AddDebugListener(false);//note: could called multimes. if debug listener already registed,it do nothing.
 #endif
-            remoteCommandServiceServer = new RibbonRemoteCommandServer(uiBuilder);
-            var serviceController = new RemoteCommandServiceController(remoteCommandServiceServer);
-            serviceController.Start(remoteCommandServiceID);
+            if (remoteCommandService != null)
+            {
+                remoteCommandServiceServer = remoteCommandService;
+                var serviceLocator = ServiceLocator.Default;
+                serviceLocator.RegisterInstance<IRemoteCommandService>(remoteCommandServiceServer);
+                var serviceController = new RemoteCommandServiceController(remoteCommandServiceServer);
+                serviceController.Start(remoteCommandServiceID);
+            }
             //
             // Application Themes
             //

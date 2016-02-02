@@ -30,7 +30,16 @@ namespace Metaseed.MVVM.Commands
         {
             get
             {
-                return Commands[commandID].CommandDelegates[Callback];
+                CompositeRemoteCommand compositeRemoteCommand = null;
+                if (Commands.TryGetValue(commandID, out compositeRemoteCommand))
+                {
+                    RemoteCommandDelegate remoteCommand = null;
+                    if(compositeRemoteCommand.CommandDelegates.TryGetValue(Callback,out remoteCommand))
+                    {
+                        return remoteCommand;
+                    }
+                }
+                return null;
             }
         }
         internal readonly Dictionary<string, CompositeRemoteCommand> Commands = new Dictionary<string, CompositeRemoteCommand>();

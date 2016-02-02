@@ -92,7 +92,7 @@
         </controls:DocumentTitleTemplateSelector.DocumentsTitleTemplate>
         <controls:DocumentTitleTemplateSelector.HostedProcessDocumentTitleTemplate>
             <DataTemplate>
-                <Grid>
+                <Grid x:Name="titleGrid">
                     <Grid.Resources>
                         <xcad:NullToDoNothingConverter x:Key="NullToDoNothingConverter"/>
                     </Grid.Resources>
@@ -113,7 +113,10 @@
                     <DataTrigger Binding="{Binding IconSource}" Value="{x:Null}">
                         <Setter Property="Visibility" Value="Collapsed" TargetName="icon"/>
                     </DataTrigger>
-
+                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                        <Setter Property="Background" Value="#FF007ACC" TargetName="titleGrid"/>
+                        <Setter Property="Foreground" Value="White" TargetName="title"/>
+                    </DataTrigger>
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
                             <Condition Binding="{Binding Path=Content.HasMenubar}" Value="true"/>
@@ -137,7 +140,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Image x:Name="icon" Source="{Binding IconSource, Converter={StaticResource NullToDoNothingConverter}}" Stretch="Uniform" Width="16" Height="16"/>
-            <TextBlock x:Name="title" Margin="4,0,0,0" Text="{Binding Title}" TextTrimming="CharacterEllipsis" Grid.Column="1"/>
+            <TextBlock x:Name="title" Margin="4,0,0,0" Text="{Binding Title}" TextTrimming="CharacterEllipsis" Grid.Column="1" Background="Red"/>
         </Grid>
         <DataTemplate.Triggers>
             <DataTrigger Binding="{Binding IconSource}" Value="{x:Null}">

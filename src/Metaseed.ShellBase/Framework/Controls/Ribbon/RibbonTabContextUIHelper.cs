@@ -33,7 +33,7 @@ namespace Metaseed.MetaShell.Controls
             }
             tab.Visibility = Visibility.Visible;
             tab.Group.UpdateLayout();
-            if (ribbon!=null&& !ribbon.IsAutomaticCollapseEnabled)
+            if (ribbon != null && !ribbon.IsMinimized)
                 tab.IsSelected = true;
         }
 

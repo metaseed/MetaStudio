@@ -80,23 +80,21 @@ namespace Metaseed.MVVM.Commands
 
 
         #region IRemoteCommandService
-        public void Register(string commandID, string uiType, string uiData)
+        public virtual void Register(string commandID, string uiType, string uiData)
         {
             CommandManager.Add(commandID, uiType, uiData);
 
         }
 
-        void IRemoteCommandService.UnRegister(string commandID)
+        public virtual void UnRegister(string commandID)
         {
             CommandManager.Remove(commandID);
         }
 
-        void IRemoteCommandService.CanExecuteChanged(string commandID)
+        public virtual void CanExecuteChanged(string commandID)
         {
-            CommandManager[commandID].RaiseCanExecuteChanged(this, null);
+            CommandManager[commandID]?.RaiseCanExecuteChanged(this, null);
         }
         #endregion IRemoteCommandService
-
-
     }
 }
