@@ -83,23 +83,29 @@
         <Image x:Name="splashScreenImage" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Source="/Metaseed.ShellBase;component/Resources/Images/SplashScreen/R_0.jpg" Stretch="None"/>
         <Grid x:Name="statusPanel"  HorizontalAlignment="Right" Margin="20,30,20,60">
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="16"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="18"/>
                 <RowDefinition Height="85"/>
             </Grid.RowDefinitions>
-            <TextBlock x:Name="AppName" Text="MetaStduio" VerticalAlignment="Center" FontSize="48" FontWeight="Bold" FontStyle="Italic" Foreground="White" Margin="5,9,-5,5" Grid.RowSpan="2">
+            <TextBlock x:Name="AppName" Text="MetaStduio" VerticalAlignment="Center" FontSize="48" FontWeight="Bold" FontStyle="Italic" Foreground="White" Margin="5,9,-5,-8">
                 <TextBlock.Effect>
-                    <DropShadowEffect ShadowDepth="1" RenderingBias="Quality" Color="Black"/>
+                    <DropShadowEffect x:Name="AppNameOutline" ShadowDepth="1" RenderingBias="Quality" Color="Black"/>
                 </TextBlock.Effect>
             </TextBlock>
-            <TextBlock x:Name="Copyright" Grid.Row="1" Text="Metaseed © 2008-2014" HorizontalAlignment="Right" Foreground="LightGreen"  FontStyle="Italic">
+            <TextBlock x:Name="SubTitle" Grid.Row="1" Text="" HorizontalAlignment="Right" Foreground="LightGreen"  FontStyle="Italic">
                 <TextBlock.Effect>
-                    <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" Color="White"/>
+                    <DropShadowEffect x:Name="SubTitleOutline" ShadowDepth="1" RenderingBias="Quality" Color="Black"/>
                 </TextBlock.Effect>
             </TextBlock>
-            <ProgressBar Grid.Row="2" HorizontalAlignment="Left" Value="{Binding Percentage,Mode=OneWay}" Height="11" Width="224"/>
-            <TextBlock Grid.Row="3" Width="224" HorizontalAlignment="Left" Text="{Binding TaskName, FallbackValue=Some very long task name is running with text wrapped...}" Height="85" Margin="5,5,0,0"  ScrollViewer.VerticalScrollBarVisibility="Disabled"  Foreground="Black" FontFamily="Segoe UI Semibold" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" >
+            <TextBlock x:Name="Copyright" Grid.Row="2" Text="Metaseed © 2008-2016" HorizontalAlignment="Right" Foreground="LightGreen" FontStyle="Italic">
+                <TextBlock.Effect>
+                    <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" Color="Black"/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <ProgressBar Grid.Row="3" HorizontalAlignment="Left" Value="{Binding Percentage,Mode=OneWay}" Height="11" Width="224"/>
+            <TextBlock Grid.Row="4" Width="224" HorizontalAlignment="Left" Text="{Binding TaskName, FallbackValue=Some very long task name is running with text wrapped...}" Height="85" Margin="5,5,0,0"  ScrollViewer.VerticalScrollBarVisibility="Disabled"  Foreground="Black" FontFamily="Segoe UI Semibold" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" >
                 <TextBlock.Effect>
                     <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" Color="White"/>
                 </TextBlock.Effect>
