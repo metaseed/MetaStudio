@@ -244,6 +244,27 @@ namespace Metaseed.MetaShell.Views
                 {
                     Copyright.Height = 0;
                 }
+                //info positon
+                var infoPosition = info.Element("Margin");
+                if (!string.IsNullOrEmpty(infoPosition?.Value))
+                {
+                    var fromString = new ThicknessConverter().ConvertFromString(infoPosition.Value);
+                    if (fromString != null)
+                    {
+                        var convertFromString = (Thickness)fromString;
+                        statusPanel.Margin = convertFromString;
+                    }
+                }
+                var width = info.Element("Width");
+                if (!string.IsNullOrEmpty(width?.Value))
+                {
+                    double fromString;
+                    var r= double.TryParse(width.Value,out fromString);
+                    if (r)
+                    {
+                        statusPanel.Width = fromString;
+                    }
+                }
             }
 
             CustomiseSplashScreen();
