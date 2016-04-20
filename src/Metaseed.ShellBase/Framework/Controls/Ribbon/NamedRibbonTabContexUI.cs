@@ -53,9 +53,7 @@ namespace Metaseed.MetaShell.Controls
         public void Initialize()
         {
             _ribbonTabItem = Ribbon.Tabs.FirstOrDefault(tab => tab.Name.Equals(_ribbonTabName));
-            if (_ribbonTabItem == null)
-                return;
-            _HasInitialized = true;
+            _HasInitialized = _ribbonTabItem != null;
         }
 
         public void Show(object objectWithContext)

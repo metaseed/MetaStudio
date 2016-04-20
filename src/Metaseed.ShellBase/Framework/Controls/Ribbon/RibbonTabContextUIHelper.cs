@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Fluent;
 using Metaseed.Windows.Threading;
@@ -13,7 +11,7 @@ namespace Metaseed.MetaShell.Controls
     {
         public static void Show(RibbonTabItem tab, Ribbon ribbon)
         {
-            if (tab.Group == null) return;
+            if (tab == null || tab.Group == null) return;
             if (tab.Group.Visibility != Visibility.Visible)
             {
                 //patch to RibbonContextualTabGroup static void OnVisibilityChanged
@@ -39,13 +37,12 @@ namespace Metaseed.MetaShell.Controls
 
         public static void Hide(RibbonTabItem tab)
         {
-            if (tab.Group == null) return;
+            if (tab == null || tab.Group == null) return;
             tab.Visibility = Visibility.Collapsed;
             bool hasVisibleItem = tab.Group.Items.Any(tabItem => tabItem.Visibility == Visibility.Visible);
             if (!hasVisibleItem)
                 tab.Group.Visibility = Visibility.Collapsed;
             tab.Group.UpdateLayout();
-
         }
 
     }
