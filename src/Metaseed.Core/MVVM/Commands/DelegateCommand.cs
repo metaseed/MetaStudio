@@ -44,5 +44,6 @@ namespace Metaseed.MVVM.Commands
                 CanExecuteChanged(this, EventArgs.Empty);
             }
         }
+        
     }
 }

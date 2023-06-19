@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 //http://codereview.stackexchange.com/questions/5470/generic-eventargs-to-go-with-generic-eventhandler
 namespace Metaseed
-{/*
+{
+  /*
   public event EventHandler<ReadOnlyEventArgs<Tuple<string,double>>> SelectChanged;
   public void SomeFormMethod()
 {
